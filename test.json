@@ -1,0 +1,803 @@
+{
+    "advertiser_id": "7094",
+    "globales": {
+        "sends": 31940,
+        "clicks": 2570,
+        "clickers": 41,
+        "opens": 3908,
+        "openers": 954,
+        "unsubs": 31,
+        "ecpm": 0.0,
+        "ca": 0.0,
+        "taux_clickers": 0.128,
+        "taux_openers": 2.987,
+        "taux_unsubs": 0.097,
+        "taux_cto": 4.298,
+        "analyses": {
+            "taux_clickers": "🟡 Taux de clic moyen",
+            "taux_cto": "⚠️ Faible engagement (CTO)",
+            "taux_unsubs": "🔶 Taux de désabonnement moyen"
+        },
+		"analyse_dep": {
+			"06": {
+				"clickers": 2,
+				"openers": 5
+			},
+			"75": {
+				"clickers": 2,
+				"openers": 5
+			},
+			"others": {
+				"clickers": 2,
+				"openers": 5
+			}
+		}
+    },
+    "bases": [
+        {
+            "database_id": 14,
+            "id_routers": "11088",
+            "tag_id": 9,
+            "brands": [
+                {
+                    "name": "EDF ENR",
+                    "creativities": "url_vide",
+                    "sends": 28881,
+                    "clicks": 2569,
+                    "clickers": 40,
+                    "opens": 3728,
+                    "openers": 814,
+                    "unsubs": 29,
+                    "taux_clickers": 0.138,
+                    "taux_cto": 4.914,
+                    "taux_unsubs": 0.1,
+                    "analyses": {
+                        "taux_clickers": "🟡 Taux de clic moyen",
+                        "taux_cto": "⚠️ Faible engagement (CTO)",
+                        "taux_unsubs": "🔶 Taux de désabonnement moyen"
+                    },
+					"subject": "test",
+					"segment_name": "segment",
+					"segment_id": 1574
+                }
+            ],
+            "sends": 28881,
+            "clicks": 2569,
+            "clickers": 40,
+            "opens": 3728,
+            "openers": 814,
+            "unsubs": 29,
+            "taux_clickers": 0.138,
+            "taux_openers": 2.818,
+            "taux_unsubs": 0.1,
+            "taux_cto": 4.914,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "classification": "C",
+            "date_schedule": [
+                "2026-02-19"
+            ],
+            "SegmentIds": [
+                0,
+                1574
+            ],
+            "analyses": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🔶 Taux de désabonnement moyen"
+            },
+            "dimensions": {
+                "age_range": {
+                    "25-34": {
+                        "sends": 68,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 4,
+                        "openers": 3,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 4.412,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "75+": {
+                        "sends": 85,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 2,
+                        "openers": 2,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 2.353,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "0-18": {
+                        "sends": 27323,
+                        "clicks": 2558,
+                        "clickers": 38,
+                        "opens": 3668,
+                        "openers": 770,
+                        "unsubs": 26,
+                        "taux_clickers": 0.139,
+                        "taux_openers": 2.818,
+                        "taux_unsubs": 0.095,
+                        "taux_cto": 4.935,
+                        "analyses": {
+                            "taux_clickers": "🟡 Taux de clic moyen",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "🔶 Taux de désabonnement moyen"
+                        }
+                    },
+                    "65-74": {
+                        "sends": 198,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 7,
+                        "openers": 7,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 3.535,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "45-54": {
+                        "sends": 486,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 10,
+                        "openers": 10,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 2.058,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "55-64": {
+                        "sends": 355,
+                        "clicks": 11,
+                        "clickers": 2,
+                        "opens": 24,
+                        "openers": 11,
+                        "unsubs": 0,
+                        "taux_clickers": 0.563,
+                        "taux_openers": 3.099,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 18.182,
+                        "analyses": {
+                            "taux_clickers": "🟢 Taux de clic satisfaisant",
+                            "taux_cto": "🔥 Engagement très fort (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "35-44": {
+                        "sends": 364,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 13,
+                        "openers": 11,
+                        "unsubs": 3,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 3.022,
+                        "taux_unsubs": 0.824,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                        }
+                    },
+                    "O_age": {
+                        "sends": 1,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "18-24": {
+                        "sends": 1,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    }
+                },
+                "gender": {
+                    "F": {
+                        "sends": 2267,
+                        "clicks": 541,
+                        "clickers": 6,
+                        "opens": 678,
+                        "openers": 70,
+                        "unsubs": 14,
+                        "taux_clickers": 0.265,
+                        "taux_openers": 3.088,
+                        "taux_unsubs": 0.618,
+                        "taux_cto": 8.571,
+                        "analyses": {
+                            "taux_clickers": "🟠 Taux de clic bon",
+                            "taux_cto": "😐 Faible engagement malgré les ouvertures",
+                            "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                        }
+                    },
+                    "M": {
+                        "sends": 16543,
+                        "clicks": 803,
+                        "clickers": 20,
+                        "opens": 1436,
+                        "openers": 463,
+                        "unsubs": 13,
+                        "taux_clickers": 0.121,
+                        "taux_openers": 2.799,
+                        "taux_unsubs": 0.079,
+                        "taux_cto": 4.32,
+                        "analyses": {
+                            "taux_clickers": "🟡 Taux de clic moyen",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "🔶 Taux de désabonnement moyen"
+                        }
+                    },
+                    "O_gender": {
+                        "sends": 10071,
+                        "clicks": 1225,
+                        "clickers": 14,
+                        "opens": 1614,
+                        "openers": 281,
+                        "unsubs": 2,
+                        "taux_clickers": 0.139,
+                        "taux_openers": 2.79,
+                        "taux_unsubs": 0.02,
+                        "taux_cto": 4.982,
+                        "analyses": {
+                            "taux_clickers": "🟡 Taux de clic moyen",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    }
+                },
+                "isp": {
+                    "yahoo": {
+                        "sends": 7602,
+                        "clicks": 2,
+                        "clickers": 2,
+                        "opens": 340,
+                        "openers": 279,
+                        "unsubs": 0,
+                        "taux_clickers": 0.026,
+                        "taux_openers": 3.67,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.717,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "free": {
+                        "sends": 927,
+                        "clicks": 20,
+                        "clickers": 1,
+                        "opens": 51,
+                        "openers": 31,
+                        "unsubs": 4,
+                        "taux_clickers": 0.108,
+                        "taux_openers": 3.344,
+                        "taux_unsubs": 0.431,
+                        "taux_cto": 3.226,
+                        "analyses": {
+                            "taux_clickers": "🟡 Taux de clic moyen",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                        }
+                    },
+                    "skynet": {
+                        "sends": 36,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 2,
+                        "openers": 1,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 2.778,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "Other": {
+                        "sends": 7786,
+                        "clicks": 2530,
+                        "clickers": 33,
+                        "opens": 3007,
+                        "openers": 235,
+                        "unsubs": 0,
+                        "taux_clickers": 0.424,
+                        "taux_openers": 3.018,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 14.043,
+                        "analyses": {
+                            "taux_clickers": "🟢 Taux de clic satisfaisant",
+                            "taux_cto": "👍 Engagement correct",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "laposte": {
+                        "sends": 2362,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 29,
+                        "openers": 27,
+                        "unsubs": 5,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 1.143,
+                        "taux_unsubs": 0.212,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "⚠️ Taux de désabonnement élevé"
+                        }
+                    },
+                    "sfr": {
+                        "sends": 50,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 6,
+                        "openers": 5,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 10.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "tiscali": {
+                        "sends": 19,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "outlook": {
+                        "sends": 8882,
+                        "clicks": 17,
+                        "clickers": 4,
+                        "opens": 290,
+                        "openers": 233,
+                        "unsubs": 20,
+                        "taux_clickers": 0.045,
+                        "taux_openers": 2.623,
+                        "taux_unsubs": 0.225,
+                        "taux_cto": 1.717,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "⚠️ Taux de désabonnement élevé"
+                        }
+                    },
+                    "gmail": {
+                        "sends": 882,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 1,
+                        "openers": 1,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.113,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "bouygues": {
+                        "sends": 271,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 1,
+                        "openers": 1,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.369,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "telecom italia": {
+                        "sends": 20,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "italiaonline": {
+                        "sends": 42,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 1,
+                        "openers": 1,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 2.381,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "O_isp": {
+                        "sends": 1,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "web.de": {
+                        "sends": 1,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "database_id": 17,
+            "id_routers": "17796",
+            "tag_id": 9,
+            "brands": [
+                {
+                    "name": "EDF ENR",
+                    "creativities": "url_vide",
+                    "sends": 3059,
+                    "clicks": 1,
+                    "clickers": 1,
+                    "opens": 180,
+                    "openers": 140,
+                    "unsubs": 2,
+                    "taux_clickers": 0.033,
+                    "taux_cto": 0.714,
+                    "taux_unsubs": 0.065,
+                    "analyses": {
+                        "taux_clickers": "🔴 Taux de clic faible",
+                        "taux_cto": "⚠️ Faible engagement (CTO)",
+                        "taux_unsubs": "🔶 Taux de désabonnement moyen"
+                    }
+                }
+            ],
+            "sends": 3059,
+            "clicks": 1,
+            "clickers": 1,
+            "opens": 180,
+            "openers": 140,
+            "unsubs": 2,
+            "taux_clickers": 0.033,
+            "taux_openers": 4.577,
+            "taux_unsubs": 0.065,
+            "taux_cto": 0.714,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "classification": "D",
+            "date_schedule": [
+                "2026-02-19"
+            ],
+            "SegmentIds": [
+                0,
+                1711
+            ],
+            "analyses": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🔶 Taux de désabonnement moyen"
+            },
+            "dimensions": {
+                "age_range": {
+                    "0-18": {
+                        "sends": 3058,
+                        "clicks": 1,
+                        "clickers": 1,
+                        "opens": 180,
+                        "openers": 140,
+                        "unsubs": 2,
+                        "taux_clickers": 0.033,
+                        "taux_openers": 4.578,
+                        "taux_unsubs": 0.065,
+                        "taux_cto": 0.714,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "🔶 Taux de désabonnement moyen"
+                        }
+                    },
+                    "O_age": {
+                        "sends": 1,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    }
+                },
+                "gender": {
+                    "M": {
+                        "sends": 1762,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 94,
+                        "openers": 78,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 4.427,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "O_gender": {
+                        "sends": 1270,
+                        "clicks": 1,
+                        "clickers": 1,
+                        "opens": 84,
+                        "openers": 60,
+                        "unsubs": 2,
+                        "taux_clickers": 0.079,
+                        "taux_openers": 4.724,
+                        "taux_unsubs": 0.157,
+                        "taux_cto": 1.667,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "⚠️ Taux de désabonnement élevé"
+                        }
+                    },
+                    "F": {
+                        "sends": 27,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 2,
+                        "openers": 2,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 7.407,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    }
+                },
+                "isp": {
+                    "free": {
+                        "sends": 225,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 7,
+                        "openers": 6,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 2.667,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "gmail": {
+                        "sends": 653,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 2,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.306,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                        }
+                    },
+                    "O_isp": {
+                        "sends": 1,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "laposte": {
+                        "sends": 186,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 2,
+                        "openers": 2,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 1.075,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "yahoo": {
+                        "sends": 1622,
+                        "clicks": 1,
+                        "clickers": 1,
+                        "opens": 169,
+                        "openers": 130,
+                        "unsubs": 0,
+                        "taux_clickers": 0.062,
+                        "taux_openers": 8.015,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.769,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "Other": {
+                        "sends": 18,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 0,
+                        "openers": 0,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.0,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    },
+                    "sfr": {
+                        "sends": 354,
+                        "clicks": 0,
+                        "clickers": 0,
+                        "opens": 2,
+                        "openers": 2,
+                        "unsubs": 0,
+                        "taux_clickers": 0.0,
+                        "taux_openers": 0.565,
+                        "taux_unsubs": 0.0,
+                        "taux_cto": 0.0,
+                        "analyses": {
+                            "taux_clickers": "🔴 Taux de clic faible",
+                            "taux_cto": "⚠️ Faible engagement (CTO)",
+                            "taux_unsubs": "✅ Taux de désabonnement faible"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

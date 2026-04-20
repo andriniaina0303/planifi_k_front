@@ -1,0 +1,9 @@
+const REACT_APP_ENDPOINT = "http://127.0.0.1:8000"
+
+// ADVETISERS
+export const REACT_APP_ENDPOINT_ALL_ADVERTISERS = REACT_APP_ENDPOINT + '/reporting/all_advertisers'
+export const REACT_APP_ENDPOINT_ADVERTISER_DETAIL = REACT_APP_ENDPOINT + '/reporting/advertiser/'
+
+//DATABASES
+export const REACT_APP_ENDPOINT_ALL_DATABASES = REACT_APP_ENDPOINT + '/database'
+export const REACT_APP_ENDPOINT_ALL_SEGMENT = REACT_APP_ENDPOINT + '/segment'

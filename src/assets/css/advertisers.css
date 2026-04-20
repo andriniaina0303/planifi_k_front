@@ -1,0 +1,153 @@
+/* 🌌 Global */
+.container {
+  padding: 24px;
+  background: #0f172a;
+  min-height: 100vh;
+  font-family: Inter, system-ui, sans-serif;
+  color: #e2e8f0;
+}
+
+/* 🔝 Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* 📊 KPI */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.kpi {
+  background: linear-gradient(145deg, #1e293b, #172033);
+  border-radius: 12px;
+  padding: 16px;
+  transition: 0.2s;
+}
+
+.kpi:hover {
+  transform: translateY(-2px);
+}
+
+.kpi-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.kpi-value {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.kpi-sub {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* 🎛 Filters */
+.filter-bar {
+  background: #1e293b;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-label {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* 📋 Table */
+.table-card {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table-head {
+  padding: 16px;
+  border-bottom: 1px solid #1e2d3d;
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-title {
+  font-weight: 600;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  font-size: 11px;
+  color: #64748b;
+  text-align: left;
+  padding: 10px;
+}
+
+.table td {
+  padding: 12px;
+  border-top: 1px solid #1e2d3d;
+}
+
+/* 🎯 Badges */
+.badge {
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  margin-right: 4px;
+}
+
+.badge-good { background: #173404; color: #86efac; }
+.badge-avg  { background: #412402; color: #fcd34d; }
+.badge-low  { background: #501313; color: #fca5a5; }
+.badge-ok   { background: #04342C; color: #6ee7b7; }
+.badge-high { background: #501313; color: #fca5a5; }
+
+/* 📊 Bars */
+.bar {
+  height: 4px;
+  background: #1e2d3d;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  transition: width 0.3s;
+}
+
+/* ⏳ Loader */
+.loader {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

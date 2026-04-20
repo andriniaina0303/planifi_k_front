@@ -1,0 +1,26 @@
+.offcanvas-title {
+  font-size: 1.5rem;          /* plus grand */
+  font-weight: 700;            /* gras */
+  color: #4fd1c5;              /* couleur teal comme le menu Reporting */
+  letter-spacing: 1px;         /* espacement entre les lettres */
+  text-transform: uppercase;   /* majuscules */
+  margin-bottom: 0.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* plus moderne */
+}
+
+
+.centered-select .ant-select-selection-item {
+  text-align: center;
+  width: 100%;
+}
+
+.centered-select .ant-select-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Centre aussi les options dans le dropdown */
+.ant-select-item-option-content {
+  text-align: center;
+}
