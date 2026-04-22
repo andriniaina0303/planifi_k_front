@@ -215,8 +215,8 @@ import {
   message,
 } from "antd";
 import axios from "axios";
-import GenderPieChart from "../../components/GenderPieChart";
-import DashboardCharts from "../../components/DashboardCharts";
+import GenderPieChart from "../../components/chart/GenderPieChart";
+import DashboardCharts from "../../components/chart/DashboardCharts";
 
 const { Title } = Typography;
 const { TextArea } = Input;

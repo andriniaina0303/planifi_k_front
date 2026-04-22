@@ -1,15 +1,18 @@
 [
     {
-        "advrtiser_id": 9597,
-        "advertiser_name": "Maty",
+        "advertiser_id": "10989",
+        "advertiser_name": "Formation secretaire médicale",
+        "tag_id": 51,
         "globales": {
             "sends": 0,
-            "openers": 19,
+            "openers": 29,
             "clickers": 0,
             "unsubs": 0,
-            "taux_openers": null,
-            "taux_clickers": null,
-            "taux_unsubs": null,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
             "analyse": {
                 "taux_clickers": "🔴 Taux de clic faible",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
@@ -18,52 +21,40 @@
         }
     },
     {
-        "advrtiser_id": 8298,
-        "advertiser_name": "Cofidis",
+        "advertiser_id": "4534",
+        "advertiser_name": "prima it",
+        "tag_id": 72,
         "globales": {
-            "sends": 9942,
-            "openers": 1249,
-            "clickers": 17,
-            "unsubs": 240,
-            "taux_openers": 12.563,
-            "taux_clickers": 0.171,
-            "taux_unsubs": 2.414,
+            "sends": 61011,
+            "openers": 3148,
+            "clickers": 147,
+            "unsubs": 0,
+            "ca": 290.0,
+            "ecpm": 4.753,
+            "taux_openers": 5.16,
+            "taux_clickers": 0.241,
+            "taux_unsubs": 0.0,
             "analyse": {
-                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_clickers": "🟠 Taux de clic bon",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     },
     {
-        "advrtiser_id": 7094,
-        "advertiser_name": "EDF",
-        "globales": {
-            "sends": 31940,
-            "openers": 954,
-            "clickers": 41,
-            "unsubs": 31,
-            "taux_openers": 2.987,
-            "taux_clickers": 0.128,
-            "taux_unsubs": 0.097,
-            "analyse": {
-                "taux_clickers": "🟡 Taux de clic moyen",
-                "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🔶 Taux de désabonnement moyen"
-            }
-        }
-    },
-    {
-        "advrtiser_id": 4892,
+        "advertiser_id": "4892",
         "advertiser_name": "Newsletter",
+        "tag_id": 8,
         "globales": {
-            "sends": 86343,
-            "openers": 33303,
-            "clickers": 1301,
-            "unsubs": 4504,
-            "taux_openers": 38.571,
-            "taux_clickers": 1.507,
-            "taux_unsubs": 5.216,
+            "sends": 1469883,
+            "openers": 371277,
+            "clickers": 11602,
+            "unsubs": 11979,
+            "ca": 3925.9320000000002,
+            "ecpm": 2.671,
+            "taux_openers": 25.259,
+            "taux_clickers": 0.789,
+            "taux_unsubs": 0.815,
             "analyse": {
                 "taux_clickers": "🟢 Taux de clic satisfaisant",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
@@ -72,16 +63,460 @@
         }
     },
     {
-        "advrtiser_id": 8282,
-        "advertiser_name": "Verisure",
+        "advertiser_id": "1713",
+        "advertiser_name": "Euromillions",
+        "tag_id": 57,
         "globales": {
-            "sends": 33411,
-            "openers": 1376,
-            "clickers": 54,
-            "unsubs": 250,
-            "taux_openers": 4.118,
+            "sends": 0,
+            "openers": 129,
+            "clickers": 5,
+            "unsubs": 1,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4103",
+        "advertiser_name": "Nettoyage des locaux",
+        "tag_id": 70,
+        "globales": {
+            "sends": 0,
+            "openers": 3,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8871",
+        "advertiser_name": "Nespresso",
+        "tag_id": 46,
+        "globales": {
+            "sends": 0,
+            "openers": 97,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 29.88,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12927",
+        "advertiser_name": "Degriffstock",
+        "tag_id": 26,
+        "globales": {
+            "sends": 0,
+            "openers": 42,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "6490",
+        "advertiser_name": "Renault",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 7,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "3068",
+        "advertiser_name": "coop",
+        "tag_id": 33,
+        "globales": {
+            "sends": 0,
+            "openers": 12,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 6.5,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1847",
+        "advertiser_name": "amazon code",
+        "tag_id": 39,
+        "globales": {
+            "sends": 20248,
+            "openers": 3817,
+            "clickers": 12,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 18.851,
+            "taux_clickers": 0.059,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12876",
+        "advertiser_name": "Oh My Crédit Calcul",
+        "tag_id": 25,
+        "globales": {
+            "sends": 0,
+            "openers": 8,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12816",
+        "advertiser_name": "Google Trading",
+        "tag_id": 39,
+        "globales": {
+            "sends": 0,
+            "openers": 20,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 161.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "6376",
+        "advertiser_name": "Mutuelle Conseil",
+        "tag_id": 20,
+        "globales": {
+            "sends": 79794,
+            "openers": 15833,
+            "clickers": 130,
+            "unsubs": 0,
+            "ca": 2825.0,
+            "ecpm": 35.404,
+            "taux_openers": 19.842,
+            "taux_clickers": 0.163,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13334",
+        "advertiser_name": "Le Roi Lion",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 285,
+            "clickers": 3,
+            "unsubs": 0,
+            "ca": 266.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "163",
+        "advertiser_name": "Costa croisière",
+        "tag_id": 91,
+        "globales": {
+            "sends": 20352,
+            "openers": 840,
+            "clickers": 53,
+            "unsubs": 0,
+            "ca": 223.76,
+            "ecpm": 10.994,
+            "taux_openers": 4.127,
+            "taux_clickers": 0.26,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "😐 Faible engagement malgré les ouvertures",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13141",
+        "advertiser_name": "Wesur",
+        "tag_id": 72,
+        "globales": {
+            "sends": 15945,
+            "openers": 3959,
+            "clickers": 8,
+            "unsubs": 0,
+            "ca": 23.6,
+            "ecpm": 1.48,
+            "taux_openers": 24.829,
+            "taux_clickers": 0.05,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "3537",
+        "advertiser_name": "Ryanair",
+        "tag_id": 38,
+        "globales": {
+            "sends": 0,
+            "openers": 2,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12418",
+        "advertiser_name": "Consumenten Panel",
+        "tag_id": 60,
+        "globales": {
+            "sends": 75752,
+            "openers": 10921,
+            "clickers": 378,
+            "unsubs": 0,
+            "ca": 133.0,
+            "ecpm": 1.756,
+            "taux_openers": 14.417,
+            "taux_clickers": 0.499,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8573",
+        "advertiser_name": "Air France",
+        "tag_id": 38,
+        "globales": {
+            "sends": 0,
+            "openers": 438,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10278",
+        "advertiser_name": "Meer Met Ziggo",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 268,
+            "clickers": 10,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "972",
+        "advertiser_name": "Land Rover",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 4,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 92.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1866",
+        "advertiser_name": "Placement divers",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 15,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 30.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4892",
+        "advertiser_name": "Newsletter",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 3925.9320000000002,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8282",
+        "advertiser_name": "Verisure",
+        "tag_id": 53,
+        "globales": {
+            "sends": 19923,
+            "openers": 1014,
+            "clickers": 10,
+            "unsubs": 0,
+            "ca": 20.0,
+            "ecpm": 1.004,
+            "taux_openers": 5.09,
+            "taux_clickers": 0.05,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "6694",
+        "advertiser_name": "Société Générale",
+        "tag_id": 10,
+        "globales": {
+            "sends": 807651,
+            "openers": 206956,
+            "clickers": 1306,
+            "unsubs": 14403,
+            "ca": 6094.5,
+            "ecpm": 7.546,
+            "taux_openers": 25.624,
             "taux_clickers": 0.162,
-            "taux_unsubs": 0.748,
+            "taux_unsubs": 1.783,
             "analyse": {
                 "taux_clickers": "🟡 Taux de clic moyen",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
@@ -90,146 +525,3194 @@
         }
     },
     {
-        "advrtiser_id": 3342,
+        "advertiser_id": "1093",
+        "advertiser_name": "Crédit Conso",
+        "tag_id": 25,
+        "globales": {
+            "sends": 106646,
+            "openers": 25200,
+            "clickers": 327,
+            "unsubs": 1046,
+            "ca": 732.0,
+            "ecpm": 6.864,
+            "taux_openers": 23.63,
+            "taux_clickers": 0.307,
+            "taux_unsubs": 0.981,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "574",
+        "advertiser_name": "Nexity",
+        "tag_id": 30,
+        "globales": {
+            "sends": 0,
+            "openers": 5,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "40",
+        "advertiser_name": "Difesa Debitori",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 474,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5061",
+        "advertiser_name": "Hypotheek Berekenen",
+        "tag_id": 30,
+        "globales": {
+            "sends": 0,
+            "openers": 16,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1412",
+        "advertiser_name": "Audi",
+        "tag_id": 2,
+        "globales": {
+            "sends": 53598,
+            "openers": 9476,
+            "clickers": 58,
+            "unsubs": 206,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 17.68,
+            "taux_clickers": 0.108,
+            "taux_unsubs": 0.384,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1067",
+        "advertiser_name": "Mutuelle santé Sénior",
+        "tag_id": 20,
+        "globales": {
+            "sends": 172338,
+            "openers": 45890,
+            "clickers": 1071,
+            "unsubs": 2682,
+            "ca": 3080.0,
+            "ecpm": 17.872,
+            "taux_openers": 26.628,
+            "taux_clickers": 0.621,
+            "taux_unsubs": 1.556,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12480",
+        "advertiser_name": "Santevies",
+        "tag_id": 20,
+        "globales": {
+            "sends": 0,
+            "openers": 7,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "645",
+        "advertiser_name": "Adoucisseur d'eau",
+        "tag_id": 47,
+        "globales": {
+            "sends": 29707,
+            "openers": 4914,
+            "clickers": 52,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 16.542,
+            "taux_clickers": 0.175,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9886",
+        "advertiser_name": "Emirates",
+        "tag_id": 86,
+        "globales": {
+            "sends": 0,
+            "openers": 1806,
+            "clickers": 2,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10013",
+        "advertiser_name": "Fortuneo",
+        "tag_id": 10,
+        "globales": {
+            "sends": 12737,
+            "openers": 2987,
+            "clickers": 5,
+            "unsubs": 0,
+            "ca": 1111.46,
+            "ecpm": 87.262,
+            "taux_openers": 23.451,
+            "taux_clickers": 0.039,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4892",
+        "advertiser_name": "Newsletter",
+        "tag_id": 1,
+        "globales": {
+            "sends": 0,
+            "openers": 17,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 3925.9320000000002,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "🙂 Engagement moyen",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9761",
+        "advertiser_name": "Nespresso",
+        "tag_id": 46,
+        "globales": {
+            "sends": 0,
+            "openers": 6,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 231.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10535",
+        "advertiser_name": "Groupama",
+        "tag_id": 20,
+        "globales": {
+            "sends": 0,
+            "openers": 4,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 204.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4987",
+        "advertiser_name": "Financer ses projets",
+        "tag_id": 25,
+        "globales": {
+            "sends": 330196,
+            "openers": 68681,
+            "clickers": 766,
+            "unsubs": 1415,
+            "ca": 2940.0,
+            "ecpm": 8.904,
+            "taux_openers": 20.8,
+            "taux_clickers": 0.232,
+            "taux_unsubs": 0.429,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4534",
+        "advertiser_name": "prima it",
+        "tag_id": 9,
+        "globales": {
+            "sends": 0,
+            "openers": 19,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 290.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11092",
+        "advertiser_name": "Mes prêts en ligne",
+        "tag_id": 25,
+        "globales": {
+            "sends": 0,
+            "openers": 49,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11792",
+        "advertiser_name": "Eni plenitude ",
+        "tag_id": 9,
+        "globales": {
+            "sends": 0,
+            "openers": 18,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 84.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1252",
+        "advertiser_name": "Paypal",
+        "tag_id": 39,
+        "globales": {
+            "sends": 51278,
+            "openers": 10984,
+            "clickers": 49,
+            "unsubs": 356,
+            "ca": 582.0,
+            "ecpm": 11.35,
+            "taux_openers": 21.42,
+            "taux_clickers": 0.096,
+            "taux_unsubs": 0.694,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "282",
+        "advertiser_name": "Comme j'aime",
+        "tag_id": 7,
+        "globales": {
+            "sends": 0,
+            "openers": 5,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 36.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "230",
+        "advertiser_name": "LMP Minceur",
+        "tag_id": 7,
+        "globales": {
+            "sends": 21489,
+            "openers": 5144,
+            "clickers": 15,
+            "unsubs": 0,
+            "ca": 10.0,
+            "ecpm": 0.465,
+            "taux_openers": 23.938,
+            "taux_clickers": 0.07,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5878",
+        "advertiser_name": "My Energy Compare",
+        "tag_id": 9,
+        "globales": {
+            "sends": 0,
+            "openers": 11,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "🙂 Engagement moyen",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "2588",
+        "advertiser_name": "Alain Afflelou",
+        "tag_id": 93,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12807",
+        "advertiser_name": "Mon Crédit facile",
+        "tag_id": 25,
+        "globales": {
+            "sends": 23662,
+            "openers": 5043,
+            "clickers": 39,
+            "unsubs": 165,
+            "ca": 47.46,
+            "ecpm": 2.006,
+            "taux_openers": 21.313,
+            "taux_clickers": 0.165,
+            "taux_unsubs": 0.697,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12803",
+        "advertiser_name": "Stop calcaire",
+        "tag_id": 47,
+        "globales": {
+            "sends": 51299,
+            "openers": 12876,
+            "clickers": 98,
+            "unsubs": 0,
+            "ca": 95.0,
+            "ecpm": 1.852,
+            "taux_openers": 25.1,
+            "taux_clickers": 0.191,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13207",
+        "advertiser_name": "Comparateur mutuelle classique",
+        "tag_id": 20,
+        "globales": {
+            "sends": 18080,
+            "openers": 3826,
+            "clickers": 74,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 21.162,
+            "taux_clickers": 0.409,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13153",
+        "advertiser_name": "Ameconviene",
+        "tag_id": 72,
+        "globales": {
+            "sends": 18021,
+            "openers": 961,
+            "clickers": 22,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 5.333,
+            "taux_clickers": 0.122,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "291",
+        "advertiser_name": "Nissan",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 326,
+            "clickers": 3,
+            "unsubs": 0,
+            "ca": 90.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "87",
+        "advertiser_name": "Giordano Vini",
+        "tag_id": 8,
+        "globales": {
+            "sends": 88431,
+            "openers": 6504,
+            "clickers": 144,
+            "unsubs": 0,
+            "ca": 24.0,
+            "ecpm": 0.271,
+            "taux_openers": 7.355,
+            "taux_clickers": 0.163,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8298",
+        "advertiser_name": "Cofidis",
+        "tag_id": 25,
+        "globales": {
+            "sends": 1352,
+            "openers": 597,
+            "clickers": 3,
+            "unsubs": 0,
+            "ca": 82.0,
+            "ecpm": 60.651,
+            "taux_openers": 44.157,
+            "taux_clickers": 0.222,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8818",
+        "advertiser_name": "Lebara",
+        "tag_id": 35,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8263",
+        "advertiser_name": "Segugio",
+        "tag_id": 25,
+        "globales": {
+            "sends": 20356,
+            "openers": 638,
+            "clickers": 20,
+            "unsubs": 0,
+            "ca": 17.0,
+            "ecpm": 0.835,
+            "taux_openers": 3.134,
+            "taux_clickers": 0.098,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "96",
+        "advertiser_name": "Clinica Baviera",
+        "tag_id": 14,
+        "globales": {
+            "sends": 148620,
+            "openers": 21434,
+            "clickers": 166,
+            "unsubs": 20,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 14.422,
+            "taux_clickers": 0.112,
+            "taux_unsubs": 0.013,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "2491",
+        "advertiser_name": "Isolation à 1 euro",
+        "tag_id": 82,
+        "globales": {
+            "sends": 7788,
+            "openers": 1022,
+            "clickers": 20,
+            "unsubs": 0,
+            "ca": 36.0,
+            "ecpm": 4.622,
+            "taux_openers": 13.123,
+            "taux_clickers": 0.257,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10661",
+        "advertiser_name": "Gifi ",
+        "tag_id": 94,
+        "globales": {
+            "sends": 0,
+            "openers": 6,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10751",
+        "advertiser_name": "prêt liberté",
+        "tag_id": 25,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 69.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "144",
+        "advertiser_name": "Nike",
+        "tag_id": 94,
+        "globales": {
+            "sends": 0,
+            "openers": 21,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 231.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9335",
+        "advertiser_name": "Peugeot",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 16,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 44.94,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "6285",
+        "advertiser_name": "Chèque cadeau",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 43,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13136",
+        "advertiser_name": "True Health Cover",
+        "tag_id": 20,
+        "globales": {
+            "sends": 0,
+            "openers": 3,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13301",
+        "advertiser_name": "Deal Helper Windows",
+        "tag_id": 81,
+        "globales": {
+            "sends": 0,
+            "openers": 22,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 90.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "7982",
+        "advertiser_name": "Budgetdevis  ",
+        "tag_id": 20,
+        "globales": {
+            "sends": 43726,
+            "openers": 6969,
+            "clickers": 105,
+            "unsubs": 0,
+            "ca": 640.0,
+            "ecpm": 14.637,
+            "taux_openers": 15.938,
+            "taux_clickers": 0.24,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11521",
+        "advertiser_name": "Amazon Prime ",
+        "tag_id": 61,
+        "globales": {
+            "sends": 0,
+            "openers": 8,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1399",
+        "advertiser_name": "Amplifon",
+        "tag_id": 14,
+        "globales": {
+            "sends": 0,
+            "openers": 201,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 210.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "163",
+        "advertiser_name": "Costa croisière",
+        "tag_id": 38,
+        "globales": {
+            "sends": 0,
+            "openers": 17,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 223.76,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1620",
+        "advertiser_name": "Le roi du matelas",
+        "tag_id": 5,
+        "globales": {
+            "sends": 64516,
+            "openers": 15083,
+            "clickers": 194,
+            "unsubs": 0,
+            "ca": 23.6,
+            "ecpm": 0.366,
+            "taux_openers": 23.379,
+            "taux_clickers": 0.301,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13153",
+        "advertiser_name": "Ameconviene",
+        "tag_id": 9,
+        "globales": {
+            "sends": 69058,
+            "openers": 3828,
+            "clickers": 39,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 5.543,
+            "taux_clickers": 0.056,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "7672",
+        "advertiser_name": "telecom",
+        "tag_id": 35,
+        "globales": {
+            "sends": 0,
+            "openers": 5,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "2931",
+        "advertiser_name": "Radiateur",
+        "tag_id": 84,
+        "globales": {
+            "sends": 7648,
+            "openers": 1044,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 13.651,
+            "taux_clickers": 0.013,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "3088",
+        "advertiser_name": "MG Motor",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 10.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13139",
+        "advertiser_name": "occhiali",
+        "tag_id": 14,
+        "globales": {
+            "sends": 0,
+            "openers": 8,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 7.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8005",
+        "advertiser_name": "Stokomani",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 22,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 30.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10957",
+        "advertiser_name": "Credit agricole Auto",
+        "tag_id": 72,
+        "globales": {
+            "sends": 12536,
+            "openers": 941,
+            "clickers": 10,
+            "unsubs": 0,
+            "ca": 14.94,
+            "ecpm": 1.192,
+            "taux_openers": 7.506,
+            "taux_clickers": 0.08,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10563",
+        "advertiser_name": "Piscine Desjoyaux",
+        "tag_id": 34,
+        "globales": {
+            "sends": 0,
+            "openers": 2,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "242",
+        "advertiser_name": "Kantar",
+        "tag_id": 8,
+        "globales": {
+            "sends": 3028,
+            "openers": 317,
+            "clickers": 2,
+            "unsubs": 0,
+            "ca": 18.9,
+            "ecpm": 6.242,
+            "taux_openers": 10.469,
+            "taux_clickers": 0.066,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4273",
+        "advertiser_name": "Wind",
+        "tag_id": 35,
+        "globales": {
+            "sends": 0,
+            "openers": 688,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 97.5,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "2061",
+        "advertiser_name": "Pharmacy 2U",
+        "tag_id": 14,
+        "globales": {
+            "sends": 167160,
+            "openers": 51404,
+            "clickers": 116,
+            "unsubs": 0,
+            "ca": 27.722,
+            "ecpm": 0.166,
+            "taux_openers": 30.751,
+            "taux_clickers": 0.069,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11066",
+        "advertiser_name": " Mon Futur appartement",
+        "tag_id": 30,
+        "globales": {
+            "sends": 0,
+            "openers": 31,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4382",
+        "advertiser_name": "GRDF",
+        "tag_id": 9,
+        "globales": {
+            "sends": 94159,
+            "openers": 20082,
+            "clickers": 368,
+            "unsubs": 0,
+            "ca": 399.0,
+            "ecpm": 4.238,
+            "taux_openers": 21.328,
+            "taux_clickers": 0.391,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4892",
+        "advertiser_name": "Newsletter",
+        "tag_id": 94,
+        "globales": {
+            "sends": 78323,
+            "openers": 25645,
+            "clickers": 1417,
+            "unsubs": 763,
+            "ca": 3925.9320000000002,
+            "ecpm": 50.125,
+            "taux_openers": 32.743,
+            "taux_clickers": 1.809,
+            "taux_unsubs": 0.974,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "😐 Faible engagement malgré les ouvertures",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "470",
+        "advertiser_name": "Histoire d'Or",
+        "tag_id": 58,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 252.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13287",
+        "advertiser_name": "Comparer facile Energie",
+        "tag_id": 35,
+        "globales": {
+            "sends": 1361,
+            "openers": 398,
+            "clickers": 2,
+            "unsubs": 0,
+            "ca": 40.0,
+            "ecpm": 29.39,
+            "taux_openers": 29.243,
+            "taux_clickers": 0.147,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8072",
+        "advertiser_name": "AG2R La Mondiale",
+        "tag_id": 20,
+        "globales": {
+            "sends": 0,
+            "openers": 4,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 542.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5961",
+        "advertiser_name": "club med",
+        "tag_id": 38,
+        "globales": {
+            "sends": 0,
+            "openers": 23,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 17.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11802",
+        "advertiser_name": "Credit Envie",
+        "tag_id": 25,
+        "globales": {
+            "sends": 50666,
+            "openers": 3037,
+            "clickers": 36,
+            "unsubs": 0,
+            "ca": 204.0,
+            "ecpm": 4.026,
+            "taux_openers": 5.994,
+            "taux_clickers": 0.071,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "2032",
+        "advertiser_name": "Isolation",
+        "tag_id": 82,
+        "globales": {
+            "sends": 9708,
+            "openers": 610,
+            "clickers": 8,
+            "unsubs": 0,
+            "ca": 41.0,
+            "ecpm": 4.223,
+            "taux_openers": 6.283,
+            "taux_clickers": 0.082,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12709",
+        "advertiser_name": "Safran",
+        "tag_id": 39,
+        "globales": {
+            "sends": 18929,
+            "openers": 2088,
+            "clickers": 15,
+            "unsubs": 0,
+            "ca": 64.0,
+            "ecpm": 3.381,
+            "taux_openers": 11.031,
+            "taux_clickers": 0.079,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1531",
+        "advertiser_name": "Mateva",
+        "tag_id": 20,
+        "globales": {
+            "sends": 0,
+            "openers": 9,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9462",
+        "advertiser_name": "Amazon Coins",
+        "tag_id": 39,
+        "globales": {
+            "sends": 14356,
+            "openers": 1665,
+            "clickers": 15,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 11.598,
+            "taux_clickers": 0.104,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10855",
+        "advertiser_name": "Crédit agricole MRH",
+        "tag_id": 21,
+        "globales": {
+            "sends": 0,
+            "openers": 8,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10195",
+        "advertiser_name": "tariffa chiara",
+        "tag_id": 9,
+        "globales": {
+            "sends": 0,
+            "openers": 7,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9654",
+        "advertiser_name": "Picard",
+        "tag_id": 11,
+        "globales": {
+            "sends": 0,
+            "openers": 949,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 84.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8552",
+        "advertiser_name": "Société Générale",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 2,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 408.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9039",
+        "advertiser_name": "Center Parcs",
+        "tag_id": 89,
+        "globales": {
+            "sends": 0,
+            "openers": 15,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4342",
+        "advertiser_name": "XTrade",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 208,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 626.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4892",
+        "advertiser_name": "Newsletter",
+        "tag_id": 5,
+        "globales": {
+            "sends": 624051,
+            "openers": 140813,
+            "clickers": 6087,
+            "unsubs": 1745,
+            "ca": 3925.9320000000002,
+            "ecpm": 6.291,
+            "taux_openers": 22.564,
+            "taux_clickers": 0.975,
+            "taux_unsubs": 0.28,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "⚠️ Taux de désabonnement élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4477",
+        "advertiser_name": "Cabinet d'Ormane",
+        "tag_id": 10,
+        "globales": {
+            "sends": 32090,
+            "openers": 5173,
+            "clickers": 41,
+            "unsubs": 244,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 16.12,
+            "taux_clickers": 0.128,
+            "taux_unsubs": 0.76,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11198",
+        "advertiser_name": "Ez dosh",
+        "tag_id": 25,
+        "globales": {
+            "sends": 0,
+            "openers": 20,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 90.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11215",
+        "advertiser_name": "Car finance claims ",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 59,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5331",
+        "advertiser_name": "Support With Debt",
+        "tag_id": 10,
+        "globales": {
+            "sends": 47518,
+            "openers": 2327,
+            "clickers": 14,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 4.897,
+            "taux_clickers": 0.029,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13105",
+        "advertiser_name": "Dassault",
+        "tag_id": 39,
+        "globales": {
+            "sends": 0,
+            "openers": 13,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 550.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13305",
+        "advertiser_name": "Vintage Cash Cow",
+        "tag_id": 8,
+        "globales": {
+            "sends": 86962,
+            "openers": 20176,
+            "clickers": 146,
+            "unsubs": 202,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 23.201,
+            "taux_clickers": 0.168,
+            "taux_unsubs": 0.232,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "⚠️ Taux de désabonnement élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10061",
+        "advertiser_name": "BUT",
+        "tag_id": 8,
+        "globales": {
+            "sends": 50243,
+            "openers": 19126,
+            "clickers": 514,
+            "unsubs": 535,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 38.067,
+            "taux_clickers": 1.023,
+            "taux_unsubs": 1.065,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4342",
+        "advertiser_name": "XTrade",
+        "tag_id": 39,
+        "globales": {
+            "sends": 79709,
+            "openers": 15718,
+            "clickers": 180,
+            "unsubs": 0,
+            "ca": 626.0,
+            "ecpm": 7.854,
+            "taux_openers": 19.719,
+            "taux_clickers": 0.226,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1685",
+        "advertiser_name": "Percko",
+        "tag_id": 14,
+        "globales": {
+            "sends": 50115,
+            "openers": 9092,
+            "clickers": 122,
+            "unsubs": 0,
+            "ca": 129.0,
+            "ecpm": 2.574,
+            "taux_openers": 18.142,
+            "taux_clickers": 0.243,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1352",
+        "advertiser_name": "Panneaux solaires",
+        "tag_id": 9,
+        "globales": {
+            "sends": 31447,
+            "openers": 5788,
+            "clickers": 207,
+            "unsubs": 3,
+            "ca": 795.0,
+            "ecpm": 25.281,
+            "taux_openers": 18.406,
+            "taux_clickers": 0.658,
+            "taux_unsubs": 0.01,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13377",
+        "advertiser_name": "Diymora",
+        "tag_id": 30,
+        "globales": {
+            "sends": 0,
+            "openers": 4,
+            "clickers": 3,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "🔥 Engagement très fort (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4438",
+        "advertiser_name": "Younited Credit",
+        "tag_id": 25,
+        "globales": {
+            "sends": 20190,
+            "openers": 709,
+            "clickers": 17,
+            "unsubs": 0,
+            "ca": 42.0,
+            "ecpm": 2.08,
+            "taux_openers": 3.512,
+            "taux_clickers": 0.084,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12421",
+        "advertiser_name": "Super Chauffage",
+        "tag_id": 84,
+        "globales": {
+            "sends": 0,
+            "openers": 18,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 40.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "3978",
+        "advertiser_name": "Leroy Merlin",
+        "tag_id": 34,
+        "globales": {
+            "sends": 163890,
+            "openers": 38480,
+            "clickers": 1472,
+            "unsubs": 563,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 23.479,
+            "taux_clickers": 0.898,
+            "taux_unsubs": 0.344,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "2587",
+        "advertiser_name": "Douche Sénior France",
+        "tag_id": 80,
+        "globales": {
+            "sends": 38630,
+            "openers": 6104,
+            "clickers": 134,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 15.801,
+            "taux_clickers": 0.347,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11708",
+        "advertiser_name": "SectorAlarm",
+        "tag_id": 53,
+        "globales": {
+            "sends": 79342,
+            "openers": 5883,
+            "clickers": 29,
+            "unsubs": 0,
+            "ca": 133.0,
+            "ecpm": 1.676,
+            "taux_openers": 7.415,
+            "taux_clickers": 0.037,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10534",
+        "advertiser_name": "Mon comparateur mutuelle",
+        "tag_id": 20,
+        "globales": {
+            "sends": 11168,
+            "openers": 1716,
+            "clickers": 26,
+            "unsubs": 250,
+            "ca": 788.0,
+            "ecpm": 70.559,
+            "taux_openers": 15.365,
+            "taux_clickers": 0.233,
+            "taux_unsubs": 2.239,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12867",
+        "advertiser_name": "TF1 Automoto",
+        "tag_id": 72,
+        "globales": {
+            "sends": 18859,
+            "openers": 1464,
+            "clickers": 19,
+            "unsubs": 0,
+            "ca": 23.6,
+            "ecpm": 1.251,
+            "taux_openers": 7.763,
+            "taux_clickers": 0.101,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "6902",
+        "advertiser_name": "Devis Mutuelle Senior",
+        "tag_id": 20,
+        "globales": {
+            "sends": 1723,
+            "openers": 339,
+            "clickers": 2,
+            "unsubs": 0,
+            "ca": 264.0,
+            "ecpm": 153.221,
+            "taux_openers": 19.675,
+            "taux_clickers": 0.116,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "506",
+        "advertiser_name": "Zalando",
+        "tag_id": 26,
+        "globales": {
+            "sends": 0,
+            "openers": 6,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12399",
+        "advertiser_name": "Cartel de Coches",
+        "tag_id": 2,
+        "globales": {
+            "sends": 20387,
+            "openers": 15847,
+            "clickers": 183,
+            "unsubs": 4,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 77.731,
+            "taux_clickers": 0.898,
+            "taux_unsubs": 0.02,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "655",
+        "advertiser_name": "Chaussea",
+        "tag_id": 94,
+        "globales": {
+            "sends": 155015,
+            "openers": 46581,
+            "clickers": 1572,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 30.049,
+            "taux_clickers": 1.014,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12709",
+        "advertiser_name": "Safran",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 16,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 64.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9461",
+        "advertiser_name": "Thalasseo",
+        "tag_id": 38,
+        "globales": {
+            "sends": 0,
+            "openers": 6,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 12.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4382",
+        "advertiser_name": "GRDF",
+        "tag_id": 84,
+        "globales": {
+            "sends": 0,
+            "openers": 18,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 399.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "🙂 Engagement moyen",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "278",
+        "advertiser_name": "Volkswagen",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 8,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8091",
+        "advertiser_name": "Edel Collecties",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 10,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13046",
+        "advertiser_name": "Meilleurs Forfaits Internet",
+        "tag_id": 35,
+        "globales": {
+            "sends": 0,
+            "openers": 561,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 550.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "495",
+        "advertiser_name": "Safti",
+        "tag_id": 22,
+        "globales": {
+            "sends": 38735,
+            "openers": 6380,
+            "clickers": 78,
+            "unsubs": 0,
+            "ca": 1800.0,
+            "ecpm": 46.47,
+            "taux_openers": 16.471,
+            "taux_clickers": 0.201,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5890",
+        "advertiser_name": "Aladom",
+        "tag_id": 17,
+        "globales": {
+            "sends": 31370,
+            "openers": 2691,
+            "clickers": 90,
+            "unsubs": 108,
+            "ca": 294.94,
+            "ecpm": 9.402,
+            "taux_openers": 8.578,
+            "taux_clickers": 0.287,
+            "taux_unsubs": 0.344,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9639",
+        "advertiser_name": "Amazon",
+        "tag_id": 39,
+        "globales": {
+            "sends": 0,
+            "openers": 10,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11490",
+        "advertiser_name": "Temu",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 40,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "6856",
+        "advertiser_name": "EDF ENR",
+        "tag_id": 85,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12070",
+        "advertiser_name": "Marc Orian",
+        "tag_id": 58,
+        "globales": {
+            "sends": 0,
+            "openers": 22,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 550.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9663",
+        "advertiser_name": "Allianz auto",
+        "tag_id": 72,
+        "globales": {
+            "sends": 299610,
+            "openers": 65619,
+            "clickers": 514,
+            "unsubs": 2411,
+            "ca": 4587.0,
+            "ecpm": 15.31,
+            "taux_openers": 21.901,
+            "taux_clickers": 0.172,
+            "taux_unsubs": 0.805,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1479",
+        "advertiser_name": "trading amazon",
+        "tag_id": 39,
+        "globales": {
+            "sends": 14266,
+            "openers": 2608,
+            "clickers": 14,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 18.281,
+            "taux_clickers": 0.098,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9597",
+        "advertiser_name": "Maty",
+        "tag_id": 58,
+        "globales": {
+            "sends": 42636,
+            "openers": 18267,
+            "clickers": 139,
+            "unsubs": 0,
+            "ca": 81.51,
+            "ecpm": 1.912,
+            "taux_openers": 42.844,
+            "taux_clickers": 0.326,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9759",
+        "advertiser_name": "Histoire d'Or",
+        "tag_id": 58,
+        "globales": {
+            "sends": 6414,
+            "openers": 3574,
+            "clickers": 17,
+            "unsubs": 0,
+            "ca": 101.88,
+            "ecpm": 15.884,
+            "taux_openers": 55.722,
+            "taux_clickers": 0.265,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13381",
+        "advertiser_name": "Offres Energie",
+        "tag_id": 9,
+        "globales": {
+            "sends": 42531,
+            "openers": 1140,
+            "clickers": 19,
+            "unsubs": 0,
+            "ca": 63.0,
+            "ecpm": 1.481,
+            "taux_openers": 2.68,
+            "taux_clickers": 0.045,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9994",
+        "advertiser_name": "Vente unique",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 5,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 30.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1685",
+        "advertiser_name": "Percko",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 7,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 129.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4892",
+        "advertiser_name": "Newsletter",
+        "tag_id": 38,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 3925.9320000000002,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "15",
+        "advertiser_name": "Acqualife",
+        "tag_id": 50,
+        "globales": {
+            "sends": 0,
+            "openers": 9,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11399",
+        "advertiser_name": "Airbus",
+        "tag_id": 39,
+        "globales": {
+            "sends": 0,
+            "openers": 3,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5782",
+        "advertiser_name": "Temps L",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 40,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13287",
+        "advertiser_name": "Comparer facile Energie",
+        "tag_id": 9,
+        "globales": {
+            "sends": 4661,
+            "openers": 832,
+            "clickers": 10,
+            "unsubs": 0,
+            "ca": 40.0,
+            "ecpm": 8.582,
+            "taux_openers": 17.85,
+            "taux_clickers": 0.215,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12597",
+        "advertiser_name": "Ô voyages ",
+        "tag_id": 38,
+        "globales": {
+            "sends": 0,
+            "openers": 7,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1569",
+        "advertiser_name": "Ma Mutuelle Senior",
+        "tag_id": 20,
+        "globales": {
+            "sends": 21311,
+            "openers": 3413,
+            "clickers": 59,
+            "unsubs": 0,
+            "ca": 160.0,
+            "ecpm": 7.508,
+            "taux_openers": 16.015,
+            "taux_clickers": 0.277,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "6827",
+        "advertiser_name": "Expert Comptable",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 2,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5061",
+        "advertiser_name": "Hypotheek Berekenen",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4892",
+        "advertiser_name": "Newsletter",
+        "tag_id": 63,
+        "globales": {
+            "sends": 213209,
+            "openers": 72225,
+            "clickers": 1284,
+            "unsubs": 11,
+            "ca": 3925.9320000000002,
+            "ecpm": 18.414,
+            "taux_openers": 33.875,
+            "taux_clickers": 0.602,
+            "taux_unsubs": 0.005,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1706",
+        "advertiser_name": "Michelin",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 6,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12421",
+        "advertiser_name": "Super Chauffage",
+        "tag_id": 9,
+        "globales": {
+            "sends": 44880,
+            "openers": 6849,
+            "clickers": 61,
+            "unsubs": 0,
+            "ca": 40.0,
+            "ecpm": 0.891,
+            "taux_openers": 15.261,
+            "taux_clickers": 0.136,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9968",
+        "advertiser_name": "Hello Artisan",
+        "tag_id": 82,
+        "globales": {
+            "sends": 0,
+            "openers": 307,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "7824",
+        "advertiser_name": "Action supermarché",
+        "tag_id": 26,
+        "globales": {
+            "sends": 0,
+            "openers": 10,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 1640.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "9405",
+        "advertiser_name": "Volkswagen",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 2,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 550.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1674",
+        "advertiser_name": "Zara",
+        "tag_id": 33,
+        "globales": {
+            "sends": 60163,
+            "openers": 2384,
+            "clickers": 131,
+            "unsubs": 0,
+            "ca": 26.5,
+            "ecpm": 0.44,
+            "taux_openers": 3.963,
+            "taux_clickers": 0.218,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟠 Taux de clic bon",
+                "taux_cto": "😐 Faible engagement malgré les ouvertures",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "1021",
+        "advertiser_name": "KIA",
+        "tag_id": 2,
+        "globales": {
+            "sends": 0,
+            "openers": 2,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "10613",
+        "advertiser_name": "NL Supermarket",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 24,
+            "clickers": 1,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8614",
+        "advertiser_name": "Asisa  ",
+        "tag_id": 20,
+        "globales": {
+            "sends": 7861,
+            "openers": 760,
+            "clickers": 59,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 9.668,
+            "taux_clickers": 0.751,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_cto": "😐 Faible engagement malgré les ouvertures",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "12833",
+        "advertiser_name": "Sodedif Santé",
+        "tag_id": 20,
+        "globales": {
+            "sends": 10799,
+            "openers": 2493,
+            "clickers": 2,
+            "unsubs": 0,
+            "ca": 137.5,
+            "ecpm": 12.733,
+            "taux_openers": 23.085,
+            "taux_clickers": 0.019,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4273",
+        "advertiser_name": "Wind",
+        "tag_id": 9,
+        "globales": {
+            "sends": 19510,
+            "openers": 727,
+            "clickers": 31,
+            "unsubs": 0,
+            "ca": 97.5,
+            "ecpm": 4.997,
+            "taux_openers": 3.726,
+            "taux_clickers": 0.159,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "3342",
         "advertiser_name": "Ikea",
+        "tag_id": 94,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 61889,
+            "openers": 16842,
+            "clickers": 518,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 27.213,
+            "taux_clickers": 0.837,
+            "taux_unsubs": 0.0,
             "analyse": {
                 "taux_clickers": "🟢 Taux de clic satisfaisant",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     },
     {
-        "advrtiser_id": 33452,
-        "advertiser_name": "Ikdea",
+        "advertiser_id": "9174",
+        "advertiser_name": "Helan",
+        "tag_id": 70,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 41053,
+            "openers": 15102,
+            "clickers": 391,
+            "unsubs": 0,
+            "ca": 63.0,
+            "ecpm": 1.535,
+            "taux_openers": 36.787,
+            "taux_clickers": 0.952,
+            "taux_unsubs": 0.0,
             "analyse": {
                 "taux_clickers": "🟢 Taux de clic satisfaisant",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     },
     {
-        "advrtiser_id": 33564642,
-        "advertiser_name": "Ikesqda",
+        "advertiser_id": "4892",
+        "advertiser_name": "Newsletter",
+        "tag_id": 26,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 688508,
+            "openers": 197403,
+            "clickers": 5943,
+            "unsubs": 1633,
+            "ca": 3925.9320000000002,
+            "ecpm": 5.702,
+            "taux_openers": 28.671,
+            "taux_clickers": 0.863,
+            "taux_unsubs": 0.237,
             "analyse": {
                 "taux_clickers": "🟢 Taux de clic satisfaisant",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "⚠️ Taux de désabonnement élevé"
             }
         }
     },
     {
-        "advrtiser_id": 3356464252,
-        "advertiser_name": "Ikessqda",
+        "advertiser_id": "10147",
+        "advertiser_name": "Direct Assurance Sante",
+        "tag_id": 20,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 6425,
+            "openers": 459,
+            "clickers": 11,
+            "unsubs": 0,
+            "ca": 84.0,
+            "ecpm": 13.074,
+            "taux_openers": 7.144,
+            "taux_clickers": 0.171,
+            "taux_unsubs": 0.0,
             "analyse": {
-                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_clickers": "🟡 Taux de clic moyen",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     },
     {
-        "advrtiser_id": 335684642,
-        "advertiser_name": "Ikesqsdda",
+        "advertiser_id": "514",
+        "advertiser_name": "Mercedes-Benz",
+        "tag_id": 2,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 49620,
+            "openers": 10835,
+            "clickers": 150,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 21.836,
+            "taux_clickers": 0.302,
+            "taux_unsubs": 0.0,
             "analyse": {
-                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_clickers": "🟠 Taux de clic bon",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     },
     {
-        "advrtiser_id": 3356456642,
-        "advertiser_name": "Ikesqsqda",
+        "advertiser_id": "3978",
+        "advertiser_name": "Leroy Merlin",
+        "tag_id": 1,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 9718,
+            "openers": 1,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.01,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
             "analyse": {
-                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_clickers": "🔴 Taux de clic faible",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     },
     {
-        "advrtiser_id": 3356415844642,
-        "advertiser_name": "Ikessdqda",
+        "advertiser_id": "12551",
+        "advertiser_name": "Mutuelle 2A",
+        "tag_id": 20,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 22824,
+            "openers": 1438,
+            "clickers": 17,
+            "unsubs": 0,
+            "ca": 13.76,
+            "ecpm": 0.603,
+            "taux_openers": 6.3,
+            "taux_clickers": 0.074,
+            "taux_unsubs": 0.0,
             "analyse": {
-                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_clickers": "🔴 Taux de clic faible",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     },
     {
-        "advrtiser_id": 3356465742,
-        "advertiser_name": "Ikessqdqqda",
+        "advertiser_id": "9540",
+        "advertiser_name": "Citroën",
+        "tag_id": 2,
         "globales": {
-            "sends": 11489,
-            "openers": 3349,
-            "clickers": 137,
-            "unsubs": 59,
-            "taux_openers": 29.15,
-            "taux_clickers": 1.192,
-            "taux_unsubs": 0.514,
+            "sends": 0,
+            "openers": 483,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 10.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
             "analyse": {
-                "taux_clickers": "🟢 Taux de clic satisfaisant",
+                "taux_clickers": "🔴 Taux de clic faible",
                 "taux_cto": "⚠️ Faible engagement (CTO)",
-                "taux_unsubs": "🚨 Taux de désabonnement très élevé"
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "983",
+        "advertiser_name": "Toyota",
+        "tag_id": 2,
+        "globales": {
+            "sends": 112047,
+            "openers": 18312,
+            "clickers": 138,
+            "unsubs": 0,
+            "ca": 1214.94,
+            "ecpm": 10.843,
+            "taux_openers": 16.343,
+            "taux_clickers": 0.123,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🟡 Taux de clic moyen",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "4590",
+        "advertiser_name": "Facile.it",
+        "tag_id": 9,
+        "globales": {
+            "sends": 0,
+            "openers": 16,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "2923",
+        "advertiser_name": "Lidl",
+        "tag_id": 8,
+        "globales": {
+            "sends": 0,
+            "openers": 44,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 0.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "11951",
+        "advertiser_name": "PER (Plan épargne retraite)",
+        "tag_id": 10,
+        "globales": {
+            "sends": 0,
+            "openers": 28,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 30.0,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "5113",
+        "advertiser_name": "Assurance Décennale",
+        "tag_id": 20,
+        "globales": {
+            "sends": 0,
+            "openers": 2,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 14.94,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "8706",
+        "advertiser_name": "Realhizza",
+        "tag_id": 30,
+        "globales": {
+            "sends": 29269,
+            "openers": 1490,
+            "clickers": 11,
+            "unsubs": 0,
+            "ca": 24.0,
+            "ecpm": 0.82,
+            "taux_openers": 5.091,
+            "taux_clickers": 0.038,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
+            }
+        }
+    },
+    {
+        "advertiser_id": "13158",
+        "advertiser_name": "INSPEE",
+        "tag_id": 26,
+        "globales": {
+            "sends": 0,
+            "openers": 8,
+            "clickers": 0,
+            "unsubs": 0,
+            "ca": 14.94,
+            "ecpm": 0.0,
+            "taux_openers": 0.0,
+            "taux_clickers": 0.0,
+            "taux_unsubs": 0.0,
+            "analyse": {
+                "taux_clickers": "🔴 Taux de clic faible",
+                "taux_cto": "⚠️ Faible engagement (CTO)",
+                "taux_unsubs": "✅ Taux de désabonnement faible"
             }
         }
     }

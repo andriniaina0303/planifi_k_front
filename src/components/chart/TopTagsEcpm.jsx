@@ -26,6 +26,28 @@ const TopTagsEcpm = ({ data, listetags }) => {
       .slice(0, 10);
   }, [data, listetags]);
 
+  // Plugin pour afficher les valeurs au-dessus des barres
+  const valueLabelPlugin = {
+    id: "valueLabel",
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      const dataset = chart.getDatasetMeta(0);
+
+      ctx.save();
+      ctx.font = "600 11px sans-serif";
+      ctx.fillStyle = "#722ed1";
+      ctx.textAlign = "center";
+
+      dataset.data.forEach((bar, i) => {
+        const value = chart.data.datasets[0].data[i] ?? 0;
+        ctx.fillText(value.toFixed(2), bar.x, bar.y - 4);
+      });
+
+      ctx.restore();
+    },
+  };
+
+
   useEffect(() => {
     if (!canvasRef.current) return;
     if (chartRef.current) chartRef.current.destroy();
@@ -40,6 +62,8 @@ const TopTagsEcpm = ({ data, listetags }) => {
             backgroundColor: topTags.map((_, i) => COLORS[i % COLORS.length]),
             borderRadius: 6,
             borderSkipped: false,
+            categoryPercentage: 0.6,
+            barPercentage: 0.8,
           },
         ],
       },
@@ -61,6 +85,10 @@ const TopTagsEcpm = ({ data, listetags }) => {
             },
           },
           datalabels: false,
+          interaction: {
+            mode: "index",
+            intersect: false,
+          },
         },
         scales: {
           x: {
@@ -75,45 +103,24 @@ const TopTagsEcpm = ({ data, listetags }) => {
           y: {
             display: false,
           },
-        },
-        animation: {
-          onComplete({ chart }) {
-            const ctx = chart.ctx;
-            const dataset = chart.getDatasetMeta(0);
-            ctx.save();
-            ctx.font = "600 11px sans-serif";
-            ctx.fillStyle = "#722ed1";
-            ctx.textAlign = "center";
-            dataset.data.forEach((bar, i) => {
-              const value = topTags[i]?.eCPM;
-              if (value != null) {
-                ctx.fillText(`${value}`, bar.x, bar.y - 6);
-              }
-            });
-            ctx.restore();
-          },
-        },
+        }
       },
+      plugins: [valueLabelPlugin],
     });
 
     return () => chartRef.current?.destroy();
   }, [topTags]);
-
   return (
     <Card
       title="🏷️ Top 10 Tags par eCPM"
-      size="small"
-      style={{ height: "100%" }}
+      size="medium"
+      style={{width: "100%", height: "100%"}}
     >
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: 200,
-          marginTop: 20,
-        }}
-      >
-        <canvas ref={canvasRef} />
+      <div style={{width:330 , height: 280 }}>
+        <canvas 
+          ref={canvasRef} 
+          style={{ width: "100%", height: "100%"}}
+          />
       </div>
     </Card>
   );

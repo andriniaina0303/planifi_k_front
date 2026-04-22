@@ -518,7 +518,7 @@ const ChartSwitcher = ({ data }) => {
 
   return (
     <Card
-      style={{ borderRadius: 10 }}
+      style={{ borderRadius: 10, size: "medium"}}
       title={activePair.map((c) => c.label).join("&")}
       extra={
         <div style={{ display: "flex", gap: 4 }}>
@@ -527,7 +527,7 @@ const ChartSwitcher = ({ data }) => {
         </div>
       }
     >
-      <div style={{ display: "flex", gap: 16 }}>
+      <div style={{ display: "flex", gap: 16 , height: 280}}>
         {activePair.map((chart, i) => (
           <div key={activeIndex * 2 + i} style={{ flex: 1, minWidth: 0 }}>
             {chart.legendItems.length > 0 && (

@@ -8,7 +8,7 @@ import mockData from "../temp/all_advertiser.json";
 import mockDataDetail from "../temp/adv_detail.json";
 
 
-const USE_MOCK = false; // 🔥 switch ici
+const USE_MOCK = true; // 🔥 switch ici
 
 export async function get_liste_advertisers() {
   if (USE_MOCK) {
