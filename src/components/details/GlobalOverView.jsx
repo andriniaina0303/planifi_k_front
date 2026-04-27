@@ -575,7 +575,7 @@ export const GlobalOverview = ({ data, allbase, styles}) => {
               <span style={styles.sectionTitle}>
                 <CheckCircleOutlined style={{ color: tokens.success }} />{" "}
                 Diagnostic
-                <Popover
+                {/* <Popover
                   content={<HealthExplainer g={g}/>}
                   title={null}
                   trigger="click"
@@ -590,7 +590,7 @@ export const GlobalOverview = ({ data, allbase, styles}) => {
                       marginLeft: 4,
                     }}
                   />
-                </Popover>
+                </Popover> */}
               </span>
             }
           >

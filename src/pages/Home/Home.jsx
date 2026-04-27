@@ -1,7 +1,7 @@
 import "../../assets/css/sidebar.css";
 import { FiMenu } from "react-icons/fi";
 import { Outlet } from "react-router-dom"
-import SidebarContent from "../../components/menu /SideBarContent";
+import SidebarContent from "../../components/menu/SideBarContent";
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow-1 d-flex flex-column">
+      <div className="flex-grow-1 d-flex flex-column overflow-x-hidden">
         {/* Mobile toggle */}
         <div className="bg-white border-bottom px-3 py-2 d-md-none">
           <button
@@ -32,7 +32,7 @@ export default function Home() {
         </div>
 
         {/* Page Content */}
-        <div className="overflow-x-hidden">
+        <div className="overflow-hidden overflow-y-auto">
           <Outlet />
         </div>
       </div>

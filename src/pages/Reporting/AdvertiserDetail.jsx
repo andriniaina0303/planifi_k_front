@@ -516,7 +516,7 @@ const AdvertiserDetail = ({ _mockData }) => {
           activeKey={mainTab}
           onChange={setMainTab}
           size="large"
-          style={{ padding: "0 24px", overflowX: "hidden" }}
+          style={{ padding: "0 24px"}}
           tabBarStyle={{ marginBottom: 0, fontWeight: 600 }}
           items={[
             {

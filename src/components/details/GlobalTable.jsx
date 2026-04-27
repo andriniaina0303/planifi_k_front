@@ -552,7 +552,7 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
                         size: "small",
                         showSizeChanger: false,
                       }}
-                      scroll={{ x: 1100 }}
+                      scroll={{ x: 1400 }}
                     />
                   )}
                 </div>
@@ -739,7 +739,7 @@ export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
   ];
   return (
     <>
-      <Card size="large" style={styles.card}>
+    <Card size="large" style={styles.card}>
         <Table
           dataSource={rows}
           columns={cols}
@@ -754,12 +754,11 @@ export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
             ),
           }}
           onRow={(record) => ({
-            // ← ajout
             onClick: () => setSelectedBase(record),
             style: { cursor: "pointer" },
           })}
         />
-      </Card>
+    </Card>
       <Modal // ← ajout
         open={!!selectedBase}
         onCancel={() => setSelectedBase(null)}
