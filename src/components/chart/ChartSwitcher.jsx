@@ -540,7 +540,7 @@ const ChartSwitcher = ({ data }) => {
                 ))}
               </div>
             )}
-            <ChartCanvas config={chart.config} height={215} />
+            <ChartCanvas config={chart.config} height={220}  />
           </div>
         ))}
       </div>

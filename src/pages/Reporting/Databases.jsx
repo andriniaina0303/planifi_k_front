@@ -2,7 +2,7 @@ import React from 'react';
 
 const Databases = () => {
     return (
-        <div>
+        <div>n
             Databases
         </div>
     );

@@ -1,0 +1,18 @@
+export const tokens = {
+  bg: "#f0f2f5",
+  cardBg: "#ffffff",
+  cardRadius: 16,
+  headerGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  primary: "#4f46e5",
+  success: "#10b981",
+  warning: "#f59e0b",
+  danger: "#ef4444",
+  info: "#3b82f6",
+  purple: "#8b5cf6",
+  cyan: "#06b6d4",
+  pink: "#ec4899",
+  orange: "#f97316",
+  shadow: "0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)",
+  shadowMd: "0 4px 6px rgba(0,0,0,0.05), 0 10px 15px rgba(0,0,0,0.03)",
+  shadowLg: "0 10px 25px rgba(0,0,0,0.08)",
+};

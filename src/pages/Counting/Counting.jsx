@@ -5,12 +5,12 @@
 // import b2b_image from "../../assets/images/b2b.jpeg";
 
 // import CountryMultiSelect from "../../components/CountryMultiSelect";
-// import ScoreFilter from "../../components/ScoreFilter";
-// import RangeFilter from "../../components/RangeFilter";
+// import ScoreFilter from "../../components/filter/ScoreFilter";
+// import RangeFilter from "../../components/filterRangeFilter";
 // import MultiSelectAnt from "../../components/MultiSelect";
 
 // const targets = [
-//   {
+//   {/
 //     id: 1,
 //     title: "-",
 //     subtitle: "",

@@ -140,17 +140,17 @@ const AnalyseTooltip = ({ analyse }) => (
         key={key}
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          // justifyContent: "space-between",
           alignItems: "center",
           gap: 12,
         }}
       >
         <span
-          style={{ color: "#ccc", fontSize: 12, textTransform: "capitalize" }}
+          style={{ color: "#ccc", fontSize: 12, textTransform: "capitalize"}}
         >
           {key.replace(/_/g, " ")}
         </span>
-        <Tag color={getTagColor(value)} style={{ margin: 0 }}>
+        <Tag color={getTagColor(value)} style={{ margin: 0 , whiteSpace: "normal", wordBreak: "break-word", flex: 1}}>
           {value}
         </Tag>
       </div>
@@ -344,10 +344,10 @@ const AdvertisersTable = ({ data }) => {
                   ) : null
                 }
                 placement="left"
-                align={{ offset: [0, -110] }} // 👈 ici
+                align={{ offset: [0, ] }} // 👈 ici
                 color="#1e1e2f"
                 mouseEnterDelay={0.15}
-                overlayInnerStyle={{ width: 280 }} // 👈 ici
+                // overlayInnerStyle={{ width: 280, display: "Flex", justifyContent: "space-between"}} // 👈 ici
               >
                 <tr {...props} style={{ cursor: "pointer", width: "100%" }}>
                   {children}

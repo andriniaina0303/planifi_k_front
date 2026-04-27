@@ -1,7 +1,7 @@
 import "../../assets/css/sidebar.css";
 import { FiMenu } from "react-icons/fi";
-import { Outlet } from "react-router-dom";
-import SidebarContent from "../../components/SidebarContent"
+import { Outlet } from "react-router-dom"
+import SidebarContent from "../../components/menu /SideBarContent";
 
 export default function Home() {
   return (
@@ -32,7 +32,7 @@ export default function Home() {
         </div>
 
         {/* Page Content */}
-        <div className="overflow-auto">
+        <div className="overflow-x-hidden">
           <Outlet />
         </div>
       </div>

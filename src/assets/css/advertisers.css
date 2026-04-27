@@ -5,6 +5,7 @@
   min-height: 100vh;
   font-family: Inter, system-ui, sans-serif;
   color: #e2e8f0;
+  overflow: hidden;
 }
 
 /* 🔝 Header */

@@ -1,5 +1,10 @@
 import api from "./interceptor";
 import * as config from "./../config/config";
+import mockData from "../temp/all_advertiser.json";
+import mockDataDetail from "../temp/adv_detail.json";
+
+
+const USE_MOCK = true; // 🔥 switch ici
 
 const CACHE_DATBASE_KEY = "all_databases";
 
@@ -7,6 +12,12 @@ const CACHE_TTL = 1000 * 60 * 60; // 1 heure
 
 export async function get_all_databases(forceRefresh = false) {
   try {
+      if (USE_MOCK) {
+    console.log("⚡ Using MOCK data");
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(mockData), 300);
+    });
+  }
     const cached = localStorage.getItem(CACHE_DATBASE_KEY);
     if (!forceRefresh && cached) {
       const { data, timestamp } = JSON.parse(cached);

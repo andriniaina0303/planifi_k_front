@@ -2,41 +2,19 @@ import React, { useEffect, useMemo, useState } from "react";
 import { get_liste_advertisers } from "../../api/advertiser";
 import "../../assets/css/advertisers.css";
 import { listetags } from "../../components/table/AdvertisersTable";
-import {
-  Card,
-  Row,
-  Select,
-  Col,
-  Button
-} from "antd";
+import { Card,Row,Col} from "antd";
+import KpiCardAdvertiser from "../../components/Kpi/KpiCardAdvertiser";
 import AdvertisersTable from "../../components/table/AdvertisersTable";
-import {
-  MailOutlined,
-  EyeOutlined,
-  LinkOutlined,
-  StopOutlined
-} from "@ant-design/icons";
+import {MailOutlined,EyeOutlined, LinkOutlined,StopOutlined} from "@ant-design/icons";
 // import testAdvertisers from "../../data/testadv";
 import ChartSwitcher from "../../components/chart/ChartSwitcher";
 import TopTagsEcpm from "../../components/chart/TopTagsEcpm";
-import { useNavigate } from "react-router-dom";
-
-const { Option } = Select;
+import FilterAdvertiser, {DEFAULT_FILTERS} from "../../components/filter/FilterAdvertiser";
 
 const Advertisers = () => {
   const [listeAdvertiser, setListeAdvertisers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    advertiser: "ALL",
-    taux_clickers: "ALL",
-    taux_openers: "ALL",
-    taux_unsubs: "ALL",
-    taux_ca: "ALL",
-    taux_ecpm: "ALL",
-    minSends: 0,
-    sortBy: "sends",
-  });
-  const navigate = useNavigate();
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);  
 
   const fetchReporting = async () => {
     try {
@@ -52,7 +30,7 @@ const Advertisers = () => {
     }
   };
 
-
+  
   const filteredData = useMemo(() => {
     if (!listeAdvertiser || !Array.isArray(listeAdvertiser)) return [];
 
@@ -83,9 +61,6 @@ const Advertisers = () => {
     return d;
   }, [listeAdvertiser, filters]);
 
-  const [searchText, setSearchText] = useState("");
-  const [searchAdvertiser, setSearchAdvertiser] = useState("");
-  const [searchTag, setSearchTag] = useState("");
 
   const stats = useMemo(() => {
     const totalSends = filteredData.reduce(
@@ -146,229 +121,27 @@ const Advertisers = () => {
 
       {/* ── KPI Cards ── */}
       <Row gutter={16}>
-        {stats.map((s, idx) => {
-          let Icon;
-          switch (s.label.toLowerCase()) {
-            case "sends":
-              Icon = (
-                <MailOutlined
-                  style={{ marginRight: 6, color: s.color, fontSize: 25 }}
-                />
-              );
-              break;
-            case "open":
-              Icon = (
-                <EyeOutlined
-                  style={{ marginRight: 6, color: s.color, fontSize: 25 }}
-                />
-              );
-              break;
-            case "click":
-              Icon = (
-                <LinkOutlined
-                  style={{ marginRight: 6, color: s.color, fontSize: 25 }}
-                />
-              );
-              break;
-            case "unsub":
-              Icon = (
-                <StopOutlined
-                  style={{ marginRight: 6, color: s.color, fontSize: 25 }}
-                />
-              );
-              break;
-            case "ctr":
-              Icon = (
-                <LinkOutlined
-                  style={{ marginRight: 6, color: s.color, fontSize: 25 }}
-                />
-              );
-              break;
-            default:
-              Icon = null;
-          }
-          return (
-            <Col key={idx} xs={24} sm={12} md={8} lg={4}>
-              <Card
-                style={{
-                  borderRadius: 10,
-                  background: "#1e1e2f",
-                  border: "none",
-                  position: "relative",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
-                }}
-                bodyStyle={{
-                  padding: "14px 16px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div
-                  style={{
-                    height: 3,
-                    width: "100%",
-                    backgroundColor: s.color,
-                    borderRadius: "4px 4px 0 0",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: 12,
-                    color: "#aaa",
-                  }}
-                >
-                  {Icon}
-                  <span>{s.label}</span>
-                </div>
-                <div style={{ fontSize: 18, fontWeight: 600, color: "#fff" }}>
-                  {s.value}
-                </div>
-              </Card>
-            </Col>
-          );
-        })}
+        {stats.map((s, idx) => (
+          <KpiCardAdvertiser key={idx} label={s.label} value={s.value} color={s.color} />
+        ))}
       </Row>
 
       {/* Chart des Tops */}
-        <Row gutter={16}>
-          <Col>
+        <Row gutter={12} wrap={false}>
+          <Col flex="auto">
             <ChartSwitcher data={filteredData} />
           </Col>  
-          <Col>
+          <Col flex="none">
             <TopTagsEcpm data={filteredData} listetags={listetags} />
           </Col>
         </Row>
 
-
-
       {/* ── Filtres ── */}
-      <Card style={{ borderRadius: 10, background: "#ffffff" }}>
-        <Row gutter={12} align="bottom">
-          <Col span={4}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>Advertiser</span>
-              <Select
-                showSearch
-                value={filters.advertiser}
-                onChange={(v) => setFilters({ ...filters, advertiser: v })}
-                style={{ width: "100%" }}
-              >
-                <Option value="ALL">All advertisers</Option>
-                {listeAdvertiser &&
-                  listeAdvertiser.map((a) => (
-                    <Option key={a.advrtiser_id} value={a.advertiser_name}>
-                      {a.advertiser_name}
-                    </Option>
-                  ))}
-              </Select>
-            </div>
-          </Col>
-          <Col span={3}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>eCPM</span>
-              <Select
-                value={filters.taux_ecpm}
-                onChange={(v) => setFilters({ ...filters, taux_ecpm: v })}
-                style={{ width: "100%" }}
-              >
-                <Option value="ALL">All</Option>
-                <Option value="🟢">🟢 Good</Option>
-                <Option value="🟡">🟡 Medium</Option>
-                <Option value="🔴">🔴 Low</Option>
-              </Select>
-            </div>
-          </Col>
-          <Col span={3}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>CA</span>
-              <Select
-                value={filters.taux_ca}
-                onChange={(v) => setFilters({ ...filters, taux_ca: v })}
-                style={{ width: "100%" }}
-              >
-                <Option value="ALL">All</Option>
-                <Option value="🟢">🟢 Good</Option>
-                <Option value="🟡">🟡 Medium</Option>
-                <Option value="🔴">🔴 Low</Option>
-              </Select>
-            </div>
-          </Col>
-          <Col span={3}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>Click Rate</span>
-              <Select
-                value={filters.taux_clickers}
-                onChange={(v) => setFilters({ ...filters, taux_clickers: v })}
-                style={{ width: "100%" }}
-              >
-                <Option value="ALL">All clickers</Option>
-                <Option value="🟢">🟢 Good</Option>
-                <Option value="🟡">🟡 Medium</Option>
-                <Option value="🔴">🔴 Low</Option>
-              </Select>
-            </div>
-          </Col>
-          <Col span={3}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>Open Rate</span>
-              <Select
-                value={filters.taux_openers}
-                onChange={(v) => setFilters({ ...filters, taux_openers: v })}
-                style={{ width: "100%" }}
-              >
-                <Option value="ALL">All openers</Option>
-                <Option value="🟢">🟢 Bon</Option>
-                <Option value="🟡">🟡 Moyen</Option>
-                <Option value="🔴">🔴 Faible</Option>
-              </Select>
-            </div>
-          </Col>
-          <Col span={3}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>Unsub Rate</span>
-              <Select
-                value={filters.taux_unsubs}
-                onChange={(v) => setFilters({ ...filters, taux_unsubs: v })}
-                style={{ width: "100%" }}
-              >
-                <Option value="ALL">All unsub</Option>
-                <Option value="🟢">🟢 Good</Option>
-                <Option value="🟡">🟡 Medium</Option>
-                <Option value="🔴">🔴 Low</Option>
-              </Select>
-            </div>
-          </Col>
-          <Col span={3}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>&nbsp;</span>
-              <Button
-                type="primary"
-                style={{ width: "100%" }}
-                onClick={() =>
-                  setFilters({
-                    advertiser: "ALL",
-                    taux_clickers: "ALL",
-                    taux_openers: "ALL",
-                    taux_unsubs: "ALL",
-                    taux_ca: "ALL",
-                    taux_ecpm: "ALL",
-                    minSends: 0,
-                    sortBy: "sends",
-                  })
-                }
-              >
-                Reset
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </Card>
+      <FilterAdvertiser
+        filters={filters}
+        setFilters={setFilters}
+        listeAdvertiser={listeAdvertiser}
+      />
 
       {/* ── Table ── */}
       <Row>
