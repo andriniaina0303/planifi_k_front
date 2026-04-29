@@ -1,3 +1,15 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * ADVERTISERS.JSX - Page dashboard des annonceurs
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Page principale affichant :
+ * - KPIs globaux (Sends, Opens, Clicks, Unsubs, CTR)
+ * - Filtres avancés sur les annonceurs
+ * - Graphiques comparatifs (chartSwitcher, topTags)
+ * - Tableau avec liste détaillée de tous les annonceurs
+ */
+
 import React, { useEffect, useMemo, useState } from "react";
 import { get_liste_advertisers } from "../../api/advertiser";
 import "../../assets/css/advertisers.css";
@@ -11,18 +23,33 @@ import ChartSwitcher from "../../components/chart/ChartSwitcher";
 import TopTagsEcpm from "../../components/chart/TopTagsEcpm";
 import FilterAdvertiser, {DEFAULT_FILTERS} from "../../components/filter/FilterAdvertiser";
 
+/**
+ * Composant Advertisers
+ * Page de dashboard avec filtrage, statistiques et visualisations des annonceurs
+ * 
+ * @component
+ * @returns {JSX.Element} Dashboard complet avec KPIs, filtres, graphiques et tableau
+ */
 const Advertisers = () => {
+  // État des annonceurs chargés depuis l'API
   const [listeAdvertiser, setListeAdvertisers] = useState([]);
+  
+  // État de chargement
   const [loading, setLoading] = useState(true);
+  
+  // État des filtres actifs
   const [filters, setFilters] = useState(DEFAULT_FILTERS);  
 
+  /**
+   * Récupère la liste complète des annonceurs depuis l'API
+   */
   const fetchReporting = async () => {
     try {
       setLoading(true);
       const res = await get_liste_advertisers();
       console.log("Fetched advertisers!!!");
       setListeAdvertisers(res);
-      // setListeAdvertisers(testAdvertisers);
+      // setListeAdvertisers(testAdvertisers); // Pour test avec données mockées
     } catch (error) {
       console.error("Erreur lors du fetch:", error);
     } finally {
@@ -30,30 +57,39 @@ const Advertisers = () => {
     }
   };
 
-  
+  /**
+   * Applique les filtres actuels à la liste d'annonceurs
+   * Filtre par : nom, taux_clickers, taux_unsubs, minSends
+   * Trie selon le critère sélectionné
+   */
   const filteredData = useMemo(() => {
     if (!listeAdvertiser || !Array.isArray(listeAdvertiser)) return [];
 
     let d = [...listeAdvertiser];
 
+    // Filtrer par annonceur spécifique si sélectionné
     if (filters.advertiser !== "ALL") {
       d = d.filter((a) => a.advertiser_name === filters.advertiser);
     }
 
+    // Filtrer par taux de clic
     if (filters.taux_clickers !== "ALL") {
       d = d.filter((a) =>
         a.globales?.analyse?.taux_clickers?.includes(filters.taux_clickers),
       );
     }
 
+    // Filtrer par taux de désabonnement
     if (filters.taux_unsubs !== "ALL") {
       d = d.filter((a) =>
         a.globales?.analyse?.taux_unsubs?.includes(filters.taux_unsubs),
       );
     }
 
+    // Filtrer par nombre minimum d'envois
     d = d.filter((a) => a.globales?.sends >= filters.minSends);
 
+    // Trier selon le critère sélectionné
     d.sort(
       (a, b) => b.globales?.[filters.sortBy] - a.globales?.[filters.sortBy],
     );
@@ -146,7 +182,7 @@ const Advertisers = () => {
       {/* ── Table ── */}
       <Row>
           <Card
-            style={{ borderRadius: 10, height: "100%", width: "100%" }}
+            style={{ borderRadius: 10, height: "100%", width: "100%", overflow: "visible" }}
             bodyStyle={{ padding: 0 }}
           >
           <AdvertisersTable data={filteredData} />

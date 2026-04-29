@@ -1,9 +1,26 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * DASHBOARDCHARTS.JSX - Graphiques du dashboard de comptage
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Affiche les résultats du comptage avec :
+ * - Total des contacts
+ * - Pie chart de distribution par genre (GenderPieChart)
+ */
+
 import React from "react";
 import { Row, Col, Typography, Card } from "antd";
 import GenderPieChart from "./GenderPieChart";
 
 const { Title, Text } = Typography;
 
+/**
+ * Composant DashboardCharts
+ * Affiche les résultats du comptage avec graphiques
+ * 
+ * @param {Object} props
+ * @param {Object} props.countResult - Résultats du comptage (total_contacts, by_gender)
+ */
 const DashboardCharts = ({ countResult }) => {
   if (!countResult) {
     return <Text type="secondary">Chargement des données...</Text>;

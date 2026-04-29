@@ -1,14 +1,32 @@
 import { pct } from "./Helpers";
 import { tokens } from "./Tokens";
 
+/**
+ * ═══════════════════════════════════════════════════════════════════════
+ * HEALTH KIT FUNCTIONS - Calcul du score et indicateur de santé
+ * ═══════════════════════════════════════════════════════════════════════
+ * 
+ * Évalue la qualité/santé d'une campagne d'annonceur basée sur :
+ * - Open Rate (taux d'ouverture) : 35 pts max
+ * - Click-Through Rate (CTR) : 35 pts max  
+ * - Unsubscribe Rate (taux de désinscription) : 30 pts max
+ * Score total : 0-100
+ */
 
-// ═══════════════════════════════════════════════════════════════
-// UTILITIES (Pure Functions)
-// ═
-
-
-
-
+/**
+ * Calcule le score de santé global d'une campagne
+ * 
+ * @param {Object} g - Globales de la campagne
+ * @param {number} g.taux_openers - Taux d'ouverture en %
+ * @param {number} g.taux_clickers - Taux de clic en %
+ * @param {number} g.taux_unsubs - Taux de désinscription en %
+ * @returns {number} Score entre 0 et 100
+ * @description
+ *   Scoring :
+ *   - Open Rate > 15% = 35pts, > 10% = 25pts, > 5% = 15pts, ≤ 5% = 5pts
+ *   - CTR > 3% = 35pts, > 1.5% = 25pts, > 0.5% = 15pts, ≤ 0.5% = 5pts
+ *   - Unsub < 0.1% = 30pts, < 0.3% = 20pts, < 0.5% = 10pts, ≥ 0.5% = 0pts
+ */
 export const getHealthScore = (g) => {
   const openRate = Number(g.taux_openers || 0);
   const ctr = Number(g.taux_clickers || 0);
@@ -27,7 +45,7 @@ export const getHealthScore = (g) => {
   else if (ctr > 0.5) score += 15;
   else score += 5;
 
-  // Unsub inverse (30 pts max)
+  // Unsub inverse (30 pts max) - moins de désins = mieux
   if (unsubRate < 0.1) score += 30;
   else if (unsubRate < 0.3) score += 20;
   else if (unsubRate < 0.5) score += 10;
@@ -36,13 +54,30 @@ export const getHealthScore = (g) => {
   return Math.min(100, score);
 };
 
+/**
+ * Retourne la couleur correspondant au score de santé
+ * 
+ * @param {number} score - Score entre 0 et 100
+ * @returns {string} Couleur hex
+ * @description
+ *   >= 75 = Vert (excellent)
+ *   >= 50 = Orange (bon)
+ *   >= 25 = Orange foncé (standard)
+ *   < 25 = Rouge (à surveiller)
+ */
 export const getHealthColor = (score) => {
-  if (score >= 75) return tokens.success;
-  if (score >= 50) return tokens.warning;
-  if (score >= 25) return tokens.orange;
-  return tokens.danger;
+  if (score >= 75) return tokens.success;   // Vert
+  if (score >= 50) return tokens.warning;   // Jaune/Orange
+  if (score >= 25) return tokens.orange;    // Orange foncé
+  return tokens.danger;                     // Rouge
 };
 
+/**
+ * Retourne le label textuel correspondant au score de santé
+ * 
+ * @param {number} score - Score entre 0 et 100
+ * @returns {string} Label ("Excellent", "Bon", "Standard", "À surveiller")
+ */
 export const getHealthLabel = (score) => {
   if (score >= 75) return "Excellent";
   if (score >= 50) return "Bon";
@@ -50,13 +85,28 @@ export const getHealthLabel = (score) => {
   return "À surveiller";
 };
 
-
-
+/**
+ * Détail complet du scoring de santé avec points par critère
+ * 
+ * @param {Object} g - Globales de la campagne
+ * @returns {Array<Object>} Tableau avec détails de chaque critère
+ * @description
+ *   Chaque critère contient :
+ *   - label: nom du critère
+ *   - value: valeur formatée
+ *   - points: points attribués
+ *   - max: points possibles pour ce critère
+ *   - thresholds: seuils de scoring
+ *   - color: couleur de visualisation
+ * 
+ *   Utile pour afficher un breakdown détaillé du score
+ */
 export const getHealthDetails = (g) => {
   const openRate = Number(g.taux_openers || 0);
   const ctr = Number(g.taux_clickers || 0);
   const unsubRate = Number(g.taux_unsubs || 0);
 
+  // Calculer les points pour chaque métrique
   const openPts =
     openRate > 15 ? 35 : openRate > 10 ? 25 : openRate > 5 ? 15 : 5;
   const ctrPts = ctr > 3 ? 35 : ctr > 1.5 ? 25 : ctr > 0.5 ? 15 : 5;

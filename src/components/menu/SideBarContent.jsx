@@ -1,3 +1,19 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * SIDEBARCONTENT.JSX - Navigation sidebar principale
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Contient la navigation principale de l'application :
+ * - Logo Planifik
+ * - Menu Reporting (Advertisers, Advertiser Detail, Databases)
+ * - Menu Counting (Comptage/Segmentation)
+ * - Boutons Settings et Logout
+ * 
+ * Responsive :
+ * - Affichée en sidebar sur desktop
+ * - Affichée en offcanvas sur mobile
+ */
+
 import {
   FiSettings,
   FiLogOut,
@@ -11,8 +27,13 @@ import ReportingMenu from "./ReportingMenu";
 import MenuItem from "../bouton/MenuItem";
 import CountingMenuItem from "./CountingMenuItem";
 
-
-// Composant principal du sidebar
+/**
+ * Composant SidebarContent - Barre latérale de navigation
+ * 
+ * @param {Object} props
+ * @param {Function} props.onClose - Callback pour fermer le sidebar mobile
+ * @returns {JSX.Element} Sidebar avec navigation complète
+ */
 const SidebarContent = ({ onClose }) => (
   <div
     // Conteneur principal du sidebar

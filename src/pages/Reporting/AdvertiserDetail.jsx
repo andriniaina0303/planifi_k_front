@@ -367,7 +367,18 @@ const AdvertiserDetail = ({ _mockData }) => {
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"
   const [allDatabase, seAllDatabase] = useState([]);              // Liste de toutes les bases de données
   const { state } = useLocation();
+  const [openPopover, setOpenPopover] = useState(null) // Etat pour gérer l'ouverture du popover d'explication du health score
   
+useEffect(() => {
+  const handleScroll = () => setOpenPopover(false);
+
+  window.addEventListener("scroll", handleScroll, true);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll, true);
+  };
+}, []);
+
   /* Appel API : récupère la liste des bases de données (une seule fois au mount) */
   const fetchb = useCallback(async () => {
     try {
@@ -496,6 +507,8 @@ const AdvertiserDetail = ({ _mockData }) => {
     <div style={styles.page}>
       {/* Header */}
       <HeadersDetails 
+        open={openPopover}
+        setOpen={setOpenPopover}
         styles={styles} 
         data={data} 
         totalBrands={totalBrands} 
@@ -529,7 +542,7 @@ const AdvertiserDetail = ({ _mockData }) => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  <GlobalOverview data={data} allbase={allDatabase} styles={styles} />
+                  <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} allbase={allDatabase} styles={styles} />
                 </div>
               ),
             },

@@ -1,9 +1,29 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * COUNTRYMULTISELECT.JSX - Formulaire de ciblage multi-critères
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Composant de sélection pour le ciblage avancé :
+ * - Pays (avec drapeaux)
+ * - Bases de données
+ * - Domain families
+ * - Départements/codes postaux
+ * - Leviers marketing
+ * 
+ * À utiliser pour la sélection multiple de critères dans des formulaires de campagne
+ */
+
 import React, { useState } from "react";
 import { Form, Select, Button, Divider } from "antd";
 import MultiSelectAnt from "./MultiSelect";
 
 const { Option } = Select;
-// Données exemples
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DONNÉES - Listes de sélection disponibles
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Pays disponibles pour le ciblage */
 const countries = [
   { code: "FR", name: "France", flag: "🇫🇷" },
   { code: "ES", name: "Espagne", flag: "🇪🇸" },
@@ -14,9 +34,31 @@ const countries = [
   { code: "DE", name: "Allemagne", flag: "🇩🇪" },
 ];
 
+/** Familles de domaines de courriel */
 const domainFamilies = ["sfr","outlook","yahoo","orange","laposte","free","bouygues","apple","gmail","others"];
+
+/** Genre/Civilité */
 const sexes = ["Homme","Femme","Others"];
-const departments = ["75","13","69","33","31"]; // Exemple codes postaux
+
+/** Codes postaux/Départements en France */
+const departments = ["75","13","69","33","31"];
+
+/** Leviers marketing disponibles */
+const levierMarketing = [
+    'Emailing',
+    'SMS',
+    'Télémarketing',
+    'Google Ads'
+]
+
+/** Bases de données disponibles */
+const databaseList = [
+  "Base A",
+  "Base B",
+  "Base C",
+]
+
+/** Tranches d'âge */
 const ageRanges = [
   "18",
   "18-24",
@@ -28,21 +70,16 @@ const ageRanges = [
   "75",
   "O",
 ];
-const levierMarketing = [
-    'Emailing',
-    'SMS',
-    'Télémarketing',
-    'Google Ads'
-]
 
-const databaseList = [
-  "Base A",
-  "Base B",
-"Base C",
-]
-
-
+/**
+ * Composant CountryMultiSelect
+ * Formulaire complet de sélection multi-critères pour le ciblage
+ * 
+ * @component
+ * @returns {JSX.Element} Formulaire avec multiples sélecteurs
+ */
 export default function CountryMultiSelect() {
+  // États pour chaque critère de sélection
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [selectedDomains, setSelectedDomains] = useState([]);
   const [selectedSexes, setSelectedSexes] = useState([]);
@@ -51,39 +88,46 @@ export default function CountryMultiSelect() {
   const [selectedLeviersMarketing, setSelectedLeviersMarketing] = useState([]);
   const [selectedDatabases, setSelectedDatabases] = useState([]);
 
-
   return (
     <div className="container py-4">
       <Form layout="vertical">
+        {/* ================= LEVIER MARKETING ================= */}
         <MultiSelectAnt
-          label="Levier Marketing"
+          placeholder="Levier Marketing"
           options={levierMarketing}
           value={selectedLeviersMarketing}
           setValue={setSelectedLeviersMarketing}
-          showFlag
+          showFlag={false}
         />
+        
+        {/* ================= PAYS ================= */}
         <MultiSelectAnt
-          label="Pays"
+          placeholder="Pays"
           options={countries}
           value={selectedCountries}
           setValue={setSelectedCountries}
-          showFlag
+          showFlag={true}
         />
+        
+        {/* ================= BASE DE DONNÉES ================= */}
         <MultiSelectAnt
-          label="Base de données"
+          placeholder="Base de données"
           options={databaseList}
           value={selectedDatabases}
           setValue={setSelectedDatabases}
         />
+        
+        {/* ================= DOMAIN FAMILY ================= */}
         <MultiSelectAnt
-          label="Domain Family"
+          placeholder="Domain Family"
           options={domainFamilies}
           value={selectedDomains}
           setValue={setSelectedDomains}
         />
         
+        {/* ================= DÉPARTEMENTS/ZIPCODES ================= */}
         <MultiSelectAnt
-          label="Départements / Zipcodes"
+          placeholder="Départements / Zipcodes"
           options={departments}
           value={selectedDepartments}
           setValue={setSelectedDepartments}

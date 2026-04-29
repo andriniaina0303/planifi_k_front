@@ -1,9 +1,28 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * ADVERTISERSTABLE.JSX - Tableau détaillé des annonceurs
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Affiche un tableau complet de tous les annonceurs avec :
+ * - Recherche en temps réel
+ * - Filtrage par tags
+ * - Navigation vers les détails (click sur une ligne)
+ * - Analyse du statut avec badges colorés
+ * 
+ * Liste complète des 97 tags du système
+ */
+
 import React, { useMemo, useState } from "react";
 import { Table, Tag, Tooltip, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-// Liste des tags
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * LISTE COMPLÈTE DES TAGS
+ * ═══════════════════════════════════════════════════════════════════════════
+ * Tous les tags disponibles pour le filtrage des annonceurs
+ */
 export const listetags = [
   { id: 92, tag: "API", dwtag: "api" },
   { id: 53, tag: "Alarms", dwtag: "alarms" },
@@ -343,11 +362,12 @@ const AdvertisersTable = ({ data }) => {
                     <AnalyseTooltip analyse={record.globales.analyse} />
                   ) : null
                 }
-                placement="left"
+                placement="topLeft"
                 align={{ offset: [0, ] }} // 👈 ici
                 color="#1e1e2f"
                 mouseEnterDelay={0.15}
-                // overlayInnerStyle={{ width: 280, display: "Flex", justifyContent: "space-between"}} // 👈 ici
+                getPopupContainer={(trigger) => trigger.parentNode}//Corrige le problème de z-index de la page 
+                // overlayInnerStyle={{ width: 280}} // 👈 ici
               >
                 <tr {...props} style={{ cursor: "pointer", width: "100%" }}>
                   {children}

@@ -1,3 +1,18 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * KPICARDADVERTISER.JSX - Carte KPI pour les annonceurs
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Composant de carte affichant une métrique clé (KPI) :
+ * - Sends (envois)
+ * - Open (ouvertures)
+ * - Click (clics)
+ * - Unsub (désabonnements)
+ * - CTR (taux de clic)
+ * 
+ * Chaque carte affiche une icône, un label, et la valeur formatée.
+ */
+
 import React from "react";
 import { Card, Col } from "antd";
 import {
@@ -7,6 +22,13 @@ import {
   StopOutlined,
 } from "@ant-design/icons";
 
+/**
+ * Retourne l'icône appropriée en fonction du label du KPI
+ * 
+ * @param {string} label - Nom du KPI (case-insensitive)
+ * @param {string} color - Couleur à appliquer à l'icône
+ * @returns {JSX.Element|null} Composant icône ou null si label non reconnu
+ */
 const getIcon = (label, color) => {
   const style = { marginRight: 6, color, fontSize: 25 };
   switch (label.toLowerCase()) {
@@ -24,6 +46,23 @@ const getIcon = (label, color) => {
   }
 };
 
+/**
+ * Composant KpiCardAdvertiser
+ * Affiche une métrique clé dans une carte avec icône et valeur
+ * 
+ * @component
+ * @param {Object} props
+ * @param {string} props.label - Nom du KPI (ex: "Sends", "Open", "Click")
+ * @param {string|number} props.value - Valeur à afficher
+ * @param {string} props.color - Couleur pour l'icône et la barre de haut
+ * @returns {JSX.Element} Carte KPI responsive
+ * @example
+ * <KpiCardAdvertiser 
+ *   label="Sends" 
+ *   value={5242} 
+ *   color="#1890ff"
+ * />
+ */
 const KpiCardAdvertiser = ({ label, value, color }) => {
   const Icon = getIcon(label, color);
 
@@ -44,6 +83,7 @@ const KpiCardAdvertiser = ({ label, value, color }) => {
           justifyContent: "space-between",
         }}
       >
+        {/* Barre de couleur en haut de la carte */}
         <div
           style={{
             height: 3,
@@ -55,6 +95,8 @@ const KpiCardAdvertiser = ({ label, value, color }) => {
             left: 0,
           }}
         />
+        
+        {/* Section gauche : Icône et label */}
         <div
           style={{
             display: "flex",
@@ -66,6 +108,8 @@ const KpiCardAdvertiser = ({ label, value, color }) => {
           {Icon}
           <span>{label}</span>
         </div>
+        
+        {/* Section droite : Valeur */}
         <div style={{ fontSize: 18, fontWeight: 600, color: "#fff" }}>
           {value}
         </div>

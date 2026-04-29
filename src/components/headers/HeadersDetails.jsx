@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 import { HealthExplainer } from "../healthComponents/HealthKit";
 import { tokens } from "../../utils/Tokens";
 
-export const HeadersDetails = ({styles,data,totalBrands,health,navigate,viewMode,setViewMode,getHealthLabel}) => {
+export const HeadersDetails = ({open,setOpen,styles,data,totalBrands,health,navigate,viewMode,setViewMode,getHealthLabel}) => {
     const location = useLocation();
     const advertiser = location.state?.advertiser;
     const fmt = (v) => Number(v ?? 0).toLocaleString("fr-FR");
@@ -217,10 +217,16 @@ const SmartChart = ({
                 </div>
                 </div>
                 <Popover
+                  open={open === "header"}
+                  onOpenChange={(v) =>
+                    setOpen(v ? "header" : null)
+                  }
                 content={<HealthExplainer g={data.globales} tokens={tokens} />}
                 title={null}
                 trigger="click"
-                placement="bottomRight"
+                placement="bottom"
+                // overlayStyle={{ maxWidth: 400 }}
+                // getPopupContainer={() => document.div}//Corrige le problème de z-index de la page 
                 >
                   <QuestionCircleOutlined
                   style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}

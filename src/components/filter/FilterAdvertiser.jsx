@@ -1,8 +1,24 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * FILTERADVERTISER.JSX - Composant de filtrage pour la liste d'annonceurs
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Propose plusieurs filtres permettant de :
+ * - Filtrer par annonceur spécifique
+ * - Filtrer par performance (eCPM, CA, Click Rate, Open Rate, Désabs)
+ * - Filtrer par nombre minimum d'envois
+ * - Trier les résultats par métrique
+ */
+
 import React from "react";
 import { Card, Row, Col, Select, Button } from "antd";
 
 const { Option } = Select;
 
+/**
+ * Configuration par défaut des filtres
+ * @type {Object}
+ */
 const DEFAULT_FILTERS = {
   advertiser: "ALL",
   taux_clickers: "ALL",
@@ -14,12 +30,27 @@ const DEFAULT_FILTERS = {
   sortBy: "sends",
 };
 
+/**
+ * Composant FilterAdvertiser
+ * Affiche une barre de filtres multicritères
+ * 
+ * @component
+ * @param {Object} props
+ * @param {Object} props.filters - État actuel des filtres
+ * @param {Function} props.setFilters - Fonction pour mettre à jour les filtres
+ * @param {Array} props.listeAdvertiser - Liste complète des annonceurs disponibles
+ * @returns {JSX.Element} Barre de filtres avec sélecteurs
+ */
 const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
+  /**
+   * Réinitialise tous les filtres à leurs valeurs par défaut
+   */
   const handleReset = () => setFilters(DEFAULT_FILTERS);
 
   return (
     <Card style={{ borderRadius: 10, background: "#ffffff" }}>
       <Row gutter={12} align="bottom">
+        {/* ================= FILTRE ANNONCEUR ================= */}
         <Col span={4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>Advertiser</span>
@@ -30,6 +61,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
               style={{ width: "100%" }}
             >
               <Option value="ALL">All advertisers</Option>
+              {/* Affiche dynamiquement tous les annonceurs disponibles */}
               {listeAdvertiser &&
                 listeAdvertiser.map((a) => (
                   <Option key={a.advrtiser_id} value={a.advertiser_name}>
@@ -40,6 +72,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
           </div>
         </Col>
 
+        {/* ================= FILTRE eCPM ================= */}
         <Col span={3}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>eCPM</span>
@@ -56,6 +89,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
           </div>
         </Col>
 
+        {/* ================= FILTRE CA ================= */}
         <Col span={3}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>CA</span>
@@ -72,6 +106,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
           </div>
         </Col>
 
+        {/* ================= FILTRE CLICK RATE ================= */}
         <Col span={3}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>Click Rate</span>
@@ -88,6 +123,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
           </div>
         </Col>
 
+        {/* ================= FILTRE OPEN RATE ================= */}
         <Col span={3}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>Open Rate</span>

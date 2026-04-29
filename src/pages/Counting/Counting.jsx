@@ -201,6 +201,21 @@
 //     </Row>
 //   );
 // }
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * COUNTING.JSX - Module de comptage/segmentation de contacts
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 
+ * Permet de compter le nombre de contacts correspondant à des critères :
+ * - Localisation (départements, codes postaux)
+ * - Profil (genre, tranches d'âges)
+ * - Indicateurs (revenu médian, propriétaires, pauvreté, CSP)
+ * - Détails ISP et opt-in email
+ * 
+ * Soumission : envoie une requête API pour récupérer le nombre de contacts
+ * Affichage : graphiques de répartition et résultats détaillés
+ */
+
 import React, { useState } from "react";
 import {
   Row,
@@ -221,7 +236,11 @@ import DashboardCharts from "../../components/chart/DashboardCharts";
 const { Title } = Typography;
 const { TextArea } = Input;
 
-// Options
+// ═══════════════════════════════════════════════════════════════════════════
+// CONSTANTES ET OPTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Options de tranches d'âge disponibles */
 const AGE_OPTIONS = [
   "18",
   "18-24",
@@ -233,7 +252,11 @@ const AGE_OPTIONS = [
   "75",
   "O",
 ];
+
+/** Options de genre/sexe */
 const GENDER_OPTIONS = ["M", "F", "O"];
+
+/** Fournisseurs d'accès internet (FAI/ISP) disponibles */
 const MAIN_ISP_OPTIONS = [
   "gmail",
   "yahoo",
@@ -254,6 +277,13 @@ const SCORE_SEGMENTS = {
   high: [0.66, 1],
 };
 
+/**
+ * Options pour le sélecteur de score (filtrage par niveaux)
+ * Les scores permettent de cibler des populations spécifiques :
+ * - Faible : 0-33% (population de référence basse)
+ * - Moyen : 33-66% (population intermédiaire)
+ * - Élevé : 66-100% (population haute, plus ciblée)
+ */
 const SCORE_OPTIONS = [
   { value: "none", label: "Aucun filtre" },
   { value: "low", label: "Faible" },
@@ -261,10 +291,34 @@ const SCORE_OPTIONS = [
   { value: "high", label: "Élevé" },
 ];
 
+/**
+ * Composant Counting - Formulaire de segmentation
+ * 
+ * Permet aux utilisateurs de :
+ * 1. Sélectionner une base de données
+ * 2. Définir des critères de segmentation
+ * 3. Lancer un comptage
+ * 4. Visualiser les résultats
+ * 
+ * @component
+ * @returns {JSX.Element} Formulaire complet avec résultats
+ */
 export default function Counting() {
+  // État de chargement (lors de l'appel API)
   const [loading, setLoading] = useState(false);
+  
+  // Résultats du comptage
   const [countResult, setCountResult] = useState(null);
 
+  /**
+   * État du formulaire - tous les critères de segmentation
+   * Structuré avec :
+   * - database_id : BD sélectionnée
+   * - Critères géographiques : locationInput
+   * - Profil : gender, age_ranges, optin_email
+   * - Critères ISP : main_isp
+   * - Scores socio-économiques : median_income, individual_house, etc.
+   */
   const [form, setForm] = useState({
     database_id: 1,
     locationInput: "",

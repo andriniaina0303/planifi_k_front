@@ -49,7 +49,8 @@ export const SmartChart = ({
             },
           },
           tooltip: {
-            backgroundColor: "rgba(17,24,39,0.9)",
+            yAlign: "top",
+            backgroundColor: "rgba(17, 19, 39, 0.9)",
             titleFont: {
               size: 12,
               family: "'Inter', sans-serif",
@@ -61,7 +62,7 @@ export const SmartChart = ({
             displayColors: true,
             boxWidth: 8,
             boxHeight: 8,
-            boxPadding: 4,
+            boxPadding: 10,
           },
         },
         scales: !isDoughnut
@@ -76,6 +77,7 @@ export const SmartChart = ({
                 border: { display: false },
               },
               y: {
+                // beginAtZero: true,
                 grid: { color: "rgba(0,0,0,0.04)", drawBorder: false },
                 ticks: {
                   font: { size: 10, family: "'Inter', sans-serif" },

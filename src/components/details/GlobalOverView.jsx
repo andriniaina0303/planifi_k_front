@@ -505,7 +505,7 @@ const SegmentRecommendations = ({ data, styles }) => {
  * Affiche aussi les graphiques comparatifs par base (AdvertiserDetailCharts).
  * Affiche les recommandations segment en bas.
  */
-export const GlobalOverview = ({ data, allbase, styles}) => {
+export const GlobalOverview = ({ open, setOpen, data, allbase, styles}) => {
   const g = data.globales;
   const health = getHealthScore(g);
   const dbMap = Object.fromEntries(allbase.map((db) => [db.id, db.basename]));
@@ -598,7 +598,7 @@ export const GlobalOverview = ({ data, allbase, styles}) => {
               {" "}
               <div style={{ marginBottom: 14, textAlign: "center" }}>
                 {" "}
-                <HealthGauge score={health} g={g} showExplainer/>{" "}
+                <HealthGauge open={open} setOpen={setOpen} score={health} g={g} showExplainer/>{" "}
               </div>{" "}
               <Divider style={{ margin: "10px 0" }} />{" "}
               <AnalyseBadges analyses={g.analyses} />{" "}

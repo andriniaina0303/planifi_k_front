@@ -20,7 +20,12 @@ export const HealthExplainer = ({ g}) => {
   const total = getHealthScore(g);
 
   return (
-    <div style={{ width: 320, padding: 4 }}>
+    <div   style={{
+    width: 320,
+    maxHeight: 350,
+    overflowY: "auto",
+    padding: 4,
+  }}>
       <div style={{ marginBottom: 12 }}>
         <Text strong style={{ fontSize: 13 }}>
           🩺 Comment est calculé le Health Score ?
@@ -118,7 +123,7 @@ export const HealthExplainer = ({ g}) => {
   );
 };
 
-export const HealthGauge = ({ score, g, showExplainer = false}) => {
+export const HealthGauge = ({ open, setOpen, score, g, showExplainer = false}) => {
   const color = getHealthColor(score);
   const label = getHealthLabel(score);
 
@@ -145,10 +150,14 @@ export const HealthGauge = ({ score, g, showExplainer = false}) => {
       />
       {showExplainer && g && (
         <Popover
+          open={open === "Diagnostic"}
+          onOpenChange={(v) =>
+            setOpen(v ? "Diagnostic" : null)
+          }
           content={<HealthExplainer g={g} tokens={tokens}/>}
           title={null}
           trigger="click"
-          placement="bottom"
+          placement="left"
         >
           <Button
             type="link"

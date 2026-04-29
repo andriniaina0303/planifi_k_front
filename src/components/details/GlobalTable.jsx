@@ -87,12 +87,26 @@ const brandCols = [
     title: "Subject",
     dataIndex: "subject",
     fixed: "left",
-    width: 450,
+    // width: 450,
     render: (v) => (
-      <Text strong style={{ fontSize: 12 }}>
+      <Text ellipsis = {{tooltip:true}} strong style={{ width:500, fontSize: 12 }}>
         {decodeBase64(v)}
       </Text>
     ),
+  },
+  {
+    title: "Segment",
+    dataIndex: "SL",
+    fixed: "left",
+    render: fmt,
+    sorter: (a, b) => a.sends - b.sends,
+  },
+  {
+    title: "Leads validés",
+    dataIndex: "VL",
+    fixed: "left",
+    render: fmt,
+    sorter: (a, b) => a.sends - b.sends,
   },
   {
     title: "Id routeur",
@@ -635,23 +649,17 @@ export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
       render: (_, r) => {
         const s = getHealthScore(r);
         return (
-          <Popover
-            content={<HealthExplainer g={r}/>}
-            title={null}
-            trigger="click"
-          >
-            <Progress
-              type="circle"
-              percent={s}
-              width={30}
-              strokeWidth={10}
-              strokeColor={getHealthColor(s)}
-              format={() => (
-                <span style={{ fontSize: 9, fontWeight: 700 }}>{s}</span>
-              )}
-              style={{ cursor: "pointer" }}
-            />
-          </Popover>
+          <Progress
+            type="circle"
+            percent={s}
+            width={30}
+            strokeWidth={10}
+            strokeColor={getHealthColor(s)}
+            format={() => (
+              <span style={{ fontSize: 9, fontWeight: 700 }}>{s}</span>
+            )}
+            style={{ cursor: "pointer" }}
+          />
         );
       },
     },

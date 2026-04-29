@@ -3,6 +3,7 @@ import { Card, Col, Row, Table, Tag, Typography } from "antd";
 import { fmt, pct} from "../../../utils/Helpers";
 import { tokens } from "../../../utils/Tokens";
 import { SmartChart } from "../../chart/AdvertiserDetailChart";
+import { AnalyseBadges } from "./AnalyseBadge";
 
 const { Text } = Typography;
 // ── DimSection ───────────────────────────────────────────────────────────────
@@ -175,14 +176,14 @@ export const DimSection = ({ dimensions, viewMode, hideFilter= false, styles }) 
               <Table
                 dataSource={rows}
                 columns={dimCols}
-                size="small"
+                size="xs"
                 rowKey="segment"
                 pagination={{
                   pageSize: 6,
-                  size: "small",
+                  size: "xs",
                   showSizeChanger: false,
                 }}
-                scroll={{ x: 900 }}
+                scroll={{ x:"max-content" }}
                 style={{ marginTop: 4 }}
               />
             )}
