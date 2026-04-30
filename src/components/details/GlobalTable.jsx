@@ -191,6 +191,9 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db.id, db.basename]));
+
+  // Etat pour gérer les segements appliquer à la base
+  const [segments,setSegments] = useState(null)
   return (
     <Card
       style={{

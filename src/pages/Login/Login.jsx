@@ -13,6 +13,7 @@
  */
 
 import React, { useState } from "react";
+import { redirect, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 /**
@@ -31,7 +32,7 @@ export default function LoginPage() {
   
   // Messages d'erreur
   const [error, setError] = useState("");
-
+  const local= useLocation()
   /**
    * Gère la soumission du formulaire
    * Valide les champs et compare avec les credentials temporaires
@@ -57,6 +58,7 @@ export default function LoginPage() {
       // Réinitialiser les champs après connexion réussie
       setEmail("");
       setPassword("");
+      redirect("/Home")
     } else {
       setError("Email ou mot de passe incorrect");
     }
