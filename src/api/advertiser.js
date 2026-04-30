@@ -11,7 +11,7 @@ import mockDataDetail from "../temp/adv_detail.json";
  * true = Utilise les données mockées (fichiers JSON statiques)
  * false = Utilise les appels API réels au backend
  */
-const USE_MOCK = true;
+const USE_MOCK = false;  //Switch pour activer/désactiver le mode MOCK
 
 /**
  * Récupère la liste complète de tous les annonceurs

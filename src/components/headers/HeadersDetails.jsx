@@ -1,4 +1,4 @@
-import {Button,Popover,Segmented,Progress} from "antd";
+import {Button,Popover, Progress} from "antd";
 import { useRef, useEffect } from "react";
 import { Chart } from "chart.js";
 import {
@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 import { HealthExplainer } from "../healthComponents/HealthKit";
 import { tokens } from "../../utils/Tokens";
 
-export const HeadersDetails = ({open,setOpen,styles,data,totalBrands,health,navigate,viewMode,setViewMode,getHealthLabel}) => {
+export const HeadersDetails = ({open,setOpen,styles,data,totalBrands,health,navigate,getHealthLabel}) => {
     const location = useLocation();
     const advertiser = location.state?.advertiser;
     const fmt = (v) => Number(v ?? 0).toLocaleString("fr-FR");
@@ -234,7 +234,7 @@ const SmartChart = ({
                 </Popover>
             </div>
 
-            <Segmented
+            {/* <Segmented
             value={viewMode}
             onChange={setViewMode}
             style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10 }}
@@ -266,7 +266,7 @@ const SmartChart = ({
                 value: "table",
                 },
             ]}
-            />
+            /> */}
         </div>
         </div>
     );

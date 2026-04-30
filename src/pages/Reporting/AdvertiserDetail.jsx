@@ -514,8 +514,6 @@ useEffect(() => {
         totalBrands={totalBrands} 
         health={health} 
         navigate={navigate}
-        viewMode={viewMode} 
-        setViewMode={setViewMode}
         getHealthLabel={getHealthLabel} 
         HealthExplainer={<HealthExplainer g={data.globales}/>}
       /> 
@@ -531,6 +529,29 @@ useEffect(() => {
           size="large"
           style={{ padding: "0 24px"}}
           tabBarStyle={{ marginBottom: 0, fontWeight: 600 }}
+
+          // Ajouter Segmented
+          tabBarExtraContent={
+            mainTab === "dimensions" ? (
+              <Segmented
+                value={viewMode}
+                onChange={setViewMode}
+                size = "middle"
+                style={{marginTop: 10, marginRight: 10}}
+                options={[
+                  {
+                    label: <span><BarChartOutlined/>Charts</span>,
+                    value: "chart",
+                  },
+                  {
+                    label: <span><TableOutlined/>Tables</span>,
+                    value: "table",
+                  }
+                ]}
+              />
+            ) : null
+          }
+
           items={[
             {
               key: "global",
