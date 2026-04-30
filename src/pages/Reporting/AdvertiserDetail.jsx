@@ -71,7 +71,7 @@ import { useLocation } from "react-router-dom";
 
 // import testAdvertisers from "../../data/testadv";
 // import testandre from "../../temp/adv_detail.json";
-import { get_all_databases } from "../../api/databases";
+// import { get_all_databases } from "../../api/databases";
 // import KpiCard from "../../components/Kpi/KpiCardAdvertiserDetail";
 import {HeadersDetails} from "../../components/headers/HeadersDetails";
 import {
@@ -370,12 +370,15 @@ const AdvertiserDetail = ({ _mockData }) => {
   const [openPopover, setOpenPopover] = useState(null) // Etat pour gérer l'ouverture du popover d'explication du health score
   
 useEffect(() => {
-  const handleScroll = () => setOpenPopover(false);
-
-  window.addEventListener("scroll", handleScroll, true);
+  const handleScroll = (e) =>{
+      // ignore scroll dans le popover
+    if (e.target.closest(".ant-popover")) return;
+    setOpenPopover(null);
+  }
+  window.addEventListener("wheel", handleScroll);
 
   return () => {
-    window.removeEventListener("scroll", handleScroll, true);
+    window.removeEventListener("wheel", handleScroll);
   };
 }, []);
 
