@@ -19,4 +19,4 @@ export const REACT_APP_ENDPOINT_ADVERTISER_DETAIL = REACT_APP_ENDPOINT + '/repor
 export const REACT_APP_ENDPOINT_ALL_DATABASES = REACT_APP_ENDPOINT + '/database'
 
 // /** Récupère les segments disponibles pour filtrer/segmenter les données */
-export const REACT_APP_ENDPOINT_ALL_SEGMENT = REACT_APP_ENDPOINT + '/segment'
+export const REACT_APP_ENDPOINT_ALL_SEGMENT = REACT_APP_ENDPOINT + '/reporting/segment'

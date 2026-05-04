@@ -10,10 +10,12 @@ import
     Tabs, 
     Row, 
     Col,
-    Divider
+    Divider,
+    Space,
+    Spin
  } from "antd";
 import {LinkOutlined, DatabaseOutlined, EyeOutlined, MailOutlined, DollarOutlined, StopOutlined, FireOutlined, DashboardOutlined, PieChartOutlined} from "@ant-design/icons";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { AnalyseBadges } from "./common/AnalyseBadge";
 import { getHealthColor,getHealthScore } from "../../utils/healthKitFunc";
 import { HealthExplainer } from "../healthComponents/HealthKit";
@@ -23,7 +25,7 @@ import { decodeBase64 } from "../../utils/utils";
 import { RateBar } from "./common/RateBar";
 import { FunnelViz } from "./common/FunnelViz";
 import { DimSection } from "./common/DimSection";
-
+import { get_segment_name } from "../../api/advertiser";
 
 const { Text } = Typography;
 
@@ -50,7 +52,16 @@ const CHART_PALETTE = [
  * Colonnes : Brand, Subject, Sends, Openers, Clickers, Unsubs, Open %, CTR %, CTO %, Unsub %.
  * Chaque colonne est triable et formatée selon son type (nombre, pourcentage, texte).
  */
-const brandCols = [
+
+
+
+// ── BrandSection columns ─────────────────────────────────────────────────────
+/* 
+ * Définition des colonnes du tableau pour l'affichage des Brands (marques).
+ * Colonnes : Brand, Subject, Sends, Openers, Clickers, Unsubs, Open %, CTR %, CTO %, Unsub %.
+ * Chaque colonne est triable et formatée selon son type (nombre, pourcentage, texte).
+ */
+const createBrandCols = (segmentNames,base) => [
   {
     title: "Brand",
     dataIndex: "name",
@@ -61,8 +72,8 @@ const brandCols = [
         <Text strong style={{ fontSize: 12 }}>
           {decodeBase64(v.name)}
         </Text>
-        <Tooltip title={v.creativities}>
-          <a
+        <Tooltip title={v.creativities}>    
+          <a   
             href={v.creativities}
             target="_blank"
             rel="noreferrer"
@@ -94,20 +105,52 @@ const brandCols = [
       </Text>
     ),
   },
-  {
-    title: "Segment",
-    dataIndex: "SL",
-    fixed: "left",
-    render: fmt,
-    sorter: (a, b) => a.sends - b.sends,
-  },
-  {
-    title: "Leads validés",
-    dataIndex: "VL",
-    fixed: "left",
-    render: fmt,
-    sorter: (a, b) => a.sends - b.sends,
-  },
+{
+  title: "Segment",
+  dataIndex: "segment_id",
+  fixed: "left",
+render: (segmentIds, record) => {
+  if (!segmentIds || !Array.isArray(segmentIds)) {
+    return "Aucun segments appliqués";
+  }
+
+  return (
+    <Space wrap>
+      {segmentIds.map((id) => {
+        const key = `${base.database_id}_${id}`;
+        const name = segmentNames[key];
+
+        // const label = name || `ID: ${id}`;
+
+        return (
+          <Tooltip key={id} title={name}>
+            <span
+              style={{
+                maxWidth: 120,
+                display: "inline-block",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                verticalAlign: "bottom",
+              }}
+            >
+              {name}
+            </span>
+          </Tooltip>
+        );
+      })}
+    </Space>
+  );
+}
+},
+
+ // {
+  //   title: "Leads validés",
+  //   dataIndex: "VL",
+  //   fixed: "left",
+  //   render: fmt,
+  //   sorter: (a, b) => a.sends - b.sends,
+  // },
   {
     title: "Id routeur",
     dataIndex: "id_routers",
@@ -180,18 +223,19 @@ const brandCols = [
 
 
 
+
 // ── BaseCard ─────────────────────────────────────────────────────────────────
 /* 
  * Affiche le détail complet d'une base de données en carte collapsible.
  * Contient 3 onglets : Aperçu (KPIs + Funnel), Brands (tableau/chart), Dimensions (segments).
  * Affiche la classification (A/B/C/D), l'indicateur de santé, et les KPIs clés en header.
  */
-const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
+const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db.id, db.basename]));
-
+  const brandCols = createBrandCols(segmentNames,base)
   // Etat pour gérer les segements appliquer à la base
   const [segments,setSegments] = useState(null)
   return (
@@ -501,7 +545,7 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
               ),
               children: (
                 <div style={{ paddingTop: 8 }}>
-                  {viewMode === "chart" ? (
+                  {/* {viewMode === "chart" ? (
                     <Row gutter={[14, 14]}>
                       <Col xs={24} lg={14}>
                         <SmartChart
@@ -557,11 +601,14 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
                         />
                       </Col>
                     </Row>
-                  ) : (
+                  )*/} 
                     <Table
-                      dataSource={
-                        base.brands?.map((b, i) => ({ key: i, ...b })) || []
-                      }
+                    dataSource={
+                      base.brands?.map((b, i) => ({
+                        key: i,
+                        ...b,
+                      })) || []
+                    }
                       columns={brandCols}
                       size="small"
                       pagination={{
@@ -571,7 +618,6 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
                       }}
                       scroll={{ x: 1400 }}
                     />
-                  )}
                 </div>
               ),
             },
@@ -611,7 +657,47 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
  */
 export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
   const [f, setF] = useState({ minSends: null, cls: null });
+  const [segmentNames, setSegmentNames] = useState({});
   const [selectedBase, setSelectedBase] = useState(null); // ← ajout
+  const [loadingSegments, setLoadingSegments] = useState(false);
+// Charger les noms des segments depuis l'API
+useEffect(() => {
+  if (!selectedBase) return; // ← Si pas de base sélectionnée, on sort
+
+  setLoadingSegments(true); // ← AU DÉBUT
+
+  const loadSegmentNames = async () => {
+    const newSegmentNames = { ...segmentNames }; // ← Garder le cache existant
+
+    // Boucler SEULEMENT sur les brands de LA BASE SÉLECTIONNÉE
+    for (const brand of selectedBase.brands || []) {
+      // Boucler sur tous les segment_id du brand
+      for (const segmentId of brand.segment_id || []) {
+        const key = `${selectedBase.database_id}_${segmentId}`;
+        
+        // Si pas déjà chargé, appeler l'API
+        if (!newSegmentNames[key]) {
+          try {
+            const name = await get_segment_name(selectedBase.database_id, segmentId);
+            if (name) {
+              newSegmentNames[key] = name;
+              // console.log(`NOM segment (${key}) : ${newSegmentNames[key]}`)
+            }
+          } catch (error) {
+            console.error(`Erreur segment ${segmentId}:`, error);
+          }
+        }
+      }
+    }
+
+    setSegmentNames(newSegmentNames);
+    setLoadingSegments(false);
+  };
+
+  loadSegmentNames();
+}, [selectedBase]); // ← Dépendance: selectedBase, pas bases
+
+
   const rows = useMemo(() => {
     let d = bases.map((b) => ({ key: b.database_id, ...b }));
     if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
@@ -620,6 +706,7 @@ export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
   }, [bases, f]);
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db.id, db.basename]));
+  const brandCols = createBrandCols(segmentNames,bases); // ← AJOUTE CETTE LIGNE
   const cols = [
     {
       title: "Database",
@@ -627,8 +714,11 @@ export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
       fixed: "left",
       width: 180,
       render: (v) => (
+        
         <Text strong style={{ fontSize: 12 }}>
-          {dbMap[v] || `DB #${v}`}
+          {
+            dbMap[v] || `DB #${v}`
+          }
         </Text>
       ),
     },
@@ -765,23 +855,38 @@ export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
             ),
           }}
           onRow={(record) => ({
-            onClick: () => setSelectedBase(record),
+          onClick: () => {
+            setSelectedBase(record);
+            console.log("loader: ",loadingSegments)
+            setLoadingSegments(true);
+          },
             style: { cursor: "pointer" },
           })}
         />
     </Card>
-      <Modal // ← ajout
-        open={!!selectedBase}
-        onCancel={() => setSelectedBase(null)}
-        footer={null}
-        width="80%"
-        style={{ top: 40 }}
-        destroyOnClose
-      >
-        {selectedBase && (
-          <BaseCard base={selectedBase} viewMode={"table"} allbase={allbase} clsConfig={clsConfig} styles={styles}/>
-        )}
-      </Modal>
+    <Modal
+      open={!!selectedBase}
+      onCancel={() => setSelectedBase(null)}
+      footer={null}
+      width="85%"
+      style={{ top: 40 }}
+      styles={{
+        content: {
+          paddingRight: 50, // ← Espace INTERNE pour éviter le X
+        }
+      }}
+      destroyOnClose
+    >
+      {selectedBase && !loadingSegments ? (
+        <BaseCard base={selectedBase} viewMode={"table"} allbase={allbase} clsConfig={clsConfig} styles={styles} segmentNames={segmentNames}/>
+      ) : (
+        <div style={{ padding: '40px', textAlign: 'center' }}>
+          <Spin size="large" tip="Chargement des segments..." >
+            <div></div>
+          </Spin>
+        </div>
+      )}
+    </Modal>
     </>
   );
 };

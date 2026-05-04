@@ -66,7 +66,7 @@ import {
 } from "@ant-design/icons";
 import { Chart, registerables } from "chart.js";
 import AdvertiserDetailCharts from "../../components/chart/AdvertiserDetailChart"; 
-import { get_advertisers_detail } from "../../api/advertiser";
+import { get_advertisers_detail} from "../../api/advertiser";
 import { useLocation } from "react-router-dom";
 
 // import testAdvertisers from "../../data/testadv";
@@ -185,85 +185,6 @@ const styles = {
   },
 };
 
-
-// ── KpiCard ──────────────────────────────────────────────────────────────────
-
-// const KpiCard = ({ icon, label, value, color, subtitle }) => (
-//   <div
-//     style={styles.kpiCard}
-//     onMouseEnter={(e) => {
-//       e.currentTarget.style.boxShadow = tokens.shadowMd;
-//       e.currentTarget.style.transform = "translateY(-2px)";
-//     }}
-//     onMouseLeave={(e) => {
-//       e.currentTarget.style.boxShadow = tokens.shadow;
-//       e.currentTarget.style.transform = "translateY(0)";
-//     }}
-//   >
-//     <div style={{ padding: "16px 18px" }}>
-//       <div
-//         style={{
-//           display: "flex",
-//           alignItems: "flex-start",
-//           justifyContent: "space-between",
-//         }}
-//       >
-//         <div style={{ flex: 1 }}>
-//           <div
-//             style={{
-//               fontSize: 11,
-//               color: "#9ca3af",
-//               fontWeight: 600,
-//               textTransform: "uppercase",
-//               letterSpacing: 0.5,
-//               marginBottom: 6,
-//             }}
-//           >
-//             {label}
-//           </div>
-//           <div
-//             style={{
-//               fontSize: 22,
-//               fontWeight: 800,
-//               color: "#111827",
-//               lineHeight: 1.2,
-//             }}
-//           >
-//             {value}
-//           </div>
-//           {subtitle && (
-//             <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
-//               {subtitle}
-//             </div>
-//           )}
-//         </div>
-//         <div
-//           style={{
-//             width: 42,
-//             height: 42,
-//             borderRadius: 12,
-//             background: `${color}12`,
-//             display: "flex",
-//             alignItems: "center",
-//             justifyContent: "center",
-//             color,
-//             fontSize: 18,
-//             flexShrink: 0,
-//           }}
-//         >
-//           {icon}
-//         </div>
-//       </div>
-//     </div>
-//     <div
-//       style={{
-//         height: 3,
-//         background: `linear-gradient(90deg, ${color}, ${color}66)`,
-//       }}
-//     />
-//   </div>
-// );
-
 // ── KpiDashboard ─────────────────────────────────────────────────────────────
 /* 
  * Affiche une grille de 7 KPIs principaux + indicateur de santé.
@@ -362,6 +283,7 @@ const AdvertiserDetail = ({ _mockData }) => {
   
   // État de la page
   const [data, setData] = useState(_mockData || null);           // Données complètes du rapport
+  const [segmentList, setSegmentList] = useState([])              //Etat pour stocker les segments de chaque campagne 
   const [loading, setLoading] = useState(!_mockData);             // État chargement
   const [viewMode, setViewMode] = useState("chart");              // Mode affichage : \"chart\" ou \"table\"
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"

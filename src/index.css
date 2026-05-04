@@ -24,3 +24,8 @@
 .ant-select-item-option-content {
   text-align: center;
 }
+
+.ant-modal-close {
+  inset-inline-end: 32px !important; /* ← éloigne du bord droit */
+  top: 16px;
+}
