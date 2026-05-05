@@ -92,7 +92,7 @@ import { FunnelViz } from "../../components/details/common/FunnelViz";
 import { GlobalOverview } from "../../components/details/GlobalOverView";
 import { GlobalTable } from "../../components/details/GlobalTable";
 import { DimSection } from "../../components/details/common/DimSection";
-
+import { exportGlobalTableXLS } from "../../components/details/common/ExportBase.jsx";
 
 
 /* 
@@ -184,6 +184,7 @@ const styles = {
     gap: 4,
   },
 };
+
 
 // ── KpiDashboard ─────────────────────────────────────────────────────────────
 /* 
@@ -474,6 +475,15 @@ useEffect(() => {
                   }
                 ]}
               />
+            ) : mainTab === "bases" ? (
+              <Button
+                icon={<DownloadOutlined />}
+                size="middle"
+                style={{marginTop: 10, marginRight:10}}
+                onClick={()=> exportGlobalTableXLS(data.bases, allDatabase, clsConfig)}
+              >
+              Export xls
+              </Button>
             ) : null
           }
 
