@@ -600,9 +600,6 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles }) => {
   );
 };
 
-
-
-
 // ── GlobalTable ──────────────────────────────────────────────────────────────
 /* 
  * Affiche la liste de toutes les bases en tableau avec filtres et tri.

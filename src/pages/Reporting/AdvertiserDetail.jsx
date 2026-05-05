@@ -92,7 +92,7 @@ import { FunnelViz } from "../../components/details/common/FunnelViz";
 import { GlobalOverview } from "../../components/details/GlobalOverView";
 import { GlobalTable } from "../../components/details/GlobalTable";
 import { DimSection } from "../../components/details/common/DimSection";
-
+import { exportGlobalTableXLS } from "../../components/details/common/ExportBase.jsx";
 
 
 /* 
@@ -185,84 +185,6 @@ const styles = {
   },
 };
 
-
-// ── KpiCard ──────────────────────────────────────────────────────────────────
-
-// const KpiCard = ({ icon, label, value, color, subtitle }) => (
-//   <div
-//     style={styles.kpiCard}
-//     onMouseEnter={(e) => {
-//       e.currentTarget.style.boxShadow = tokens.shadowMd;
-//       e.currentTarget.style.transform = "translateY(-2px)";
-//     }}
-//     onMouseLeave={(e) => {
-//       e.currentTarget.style.boxShadow = tokens.shadow;
-//       e.currentTarget.style.transform = "translateY(0)";
-//     }}
-//   >
-//     <div style={{ padding: "16px 18px" }}>
-//       <div
-//         style={{
-//           display: "flex",
-//           alignItems: "flex-start",
-//           justifyContent: "space-between",
-//         }}
-//       >
-//         <div style={{ flex: 1 }}>
-//           <div
-//             style={{
-//               fontSize: 11,
-//               color: "#9ca3af",
-//               fontWeight: 600,
-//               textTransform: "uppercase",
-//               letterSpacing: 0.5,
-//               marginBottom: 6,
-//             }}
-//           >
-//             {label}
-//           </div>
-//           <div
-//             style={{
-//               fontSize: 22,
-//               fontWeight: 800,
-//               color: "#111827",
-//               lineHeight: 1.2,
-//             }}
-//           >
-//             {value}
-//           </div>
-//           {subtitle && (
-//             <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
-//               {subtitle}
-//             </div>
-//           )}
-//         </div>
-//         <div
-//           style={{
-//             width: 42,
-//             height: 42,
-//             borderRadius: 12,
-//             background: `${color}12`,
-//             display: "flex",
-//             alignItems: "center",
-//             justifyContent: "center",
-//             color,
-//             fontSize: 18,
-//             flexShrink: 0,
-//           }}
-//         >
-//           {icon}
-//         </div>
-//       </div>
-//     </div>
-//     <div
-//       style={{
-//         height: 3,
-//         background: `linear-gradient(90deg, ${color}, ${color}66)`,
-//       }}
-//     />
-//   </div>
-// );
 
 // ── KpiDashboard ─────────────────────────────────────────────────────────────
 /* 
@@ -552,6 +474,15 @@ useEffect(() => {
                   }
                 ]}
               />
+            ) : mainTab === "bases" ? (
+              <Button
+                icon={<DownloadOutlined />}
+                size="middle"
+                style={{marginTop: 10, marginRight:10}}
+                onClick={()=> exportGlobalTableXLS(data.bases, allDatabase, clsConfig)}
+              >
+              Export xls
+              </Button>
             ) : null
           }
 
