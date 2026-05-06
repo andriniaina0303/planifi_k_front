@@ -138,7 +138,7 @@ export async function exportGlobalTableXLS(
 
     // C11: CA
     row.getCell(11).value = base.ca ?? null;
-    styleCell(row.getCell(11), { fgColor: COLOR.black, bgColor: rowBg, align: "right", numFmt: '"£"#,##0.00' });
+    styleCell(row.getCell(11), { fgColor: COLOR.black, bgColor: rowBg, align: "right", numFmt: '#,##0.00' });
 
     // C12: eCPM
     row.getCell(12).value = base.ecpm ?? null;
@@ -169,7 +169,7 @@ export async function exportGlobalTableXLS(
   [[11]].forEach(([c]) => {
     const letter = sheet.getColumn(c).letter;
     totalRow.getCell(c).value = { formula: "SUM(" + letter + "2:" + letter + lastData + ")" };
-    styleCell(totalRow.getCell(c), { fgColor: COLOR.header_fg, bgColor: COLOR.header_bg, bold: true, align: "right", numFmt: '"£"#,##0.00' });
+    styleCell(totalRow.getCell(c), { fgColor: COLOR.header_fg, bgColor: COLOR.header_bg, bold: true, align: "right", numFmt: '#,##0.00' });
   });
 
   const buffer = await workbook.xlsx.writeBuffer();

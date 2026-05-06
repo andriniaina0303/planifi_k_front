@@ -508,7 +508,7 @@ const SegmentRecommendations = ({ data, styles }) => {
 export const GlobalOverview = ({ open, setOpen, data, allbase, styles}) => {
   const g = data.globales;
   const health = getHealthScore(g);
-  const dbMap = Object.fromEntries(allbase.map((db) => [db.id, db.basename]));
+  const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
 
   return (
     <div>

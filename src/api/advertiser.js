@@ -81,3 +81,78 @@ export async function get_segment_name(database_id, segment_id) {
   // Sinon si c'est un objet, retourne segment_name
   return data?.segment_name ?? null;
 }
+
+
+/**
+ * Cache global pour stocker les mappings
+ * Structure: { "tags": {...}, "agences": {...}, "databases": {...} }
+ */
+const mappingCache = {};
+
+/**
+ * Récupère et cache les données COMPLÈTES d'une API
+ * Retourne l'array brut pour que tu fasses ton mapping toi-même
+ * 
+ * @param {string} endpoint - URL de l'API
+ * @param {string} cacheKey - Clé unique pour le cache
+ * @returns {Promise<Array>} Array des objets bruts de l'API
+ */
+export async function getMappingData(endpoint, cacheKey) {
+  // Si déjà en cache, retourner immédiatement
+  if (mappingCache[cacheKey]) {
+    console.log(`✅ Using cached ${cacheKey}`);
+    return mappingCache[cacheKey];
+  }
+
+  try {
+    console.log(`🔄 Fetching ${cacheKey} from API...`);
+    
+    const response = await api.get( config.REACT_APP_ENDPOINT_ALL_MAPPING+endpoint, { timeout: 120000 });
+    const data = Array.isArray(response.data) ? response.data : [response.data];
+
+    // Stocker le array COMPLET en cache
+    mappingCache[cacheKey] = data;
+    console.log(`✨ Cached ${cacheKey}:`, data);
+
+    return data;
+  } catch (error) {
+    console.error(`Erreur lors du fetch de ${cacheKey}:`, error);
+    return [];
+  }
+}
+
+/**
+ * Récupère une valeur du mapping
+ * @param {string} cacheKey - Clé du cache
+ * @param {number|string} id - L'ID à chercher
+ * @param {string} idKey - Clé de l'ID (ex: "tag_id")
+ * @param {string} nameKey - Clé du nom (ex: "tag_name")
+ * @returns {string} Le nom ou "ID: {id}"
+ */
+export function getMappingValue(cacheKey, id, idKey, nameKey) {
+  const data = mappingCache[cacheKey] || [];
+  const item = data.find(d => d[idKey] === id);
+  return item ? item[nameKey] : `ID: ${id}`;
+}
+
+/**
+ * Récupère toutes les données en cache
+ */
+export function getFullMapping(cacheKey) {
+  return mappingCache[cacheKey] || [];
+}
+
+/**
+ * Efface le cache (utile pour rafraîchir les données)
+ * 
+ * @param {string} cacheKey - Clé à effacer, ou null pour tout effacer
+ */
+export function clearMappingCache(cacheKey = null) {
+  if (cacheKey) {
+    delete mappingCache[cacheKey];
+    console.log(`🗑️ Cleared cache for ${cacheKey}`);
+  } else {
+    Object.keys(mappingCache).forEach(key => delete mappingCache[key]);
+    console.log(`🗑️ Cleared all mapping caches`);
+  }
+}

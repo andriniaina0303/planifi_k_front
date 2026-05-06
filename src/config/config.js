@@ -20,3 +20,6 @@ export const REACT_APP_ENDPOINT_ALL_DATABASES = REACT_APP_ENDPOINT + '/database'
 
 // /** Récupère les segments disponibles pour filtrer/segmenter les données */
 export const REACT_APP_ENDPOINT_ALL_SEGMENT = REACT_APP_ENDPOINT + '/reporting/segment'
+
+// Récupère les données de mapping comme tags, nom_agence, nom_DB 
+export const REACT_APP_ENDPOINT_ALL_MAPPING = REACT_APP_ENDPOINT + '/reporting/'

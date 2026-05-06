@@ -61,7 +61,7 @@ const CHART_PALETTE = [
  * Colonnes : Brand, Subject, Sends, Openers, Clickers, Unsubs, Open %, CTR %, CTO %, Unsub %.
  * Chaque colonne est triable et formatée selon son type (nombre, pourcentage, texte).
  */
-const createBrandCols = (segmentNames,base) => [
+const createBrandCols = (segmentNames,base,listNames) => [
   {
     title: "Brand",
     dataIndex: "name",
@@ -109,53 +109,155 @@ const createBrandCols = (segmentNames,base) => [
   title: "Segment",
   dataIndex: "segment_id",
   fixed: "left",
-render: (segmentIds, record) => {
-  if (!segmentIds || !Array.isArray(segmentIds)) {
-    return "Aucun segments appliqués";
-  }
+  width: 220,
+  render: (segmentIds, record) => {
+    if (!segmentIds || !Array.isArray(segmentIds)) {
+      segmentIds = [];
+    }
 
-  return (
-    <Space wrap>
-      {segmentIds.map((id) => {
-        const key = `${base.database_id}_${id}`;
-        const name = segmentNames[key];
+    // Récupérer les listes pour ce brand
+    const listNamesForBrand = listNames[record.name] || [];
 
-        // const label = name || `ID: ${id}`;
+    // ━━━ POPOVER SEGMENTS ━━━
+    const segmentsContent = (
+      <div style={{ maxWidth: 300 }}>
+        {segmentIds.length === 0 ? (
+          <div style={{ padding: "8px 12px", fontSize: 12, color: "#999" }}>
+            Aucun segment
+          </div>
+        ) : (
+          segmentIds.map((id) => {
+            const key = `${base.database_id}_${id}`;
+            const name = segmentNames[key];
+            return (
+              <div
+                key={id}
+                style={{
+                  padding: "8px 12px",
+                  borderBottom: "1px solid #f0f0f0",
+                  fontSize: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span style={{ color: tokens.primary, fontWeight: 600 }}>•</span>
+                <span>{name || `ID: ${id}`}</span>
+              </div>
+            );
+          })
+        )}
+      </div>
+    );
 
-        return (
-          <Tooltip key={id} title={name}>
-            <span
+    // ━━━ POPOVER LISTES ━━━
+    const listesContent = (
+      <div style={{ maxWidth: 300 }}>
+        {listNamesForBrand.length === 0 ? (
+          <div style={{ padding: "8px 12px", fontSize: 12, color: "#999" }}>
+            Aucune liste
+          </div>
+        ) : (
+          listNamesForBrand.map((listName, idx) => (
+            <div
+              key={idx}
               style={{
-                maxWidth: 120,
-                display: "inline-block",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                verticalAlign: "bottom",
+                padding: "8px 12px",
+                borderBottom: "1px solid #f0f0f0",
+                fontSize: 12,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
               }}
             >
-              {name}
-            </span>
-          </Tooltip>
-        );
-      })}
-    </Space>
-  );
-}
+              <span style={{ color: tokens.success, fontWeight: 600 }}>◆</span>
+              <span>{listName}</span>
+            </div>
+          ))
+        )}
+      </div>
+    );
+
+    // ━━━ BOUTON SEGMENT ━━━
+    const segmentButton = (
+      <Popover
+        content=
+        {  
+          <div style={{ maxHeight: 200, overflowY: "auto" }}>
+            {segmentsContent}
+          </div>
+        }
+        title={`Segments (${segmentIds.length})`}
+        trigger="click"
+        placement="topRight"
+      >
+        <button
+          style={{
+            background: tokens.primary,
+            color: "white",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+            padding: "4px 12px",
+            fontSize: 12,
+            fontWeight: 500,
+            marginRight: 8,
+          }}
+        >
+          {segmentIds.length} segment{segmentIds.length > 1 ? "s" : ""}
+        </button>
+      </Popover>
+    );
+
+    // ━━━ BOUTON LISTES ━━━
+    const listesButton = (
+      <Popover
+        content=
+        {  
+          <div style={{ maxHeight: 200, overflowY: "auto" }}>
+            {listesContent}
+          </div>
+        }
+        title={`Listes (${listNamesForBrand.length})`}
+        trigger="click"
+        placement="topRight"
+      >
+        <button
+          style={{
+            background: tokens.success,
+            color: "white",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+            padding: "4px 12px",
+            fontSize: 12,
+            fontWeight: 500,
+          }}
+        >
+          {listNamesForBrand.length} liste{listNamesForBrand.length > 1 ? "s" : ""}
+        </button>
+      </Popover>
+    );
+
+    // ━━━ AFFICHER LES DEUX BOUTONS ━━━
+    return (
+      <Space>
+        {segmentIds.length > 0 && segmentButton}
+        {listNamesForBrand.length > 0 && listesButton}
+        {segmentIds.length === 0 && listNamesForBrand.length === 0 && (
+          <span style={{ fontSize: 12, color: "#999" }}>Aucun segment/liste</span>
+        )}
+      </Space>
+    );
+  },
 },
 
- // {
-  //   title: "Leads validés",
-  //   dataIndex: "VL",
-  //   fixed: "left",
-  //   render: fmt,
-  //   sorter: (a, b) => a.sends - b.sends,
-  // },
-  {
-    title: "Id routeur",
-    dataIndex: "id_routers",
+ {
+    title: "Leads validés",
+    dataIndex: "VL",
+    fixed: "left",
     render: fmt,
-    align: "right",
+    sorter: (a, b) => a.sends - b.sends,
   },
   {
     title: "Sends",
@@ -230,12 +332,12 @@ render: (segmentIds, record) => {
  * Contient 3 onglets : Aperçu (KPIs + Funnel), Brands (tableau/chart), Dimensions (segments).
  * Affiche la classification (A/B/C/D), l'indicateur de santé, et les KPIs clés en header.
  */
-const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames }) => {
+const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames, listNames, agencyName }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
-  const dbMap = Object.fromEntries(allbase.map((db) => [db.id, db.basename]));
-  const brandCols = createBrandCols(segmentNames,base)
+  const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
+  const brandCols = createBrandCols(segmentNames,base,listNames)
   // Etat pour gérer les segements appliquer à la base
   const [segments,setSegments] = useState(null)
   return (
@@ -291,7 +393,7 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames }) 
               >
                 {cls.icon} {cls.label}
               </span>
-              <Tag
+              {/* <Tag
                 color="purple"
                 style={{
                   borderRadius: 6,
@@ -301,7 +403,7 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames }) 
                 }}
               >
                 Router {base.id_routers}
-              </Tag>
+              </Tag> */}
             </div>
             {base.date_schedule && (
               <Text style={{ fontSize: 11, color: "#9ca3af" }}>
@@ -652,9 +754,10 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames }) 
  * Colonnes : Database, Classe, Health, Sends, Openers, Open %, Clickers, CTR %, Unsubs, CA, eCPM, Analyses.
  * Clic sur une ligne ouvre un modal avec le détail de la base (BaseCard).
  */
-export const GlobalTable = ({ bases, allbase, clsConfig, styles}) => {
+export const GlobalTable = ({ bases, allbase, agencyName, clsConfig, styles}) => {
   const [f, setF] = useState({ minSends: null, cls: null });
   const [segmentNames, setSegmentNames] = useState({});
+  const [listNames, setListNames] = useState([]);
   const [selectedBase, setSelectedBase] = useState(null); // ← ajout
   const [loadingSegments, setLoadingSegments] = useState(false);
 // Charger les noms des segments depuis l'API
@@ -665,9 +768,17 @@ useEffect(() => {
 
   const loadSegmentNames = async () => {
     const newSegmentNames = { ...segmentNames }; // ← Garder le cache existant
+    const newListNames = {...listNames};
 
     // Boucler SEULEMENT sur les brands de LA BASE SÉLECTIONNÉE
     for (const brand of selectedBase.brands || []) {
+
+      // RÉCUPÉRER LES NOMS DE LISTES
+      // ListName est un array : ["acheter-malin.com", "autre-liste.com"]
+      if (brand.ListName && Array.isArray(brand.ListName)) {
+        const brandKey = brand.name; // ou brand.id si tu as un ID unique
+        newListNames[brandKey] = brand.ListName; // Stocker l'array complet
+      }
       // Boucler sur tous les segment_id du brand
       for (const segmentId of brand.segment_id || []) {
         const key = `${selectedBase.database_id}_${segmentId}`;
@@ -688,6 +799,7 @@ useEffect(() => {
     }
 
     setSegmentNames(newSegmentNames);
+    setListNames(newListNames); // ← Stocker les listes
     setLoadingSegments(false);
   };
 
@@ -702,8 +814,8 @@ useEffect(() => {
     return d;
   }, [bases, f]);
 
-  const dbMap = Object.fromEntries(allbase.map((db) => [db.id, db.basename]));
-  const brandCols = createBrandCols(segmentNames,bases); // ← AJOUTE CETTE LIGNE
+  const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
+  const brandCols = createBrandCols(segmentNames,bases,listNames); // ← AJOUTE CETTE LIGNE
   const cols = [
     {
       title: "Database",
@@ -875,7 +987,16 @@ useEffect(() => {
       destroyOnClose
     >
       {selectedBase && !loadingSegments ? (
-        <BaseCard base={selectedBase} viewMode={"table"} allbase={allbase} clsConfig={clsConfig} styles={styles} segmentNames={segmentNames}/>
+        <BaseCard
+          base={selectedBase}
+          viewMode={"table"} 
+          allbase={allbase} 
+          clsConfig={clsConfig} 
+          styles={styles} 
+          segmentNames={segmentNames}
+          listNames={listNames}
+          agencyName={agencyName}
+        />
       ) : (
         <div style={{ padding: '40px', textAlign: 'center' }}>
           <Spin size="large" tip="Chargement des segments..." >

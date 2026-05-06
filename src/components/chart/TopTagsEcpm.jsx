@@ -24,33 +24,30 @@ const COLORS = ["#722ed1", "#9254de", "#b37feb", "#531dab", "#8b5cf6"];
  * @param {Array} props.data - Données des annonceurs
  * @param {Array} props.listetags - Liste complète des tags
  */
-const TopTagsEcpm = ({ data, listetags }) => {
+const TopTagsEcpm = ({ data, tagMapping = [] }) => {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
-  
-  console.log(data)
+
   
   /**
    * Calcule le top 10 des tags par eCPM
-   */
-  const topTags = useMemo(() => {
-    const tagsPerf = listetags.map((tag) => {
-      // Filtrer les annonceurs pour ce tag
-      const items = data.filter((a) => a.tag_id === tag.id);
-      // Récupérer l'eCPM directement (ou calculer si besoin)
-      const ecpm = items.length > 0 ? items[0].globales.ecpm : 0;
-      return {
-        name: tag.tag,
-        eCPM: ecpm,
-      };
-    });
-    
-    // Filtrer, trier et limiter à 10
-    return tagsPerf
-      .filter((t) => t.eCPM > 0)
-      .sort((a, b) => b.eCPM - a.eCPM)
-      .slice(0, 10);
-  }, [data, listetags]);
+  */
+const topTags = useMemo(() => {
+const tagsPerf = Object.entries(tagMapping).map(([id, name]) => {
+  const tagId = Number(id);
+  const items = data.filter((a) => Number(a.tag_id) === tagId);
+  const ecpm = items.length > 0 ? items[0].globales.ecpm : 0;
+    return {
+      name: name.tag_name,
+      eCPM: ecpm,
+    };
+  });
+  
+  return tagsPerf
+    .filter((t) => t.eCPM > 0)
+    .sort((a, b) => b.eCPM - a.eCPM)
+    .slice(0, 10);
+}, [data]);
 
   /**
    * Plugin Chart.js personnalisé pour afficher les valeurs au-dessus des barres
@@ -80,11 +77,12 @@ const TopTagsEcpm = ({ data, listetags }) => {
   useEffect(() => {
     if (!canvasRef.current) return;
     if (chartRef.current) chartRef.current.destroy();
-
+    console.log("topTags", topTags);
     // Configuration du graphique Chart.js
     chartRef.current = new Chart(canvasRef.current, {
       type: "bar",
       data: {
+        
         labels: topTags.map((t) => t.name),
         datasets: [
           {

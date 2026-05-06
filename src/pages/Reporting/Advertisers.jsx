@@ -11,7 +11,7 @@
  */
 
 import React, { useEffect, useMemo, useState } from "react";
-import { get_liste_advertisers } from "../../api/advertiser";
+import { get_liste_advertisers, getMappingData, getMappingValue  } from "../../api/advertiser";
 import "../../assets/css/advertisers.css";
 import { listetags } from "../../components/table/AdvertisersTable";
 import { Card,Row,Col} from "antd";
@@ -39,6 +39,10 @@ const Advertisers = () => {
   
   // État des filtres actifs
   const [filters, setFilters] = useState(DEFAULT_FILTERS);  
+
+    // ➕ AJOUTE CES STATES POUR LES MAPPINGS
+  const [tagMapping, setTagMapping] = useState({});
+
 
   /**
    * Récupère la liste complète des annonceurs depuis l'API
@@ -131,9 +135,26 @@ const Advertisers = () => {
   }, [filteredData]);
 
 
-  useEffect(() => {
-    fetchReporting();
-  }, []);
+useEffect(() => {
+  const init = async () => {
+    try {
+      // Charger uniquement les tags
+      const tags = await getMappingData('tags', 'tags');
+      
+      console.log("TAGS API RESULT:", tags);
+      setTagMapping(tags);
+
+      // Ensuite fetch le reporting
+      await fetchReporting();
+    } catch (error) {
+      console.error("Erreur lors de l'initialisation :", error);
+    }
+  };
+
+  init();
+}, []);
+
+
 
   if (loading) {
     return (
@@ -168,7 +189,7 @@ const Advertisers = () => {
             <ChartSwitcher data={filteredData} />
           </Col>  
           <Col flex="none">
-            <TopTagsEcpm data={filteredData} listetags={listetags} />
+            <TopTagsEcpm data={filteredData} tagMapping={tagMapping} />
           </Col>
         </Row>
 
@@ -185,7 +206,7 @@ const Advertisers = () => {
             style={{ borderRadius: 10, height: "100%", width: "100%", overflow: "visible" }}
             bodyStyle={{ padding: 0 }}
           >
-          <AdvertisersTable data={filteredData} />
+          <AdvertisersTable data={filteredData}   tagMapping={tagMapping}/>
           </Card>
       </Row>
     </div>

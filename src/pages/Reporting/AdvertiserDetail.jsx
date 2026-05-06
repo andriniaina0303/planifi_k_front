@@ -66,7 +66,7 @@ import {
 } from "@ant-design/icons";
 import { Chart, registerables } from "chart.js";
 import AdvertiserDetailCharts from "../../components/chart/AdvertiserDetailChart"; 
-import { get_advertisers_detail} from "../../api/advertiser";
+import { get_advertisers_detail, getMappingData, getMappingValue} from "../../api/advertiser";
 import { useLocation } from "react-router-dom";
 
 // import testAdvertisers from "../../data/testadv";
@@ -288,10 +288,13 @@ const AdvertiserDetail = ({ _mockData }) => {
   const [loading, setLoading] = useState(!_mockData);             // État chargement
   const [viewMode, setViewMode] = useState("chart");              // Mode affichage : \"chart\" ou \"table\"
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"
-  const [allDatabase, seAllDatabase] = useState([]);              // Liste de toutes les bases de données
   const { state } = useLocation();
   const [openPopover, setOpenPopover] = useState(null) // Etat pour gérer l'ouverture du popover d'explication du health score
   
+  // Etat pour stocker les mapping agences et databases 
+  const [agenceMapping, setAgenceMapping] = useState({});
+  const [databaseMapping, setDatabaseMapping] = useState({});
+
 useEffect(() => {
   const handleScroll = (e) =>{
       // ignore scroll dans le popover
@@ -305,18 +308,22 @@ useEffect(() => {
   };
 }, []);
 
-  /* Appel API : récupère la liste des bases de données (une seule fois au mount) */
-  const fetchb = useCallback(async () => {
-    try {
-      const res = await get_all_databases();
-      console.log(res);
-      seAllDatabase(res);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+
+// Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
+  const fetchMappings = useCallback(async () => {
+  try {
+    const [agences, databases] = await Promise.all([
+      getMappingData('agences', 'agences'),
+      getMappingData('databases', 'databases'),
+    ]);
+
+    setAgenceMapping(agences);
+    setDatabaseMapping(databases);
+
+  } catch (e) {
+    console.error(e);
+  }
+}, []);
 
   /* Appel API : récupère les détails de l'annonceur actuel par son ID */
   const fetchd = useCallback(async () => {
@@ -334,9 +341,9 @@ useEffect(() => {
 
   /* Effect : charge les bases au mount et recharge les données si _mockData change ou ID change */
   useEffect(() => {
-    fetchb();
+    fetchMappings();
     if (!_mockData) fetchd();
-  }, [advertiser_id, fetchd, _mockData]);
+  }, [advertiser_id, _mockData, fetchMappings]);
 
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
@@ -480,7 +487,7 @@ useEffect(() => {
                 icon={<DownloadOutlined />}
                 size="middle"
                 style={{marginTop: 10, marginRight:10}}
-                onClick={()=> exportGlobalTableXLS(data.bases, allDatabase, clsConfig)}
+                onClick={()=> exportGlobalTableXLS(data.bases, databaseMapping, clsConfig)}
               >
               Export xls
               </Button>
@@ -498,7 +505,7 @@ useEffect(() => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} allbase={allDatabase} styles={styles} />
+                  <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} allbase={databaseMapping} styles={styles} />
                 </div>
               ),
             },
@@ -523,7 +530,7 @@ useEffect(() => {
                   overflow: "hidden",
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
-                  <GlobalTable bases={data.bases} allbase={allDatabase} clsConfig={clsConfig} styles={styles} />
+                  <GlobalTable bases={data.bases} allbase={databaseMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} />
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />
                     Détail par base ({data.bases?.length})

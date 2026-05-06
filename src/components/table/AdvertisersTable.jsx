@@ -132,6 +132,8 @@ export const listetags = [
   { id: 74, tag: "fonctionnaires", dwtag: "fonctionnaires" },
 ];
 
+
+
 // Créer un map pour accès rapide aux tags
 const tagMap = Object.fromEntries(listetags.map((t) => [t.id, t]));
 
@@ -177,12 +179,18 @@ const AnalyseTooltip = ({ analyse }) => (
   </div>
 );
 
-const AdvertisersTable = ({ data }) => {
+const AdvertisersTable = ({ data, tagMapping = [] }) => {
   const navigate = useNavigate();
+  // console.log("tagMapping:", tagMapping);
 
   // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
   const [searchAdvertiser, setSearchAdvertiser] = React.useState("");
 
+
+    // Créer le map à partir du array
+  const tagMapFromAPI = Object.fromEntries(
+    tagMapping.map(t => [t.tag_id, t.tag_name])
+  );
   // Définition des colonnes
   const columns = useMemo(
     () => [
@@ -266,11 +274,11 @@ const AdvertisersTable = ({ data }) => {
           <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
         ),
         onFilter: (value, record) => {
-          const tag = tagMap[record.tag_id];
-          return tag?.tag?.toLowerCase().includes(value.toLowerCase());
+          const tagName = tagMapFromAPI[record.tag_id] || "";
+          return tagName.toLowerCase().includes(value.toLowerCase());
         },
         render: (tag_id) => {
-          const tag = tagMap[tag_id];
+          const tagName = tagMapFromAPI[tag_id];
           return (
             <Tag
               color="cyan"
@@ -280,7 +288,7 @@ const AdvertisersTable = ({ data }) => {
                 wordBreak: "break-word",
               }}
             >
-              {tag ? tag.tag : "Unknown"}
+              {tagName || `ID: ${tag_id}`}
             </Tag>
           );
         },
@@ -327,7 +335,7 @@ const AdvertisersTable = ({ data }) => {
         sorter: (a, b) => a.globales.ecpm - b.globales.ecpm,
       },
     ],
-    []
+    [tagMapping]
   );
 
   if (!data || data.length === 0) {
