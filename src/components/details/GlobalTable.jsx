@@ -26,7 +26,7 @@ import { RateBar } from "./common/RateBar";
 import { FunnelViz } from "./common/FunnelViz";
 import { DimSection } from "./common/DimSection";
 import { get_segment_name } from "../../api/advertiser";
-
+import { TabExtraContent } from "../bouton/SwitchBtnTableChart"; 
 const { Text } = Typography;
 
 
@@ -61,7 +61,7 @@ const CHART_PALETTE = [
  * Colonnes : Brand, Subject, Sends, Openers, Clickers, Unsubs, Open %, CTR %, CTO %, Unsub %.
  * Chaque colonne est triable et formatée selon son type (nombre, pourcentage, texte).
  */
-const createBrandCols = (segmentNames,base,listNames) => [
+const createBrandCols = (segmentNames,base,listNames,agencyName) => [
   {
     title: "Brand",
     dataIndex: "name",
@@ -109,7 +109,7 @@ const createBrandCols = (segmentNames,base,listNames) => [
   title: "Segment",
   dataIndex: "segment_id",
   fixed: "left",
-  width: 220,
+  width: 190,
   render: (segmentIds, record) => {
     if (!segmentIds || !Array.isArray(segmentIds)) {
       segmentIds = [];
@@ -188,7 +188,7 @@ const createBrandCols = (segmentNames,base,listNames) => [
           </div>
         }
         title={`Segments (${segmentIds.length})`}
-        trigger="click"
+        trigger="hover"
         placement="topRight"
       >
         <button
@@ -219,7 +219,7 @@ const createBrandCols = (segmentNames,base,listNames) => [
           </div>
         }
         title={`Listes (${listNamesForBrand.length})`}
-        trigger="click"
+        trigger="hover"
         placement="topRight"
       >
         <button
@@ -241,7 +241,7 @@ const createBrandCols = (segmentNames,base,listNames) => [
 
     // ━━━ AFFICHER LES DEUX BOUTONS ━━━
     return (
-      <Space>
+      <Space >
         {segmentIds.length > 0 && segmentButton}
         {listNamesForBrand.length > 0 && listesButton}
         {segmentIds.length === 0 && listNamesForBrand.length === 0 && (
@@ -253,74 +253,158 @@ const createBrandCols = (segmentNames,base,listNames) => [
 },
 
  {
-    title: "Leads validés",
-    dataIndex: "VL",
+    title: "Nom Agence",
+    dataIndex: "agence_id",
     fixed: "left",
-    render: fmt,
+    width:110,
+    render: (agence_id) => (
+        <button
+          style={{
+            background: tokens.info,
+            color: "white",
+            border: "none",
+            borderRadius: 4,
+            cursor: "auto",
+            padding: "4px 12px",
+            fontSize: 12,
+            fontWeight: 500,
+            marginRight: 8,
+          }}
+        >
+        {agencyName[agence_id]?.agence_name || `ID: ${agence_id}`}
+        </button>
+    ),
+  },
+  {
+    title: "Models",
+    dataIndex: "models",
+    align: "left",
+    render: (models) => {
+      if (!Array.isArray(models)) return "-";
+
+      return (
+        <Text ellipsis={{ tooltip: true }} strong style={{ width: 500, fontSize: 12 }}>
+          {models.map(m => `${m.model}(${m.payvalue})`).join(", ")}
+        </Text>
+      );
+    }
+  },
+  {
+    title: "Leads validés",
+    dataIndex: "leads_val",
+    fixed: "center",
     sorter: (a, b) => a.sends - b.sends,
+    render: fmt,
+  },
+  {
+    title: "Clicks validés",
+    dataIndex: "Clicks_val",
+    fixed: "center",
+    sorter: (a, b) => a.sends - b.sends,
+    render: fmt,
+  },
+  {
+    title: "Vol. validés",
+    dataIndex: "volume_val",
+    fixed: "center",
+    sorter: (a, b) => a.sends - b.sends,
+    render: fmt,
   },
   {
     title: "Sends",
     dataIndex: "sends",
     sorter: (a, b) => a.sends - b.sends,
     render: fmt,
-    align: "right",
+    align: "center",
   },
   {
     title: "Openers",
     dataIndex: "openers",
     sorter: (a, b) => a.openers - b.openers,
-    render: fmt,
-    align: "right",
+    align: "center",
+    render: (_, record) => (
+    <div style={{ 
+      display: "flex", 
+      justifyContent: "space-between", 
+      alignItems: "center",
+      width: "100%"
+    }}>
+      <span>{fmt(record.openers)}</span>
+      <Text
+        ellipsis={{ tooltip: true }}
+        style={{
+          maxWidth: 60, // ⚠️ obligatoire
+          display: "inline-block", // ⚠️ obligatoire
+          fontWeight: 400,
+          fontSize: 12
+        }}
+      >
+        ({pct(record.taux_cto)})
+      </Text>
+    </div>
+    ),
   },
   {
     title: "Clickers",
     dataIndex: "clickers",
     sorter: (a, b) => a.clickers - b.clickers,
-    render: fmt,
-    align: "right",
+    align: "center",
+    render: (_, record) => (
+    <div style={{ 
+      display: "flex", 
+      justifyContent: "space-between", 
+      alignItems: "center",
+      width: "100%"
+    }}>
+      <span>{fmt(record.clickers)}</span>
+      <Text style={{ color: tokens.warning, fontWeight: 400, fontSize:12 }}>
+        ({pct(record.taux_clickers)})
+      </Text>
+    </div>
+    ),
   },
   {
     title: "Unsubs",
     dataIndex: "unsubs",
     sorter: (a, b) => a.unsubs - b.unsubs,
+    align: "center",
+    render: (_, record) => (
+    <div style={{ 
+      display: "flex", 
+      justifyContent: "space-between", 
+      alignItems: "center",
+      width: "100%"
+    }}>
+      <span>{fmt(record.unsubs)}</span>
+      <Text style={{ color: tokens.danger, fontWeight: 400, fontSize:12 }}>
+        ({pct(record.taux_unsubs)})
+      </Text>
+    </div>
+    ),
+  },
+  // {
+  //   title: "Open %",
+  //   dataIndex: "taux_openers",
+  //   sorter: (a, b) => (a.taux_openers || 0) - (b.taux_openers || 0),
+  //   render: (v) => (
+  //     <Text style={{ color: tokens.success, fontWeight: 600 }}>{pct(v)}</Text>
+  //   ),
+  //   align: "right",
+  // },
+  {
+    title: "CA",
+    dataIndex: "ca",
+    sorter: (a, b) => a.sends - b.sends,
+    align: "center",
     render: fmt,
-    align: "right",
   },
   {
-    title: "Open %",
-    dataIndex: "taux_openers",
-    sorter: (a, b) => (a.taux_openers || 0) - (b.taux_openers || 0),
-    render: (v) => (
-      <Text style={{ color: tokens.success, fontWeight: 600 }}>{pct(v)}</Text>
-    ),
-    align: "right",
-  },
-  {
-    title: "CTR %",
-    dataIndex: "taux_clickers",
-    sorter: (a, b) => a.taux_clickers - b.taux_clickers,
-    render: (v) => (
-      <Text style={{ color: tokens.warning, fontWeight: 600 }}>{pct(v)}</Text>
-    ),
-    align: "right",
-  },
-  {
-    title: "CTO %",
-    dataIndex: "taux_cto",
-    sorter: (a, b) => a.taux_cto - b.taux_cto,
-    render: pct,
-    align: "right",
-  },
-  {
-    title: "Unsub %",
-    dataIndex: "taux_unsubs",
-    sorter: (a, b) => a.taux_unsubs - b.taux_unsubs,
-    render: (v) => (
-      <Text style={{ color: tokens.danger, fontWeight: 600 }}>{pct(v)}</Text>
-    ),
-    align: "right",
-  },
+    title: "ecpm",
+    dataIndex: "ecpm",
+    sorter: (a, b) => a.sends - b.sends,
+    render: fmt,
+    align: "center",
+  }
 ];
 
 
@@ -332,12 +416,12 @@ const createBrandCols = (segmentNames,base,listNames) => [
  * Contient 3 onglets : Aperçu (KPIs + Funnel), Brands (tableau/chart), Dimensions (segments).
  * Affiche la classification (A/B/C/D), l'indicateur de santé, et les KPIs clés en header.
  */
-const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames, listNames, agencyName }) => {
+const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, segmentNames, listNames, agencyName }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
-  const brandCols = createBrandCols(segmentNames,base,listNames)
+  const brandCols = createBrandCols(segmentNames,base,listNames,agencyName)
   // Etat pour gérer les segements appliquer à la base
   const [segments,setSegments] = useState(null)
   return (
@@ -405,11 +489,11 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames, li
                 Router {base.id_routers}
               </Tag> */}
             </div>
-            {base.date_schedule && (
+            {/* {base.date_schedule && (
               <Text style={{ fontSize: 11, color: "#9ca3af" }}>
                 Planifié: {base.date_schedule.join(", ")}
               </Text>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -503,6 +587,16 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames, li
           onChange={setActiveTab}
           size="small"
           style={{ marginBottom: 0 }}
+
+          tabBarExtraContent={
+            <TabExtraContent
+              mainTab={activeTab}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+            />
+          }
+
+
           items={[
             {
               key: "overview",
@@ -719,6 +813,8 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames, li
                         showSizeChanger: false,
                       }}
                       scroll={{ x: 1400 }}
+                      bordered={true}
+                      // className="custom-table"
                     />
                 </div>
               ),
@@ -741,6 +837,13 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames, li
                 </div>
               ),
             },
+            {
+              key: "Dimensions Brands",
+              label:(<span><PieChartOutlined /> Dimensions Brands</span>),
+              children:(
+                <div></div>
+              )
+            }
           ]}
         />
       </div>
@@ -754,7 +857,7 @@ const BaseCard = ({ base, viewMode, allbase, clsConfig, styles, segmentNames, li
  * Colonnes : Database, Classe, Health, Sends, Openers, Open %, Clickers, CTR %, Unsubs, CA, eCPM, Analyses.
  * Clic sur une ligne ouvre un modal avec le détail de la base (BaseCard).
  */
-export const GlobalTable = ({ bases, allbase, agencyName, clsConfig, styles}) => {
+export const GlobalTable = ({ bases, allbase, agencyName, clsConfig, styles, viewMode, setViewMode}) => {
   const [f, setF] = useState({ minSends: null, cls: null });
   const [segmentNames, setSegmentNames] = useState({});
   const [listNames, setListNames] = useState([]);
@@ -977,7 +1080,7 @@ useEffect(() => {
       open={!!selectedBase}
       onCancel={() => setSelectedBase(null)}
       footer={null}
-      width="85%"
+      width="100%"
       style={{ top: 40 }}
       styles={{
         content: {
@@ -989,7 +1092,8 @@ useEffect(() => {
       {selectedBase && !loadingSegments ? (
         <BaseCard
           base={selectedBase}
-          viewMode={"table"} 
+          viewMode={viewMode} 
+          setViewMode={setViewMode}
           allbase={allbase} 
           clsConfig={clsConfig} 
           styles={styles} 

@@ -68,6 +68,7 @@ import { Chart, registerables } from "chart.js";
 import AdvertiserDetailCharts from "../../components/chart/AdvertiserDetailChart"; 
 import { get_advertisers_detail, getMappingData, getMappingValue} from "../../api/advertiser";
 import { useLocation } from "react-router-dom";
+import { TabExtraContent } from "../../components/bouton/SwitchBtnTableChart.jsx";
 
 // import testAdvertisers from "../../data/testadv";
 // import testandre from "../../temp/adv_detail.json";
@@ -92,7 +93,6 @@ import { FunnelViz } from "../../components/details/common/FunnelViz";
 import { GlobalOverview } from "../../components/details/GlobalOverView";
 import { GlobalTable } from "../../components/details/GlobalTable";
 import { DimSection } from "../../components/details/common/DimSection";
-import { exportGlobalTableXLS } from "../../components/details/common/ExportBase.jsx";
 
 
 /* 
@@ -465,33 +465,15 @@ useEffect(() => {
 
           // Ajouter Segmented
           tabBarExtraContent={
-            mainTab === "dimensions" ? (
-              <Segmented
-                value={viewMode}
-                onChange={setViewMode}
-                size = "middle"
-                style={{marginTop: 10, marginRight: 10}}
-                options={[
-                  {
-                    label: <span><BarChartOutlined/>Charts</span>,
-                    value: "chart",
-                  },
-                  {
-                    label: <span><TableOutlined/>Tables</span>,
-                    value: "table",
-                  }
-                ]}
-              />
-            ) : mainTab === "bases" ? (
-              <Button
-                icon={<DownloadOutlined />}
-                size="middle"
-                style={{marginTop: 10, marginRight:10}}
-                onClick={()=> exportGlobalTableXLS(data.bases, databaseMapping, clsConfig)}
-              >
-              Export xls
-              </Button>
-            ) : null
+            <TabExtraContent
+              mainTab={mainTab}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              data={data}
+              clsConfig={clsConfig}
+              agenceMapping={agenceMapping}
+              allbase={databaseMapping}
+            />
           }
 
           items={[
@@ -530,7 +512,7 @@ useEffect(() => {
                   overflow: "hidden",
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
-                  <GlobalTable bases={data.bases} allbase={databaseMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} />
+                  <GlobalTable bases={data.bases} allbase={databaseMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} />
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />
                     Détail par base ({data.bases?.length})
