@@ -369,7 +369,7 @@ const AdvertisersTable = ({ data, tagMapping = [] }) => {
                     <AnalyseTooltip analyse={record.globales.analyse} />
                   ) : null
                 }
-                placement="topLeft"
+                placement="top"
                 align={{ offset: [0, ] }} // 👈 ici
                 color="#1e1e2f"
                 mouseEnterDelay={0.15}

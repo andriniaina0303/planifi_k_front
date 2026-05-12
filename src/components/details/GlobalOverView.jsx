@@ -47,37 +47,76 @@ const SegmentRecommendations = ({ data, styles,recommendations }) => {
   if (recommendations.length === 0) return null;
  
   // Préparer les items du Collapse
-  const collapseItems = recommendations.map((rec) => ({
-    key: rec.dimKey,
-    label: (
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <div
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: `${rec.color}18`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: rec.color,
-            fontSize: 14,
-          }}
+ 
+  return (
+  <Card
+    size="small"
+    style={{
+      ...styles.card,
+      border: `1px solid ${tokens.primary}33`,
+    }}
+  >
+    {/* ── TITRE GLOBAL ── */}
+    <div style={{ marginBottom: 10 }}>
+      <span style={{ ...styles.sectionTitle }}>
+        <BulbOutlined style={{ color: tokens.warning, fontSize: 18 }} />
+        Recommandations par segment
+        <Tag
+          color="blue"
+          style={{ borderRadius: 10, fontSize: 10, marginLeft: 8 }}
         >
-          {rec.icon}
-        </div>
-        <div>
-          <Text strong style={{ fontSize: 13 }}>
-            {rec.label}
-          </Text>
-          <div style={{ fontSize: 10, color: "#9ca3af", marginTop: 2 }}>
-            {rec.totalSegments} segments
-          </div>
-        </div>
-      </div>
-    ),
-    children: (
-      <div style={{ padding: "8px 0" }}>
+          {recommendations.length} dimensions analysées
+        </Tag>
+      </span>
+ 
+      <Paragraph style={{ fontSize: 12, color: "#6b7280", marginTop: 6 }}>
+        Récapitulatif des meilleurs segments identifiés sur l'ensemble des bases
+        pour optimiser le ciblage.
+      </Paragraph>
+    </div>
+ 
+    {/* ── 🔥 SYNTHÈSE EN HAUT ── */}
+    <SyntheseText recommendations={recommendations} />
+ 
+    {/* ── 3 Cards ── */}
+    <Row gutter={[16, 16]}>
+      {recommendations.map((rec) => (
+        <Col xs={24} md={8} key={rec.dimKey}>
+          <Card
+            size="small"
+            style={{
+              ...styles.card,
+              borderRadius: 12,
+              border: `1px solid ${rec.color}22`,
+              background: `${rec.color}02`,
+            }}
+            title={
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    background: `${rec.color}18`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: rec.color,
+                  }}
+                >
+                  {rec.icon}
+                </div>
+                <div>
+                  <Text strong>{rec.label}</Text>
+                  <div style={{ fontSize: 10, color: "#9ca3af" }}>
+                    {rec.totalSegments} segments
+                  </div>
+                </div>
+              </div>
+            }
+          >
+            {/* Contenu des 4 boîtes (Best CTR, Best Open, etc) */}
+            <div style={{ padding: "8px 0" }}>
         {/* Best CTR */}
         <div
           style={{
@@ -305,42 +344,11 @@ const SegmentRecommendations = ({ data, styles,recommendations }) => {
             {pct(rec.worstCtr.unsubRate)} unsub
           </Text>
         </div>
-      </div>
-    ),
-  }));
- 
-  return (
-  <Card
-    size="small"
-    style={{
-      ...styles.card,
-      border: `1px solid ${tokens.primary}33`,
-    }}
-  >
-    {/* ── TITRE GLOBAL ── */}
-    <div style={{ marginBottom: 10 }}>
-      <span style={{ ...styles.sectionTitle }}>
-        <BulbOutlined style={{ color: tokens.warning, fontSize: 18 }} />
-        Recommandations par segment
-        <Tag
-          color="blue"
-          style={{ borderRadius: 10, fontSize: 10, marginLeft: 8 }}
-        >
-          {recommendations.length} dimensions analysées
-        </Tag>
-      </span>
- 
-      <Paragraph style={{ fontSize: 12, color: "#6b7280", marginTop: 6 }}>
-        Récapitulatif des meilleurs segments identifiés sur l'ensemble des bases
-        pour optimiser le ciblage.
-      </Paragraph>
-    </div>
- 
-    {/* ── 🔥 SYNTHÈSE EN HAUT ── */}
-    <SyntheseText recommendations={recommendations} />
- 
-    {/* ── COLLAPSE ── */}
-    <Collapse items={collapseItems} />
+            </div>
+          </Card>
+        </Col>
+      ))}
+    </Row>
   </Card>
   );
 };
@@ -423,21 +431,27 @@ export const GlobalOverview = ({ open, setOpen, data, allbase, styles}) => {
   
   return (
     <div>
-      {/* ── SECTION HAUTE (CÔTE À CÔTE) : SLIDER + RECOMMANDATIONS ── */}
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         {/* Slider Top Brands */}
-        <Col xs={24} lg={15}>
-          <TopBrandsSlider data={data} styles={styles} />
-        </Col>
-
-        {/* Recommandations par segment */}
-        <Col xs={24} lg={9}>
+        <Col xs={24} lg={24}>
           <SegmentRecommendations 
             data={data} 
             styles={styles} 
             recommendations={recommendations}
-          />
+          />     
         </Col>
+      </Row>
+      {/* ── SECTION RECOMMANDATIONS ── */}
+      <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+        {/* Slider Top Brands */}
+        <Col xs={24} lg={24}>
+          <TopBrandsSlider data={data} styles={styles} />
+        </Col>
+
+        {/* Recommandations par segment */}
+        {/* <Col xs={24} lg={9}>
+
+        </Col> */}
       </Row>
 
       {/* ── SECTION BASSE : KPIs ET GRAPHIQUES ── */}

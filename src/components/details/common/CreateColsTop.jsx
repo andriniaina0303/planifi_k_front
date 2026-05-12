@@ -133,7 +133,7 @@ export const TopBrandsSlider = ({ data, styles }) => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              maxWidth: 260,
+              maxWidth: 300,
               display: "block",
             }}
           >
