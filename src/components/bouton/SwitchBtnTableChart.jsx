@@ -11,7 +11,7 @@ export const TabExtraContent = ({
   agenceMapping,
   allbase
 }) => {
-  if (mainTab === "dimensions") {
+  if (mainTab === "dimensions" || mainTab === "Dimensions Brands" ) {
     return (
       <Segmented
         value={viewMode}

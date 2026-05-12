@@ -5,6 +5,7 @@ import * as config from "./../config/config";
 // 👇 IMPORT MOCK - pour développement sans backend
 import mockData from "../temp/all_advertiser.json";
 import mockDataDetail from "../temp/adv_detail.json";
+import { formatDate } from "../utils/Helpers";
 
 /**
  * 🔥 SWITCH MODE DÉVELOPPEMENT
@@ -22,17 +23,39 @@ const USE_MOCK = false;
  *   - En mode MOCK : retourne les données du fichier all_advertiser.json
  *   - En mode PROD : appel GET /reporting/all_advertisers avec timeout 120s
  */
-export async function get_liste_advertisers() {
+export async function get_liste_advertisers(startDate = null, endDate = null) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
+
     return new Promise((resolve) => {
       setTimeout(() => resolve(mockData), 300);
     });
   }
-  const response = await api.get(
-    config.REACT_APP_ENDPOINT_ALL_ADVERTISERS,
-    { timeout: 120000 }
-  );
+
+  // ── DATE DU JOUR ──
+  const today = new Date();
+
+  // ── AUJOURD'HUI - 3 MOIS ──
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(today.getMonth() - 3);
+
+  // ── VALEURS PAR DÉFAUT ──
+  const finalStartDate = startDate || formatDate(threeMonthsAgo);
+  const finalEndDate = endDate || formatDate(today);
+
+  // ── QUERY PARAMS ──
+  const params = new URLSearchParams();
+
+  params.append("start_date", finalStartDate);
+  params.append("end_date", finalEndDate);
+
+  // ── URL FINALE ──
+  const url = `${config.REACT_APP_ENDPOINT_ALL_ADVERTISERS}?${params.toString()}`;
+
+  const response = await api.get(url, {
+    timeout: 120000,
+  });
+
   return response.data;
 }
 

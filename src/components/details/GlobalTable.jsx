@@ -12,7 +12,9 @@ import
     Col,
     Divider,
     Space,
-    Spin
+    Spin,
+    Collapse,
+    Button
  } from "antd";
 import {LinkOutlined, DatabaseOutlined, EyeOutlined, MailOutlined, DollarOutlined, StopOutlined, FireOutlined, DashboardOutlined, PieChartOutlined} from "@ant-design/icons";
 import { useState, useMemo, useEffect } from "react";
@@ -27,6 +29,8 @@ import { FunnelViz } from "./common/FunnelViz";
 import { DimSection } from "./common/DimSection";
 import { get_segment_name } from "../../api/advertiser";
 import { TabExtraContent } from "../bouton/SwitchBtnTableChart"; 
+import { createBrandCols } from "./brands/CreateColumns";
+import { getDimensionCollapseItems, DimensionsCollapse} from "./brands/DimensionsCollaps";
 const { Text } = Typography;
 
 
@@ -46,368 +50,6 @@ const CHART_PALETTE = [
   "#e11d48",
 ];
 
-// ── BrandSection columns ─────────────────────────────────────────────────────
-/* 
- * Définition des colonnes du tableau pour l'affichage des Brands (marques).
- * Colonnes : Brand, Subject, Sends, Openers, Clickers, Unsubs, Open %, CTR %, CTO %, Unsub %.
- * Chaque colonne est triable et formatée selon son type (nombre, pourcentage, texte).
- */
-
-
-
-// ── BrandSection columns ─────────────────────────────────────────────────────
-/* 
- * Définition des colonnes du tableau pour l'affichage des Brands (marques).
- * Colonnes : Brand, Subject, Sends, Openers, Clickers, Unsubs, Open %, CTR %, CTO %, Unsub %.
- * Chaque colonne est triable et formatée selon son type (nombre, pourcentage, texte).
- */
-const createBrandCols = (segmentNames,base,listNames,agencyName) => [
-  {
-    title: "Brand",
-    dataIndex: "name",
-    fixed: "left",
-    width: 140,
-    render: (_, v) => (
-      <>
-        <Text strong style={{ fontSize: 12 }}>
-          {decodeBase64(v.name)}
-        </Text>
-        <Tooltip title={v.creativities}>    
-          <a   
-            href={v.creativities}
-            target="_blank"
-            rel="noreferrer"
-            style={{
-              fontSize: 11,
-              color: tokens.primary,
-              maxWidth: 170,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "inline-block",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <LinkOutlined style={{ marginRight: 4 }} />
-            Lien du kit
-          </a>
-        </Tooltip>
-      </>
-    ),
-  },
-  {
-    title: "Subject",
-    dataIndex: "subject",
-    fixed: "left",
-    // width: 450,
-    render: (v) => (
-      <Text ellipsis = {{tooltip:true}} strong style={{ width:500, fontSize: 12 }}>
-        {decodeBase64(v)}
-      </Text>
-    ),
-  },
-{
-  title: "Segment",
-  dataIndex: "segment_id",
-  fixed: "left",
-  width: 190,
-  render: (segmentIds, record) => {
-    if (!segmentIds || !Array.isArray(segmentIds)) {
-      segmentIds = [];
-    }
-
-    // Récupérer les listes pour ce brand
-    const listNamesForBrand = listNames[record.name] || [];
-
-    // ━━━ POPOVER SEGMENTS ━━━
-    const segmentsContent = (
-      <div style={{ maxWidth: 300 }}>
-        {segmentIds.length === 0 ? (
-          <div style={{ padding: "8px 12px", fontSize: 12, color: "#999" }}>
-            Aucun segment
-          </div>
-        ) : (
-          segmentIds.map((id) => {
-            const key = `${base.database_id}_${id}`;
-            const name = segmentNames[key];
-            return (
-              <div
-                key={id}
-                style={{
-                  padding: "8px 12px",
-                  borderBottom: "1px solid #f0f0f0",
-                  fontSize: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <span style={{ color: tokens.primary, fontWeight: 600 }}>•</span>
-                <span>{name || `ID: ${id}`}</span>
-              </div>
-            );
-          })
-        )}
-      </div>
-    );
-
-    // ━━━ POPOVER LISTES ━━━
-    const listesContent = (
-      <div style={{ maxWidth: 300 }}>
-        {listNamesForBrand.length === 0 ? (
-          <div style={{ padding: "8px 12px", fontSize: 12, color: "#999" }}>
-            Aucune liste
-          </div>
-        ) : (
-          listNamesForBrand.map((listName, idx) => (
-            <div
-              key={idx}
-              style={{
-                padding: "8px 12px",
-                borderBottom: "1px solid #f0f0f0",
-                fontSize: 12,
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              <span style={{ color: tokens.success, fontWeight: 600 }}>◆</span>
-              <span>{listName}</span>
-            </div>
-          ))
-        )}
-      </div>
-    );
-
-    // ━━━ BOUTON SEGMENT ━━━
-    const segmentButton = (
-      <Popover
-        content=
-        {  
-          <div style={{ maxHeight: 200, overflowY: "auto" }}>
-            {segmentsContent}
-          </div>
-        }
-        title={`Segments (${segmentIds.length})`}
-        trigger="hover"
-        placement="topRight"
-      >
-        <button
-          style={{
-            background: tokens.primary,
-            color: "white",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-            padding: "4px 12px",
-            fontSize: 12,
-            fontWeight: 500,
-            marginRight: 8,
-          }}
-        >
-          {segmentIds.length} segment{segmentIds.length > 1 ? "s" : ""}
-        </button>
-      </Popover>
-    );
-
-    // ━━━ BOUTON LISTES ━━━
-    const listesButton = (
-      <Popover
-        content=
-        {  
-          <div style={{ maxHeight: 200, overflowY: "auto" }}>
-            {listesContent}
-          </div>
-        }
-        title={`Listes (${listNamesForBrand.length})`}
-        trigger="hover"
-        placement="topRight"
-      >
-        <button
-          style={{
-            background: tokens.success,
-            color: "white",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-            padding: "4px 12px",
-            fontSize: 12,
-            fontWeight: 500,
-          }}
-        >
-          {listNamesForBrand.length} liste{listNamesForBrand.length > 1 ? "s" : ""}
-        </button>
-      </Popover>
-    );
-
-    // ━━━ AFFICHER LES DEUX BOUTONS ━━━
-    return (
-      <Space >
-        {segmentIds.length > 0 && segmentButton}
-        {listNamesForBrand.length > 0 && listesButton}
-        {segmentIds.length === 0 && listNamesForBrand.length === 0 && (
-          <span style={{ fontSize: 12, color: "#999" }}>Aucun segment/liste</span>
-        )}
-      </Space>
-    );
-  },
-},
-
- {
-    title: "Nom Agence",
-    dataIndex: "agence_id",
-    fixed: "left",
-    width:110,
-    render: (agence_id) => (
-        <button
-          style={{
-            background: tokens.info,
-            color: "white",
-            border: "none",
-            borderRadius: 4,
-            cursor: "auto",
-            padding: "4px 12px",
-            fontSize: 12,
-            fontWeight: 500,
-            marginRight: 8,
-          }}
-        >
-        {agencyName[agence_id]?.agence_name || `ID: ${agence_id}`}
-        </button>
-    ),
-  },
-  {
-    title: "Models",
-    dataIndex: "models",
-    align: "left",
-    render: (models) => {
-      if (!Array.isArray(models)) return "-";
-
-      return (
-        <Text ellipsis={{ tooltip: true }} strong style={{ width: 500, fontSize: 12 }}>
-          {models.map(m => `${m.model}(${m.payvalue})`).join(", ")}
-        </Text>
-      );
-    }
-  },
-  {
-    title: "Leads validés",
-    dataIndex: "leads_val",
-    fixed: "center",
-    sorter: (a, b) => a.sends - b.sends,
-    render: fmt,
-  },
-  {
-    title: "Clicks validés",
-    dataIndex: "Clicks_val",
-    fixed: "center",
-    sorter: (a, b) => a.sends - b.sends,
-    render: fmt,
-  },
-  {
-    title: "Vol. validés",
-    dataIndex: "volume_val",
-    fixed: "center",
-    sorter: (a, b) => a.sends - b.sends,
-    render: fmt,
-  },
-  {
-    title: "Sends",
-    dataIndex: "sends",
-    sorter: (a, b) => a.sends - b.sends,
-    render: fmt,
-    align: "center",
-  },
-  {
-    title: "Openers",
-    dataIndex: "openers",
-    sorter: (a, b) => a.openers - b.openers,
-    align: "center",
-    render: (_, record) => (
-    <div style={{ 
-      display: "flex", 
-      justifyContent: "space-between", 
-      alignItems: "center",
-      width: "100%"
-    }}>
-      <span>{fmt(record.openers)}</span>
-      <Text
-        ellipsis={{ tooltip: true }}
-        style={{
-          maxWidth: 60, // ⚠️ obligatoire
-          display: "inline-block", // ⚠️ obligatoire
-          fontWeight: 400,
-          fontSize: 12
-        }}
-      >
-        ({pct(record.taux_cto)})
-      </Text>
-    </div>
-    ),
-  },
-  {
-    title: "Clickers",
-    dataIndex: "clickers",
-    sorter: (a, b) => a.clickers - b.clickers,
-    align: "center",
-    render: (_, record) => (
-    <div style={{ 
-      display: "flex", 
-      justifyContent: "space-between", 
-      alignItems: "center",
-      width: "100%"
-    }}>
-      <span>{fmt(record.clickers)}</span>
-      <Text style={{ color: tokens.warning, fontWeight: 400, fontSize:12 }}>
-        ({pct(record.taux_clickers)})
-      </Text>
-    </div>
-    ),
-  },
-  {
-    title: "Unsubs",
-    dataIndex: "unsubs",
-    sorter: (a, b) => a.unsubs - b.unsubs,
-    align: "center",
-    render: (_, record) => (
-    <div style={{ 
-      display: "flex", 
-      justifyContent: "space-between", 
-      alignItems: "center",
-      width: "100%"
-    }}>
-      <span>{fmt(record.unsubs)}</span>
-      <Text style={{ color: tokens.danger, fontWeight: 400, fontSize:12 }}>
-        ({pct(record.taux_unsubs)})
-      </Text>
-    </div>
-    ),
-  },
-  // {
-  //   title: "Open %",
-  //   dataIndex: "taux_openers",
-  //   sorter: (a, b) => (a.taux_openers || 0) - (b.taux_openers || 0),
-  //   render: (v) => (
-  //     <Text style={{ color: tokens.success, fontWeight: 600 }}>{pct(v)}</Text>
-  //   ),
-  //   align: "right",
-  // },
-  {
-    title: "CA",
-    dataIndex: "ca",
-    sorter: (a, b) => a.sends - b.sends,
-    align: "center",
-    render: fmt,
-  },
-  {
-    title: "ecpm",
-    dataIndex: "ecpm",
-    sorter: (a, b) => a.sends - b.sends,
-    render: fmt,
-    align: "center",
-  }
-];
-
-
 
 
 // ── BaseCard ─────────────────────────────────────────────────────────────────
@@ -422,6 +64,8 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
   const brandCols = createBrandCols(segmentNames,base,listNames,agencyName)
+  // Etat pour filtrer dans dimensions brands 
+  const [brandSort, setBrandSort] = useState("asc");
   // Etat pour gérer les segements appliquer à la base
   const [segments,setSegments] = useState(null)
   return (
@@ -733,6 +377,24 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
               ),
             },
             {
+              key: "dimensions",
+              label: (
+                <span>
+                  <PieChartOutlined /> Dimensions Globale
+                </span>
+              ),
+              children: (
+                <div style={{ paddingTop: 8 }}>
+                  <DimSection
+                    dimensions={base.dimensions}
+                    viewMode={viewMode}
+                    hideFilters
+                    styles={styles}
+                  />
+                </div>
+              ),
+            },
+            {
               key: "brands",
               label: (
                 <span>
@@ -741,63 +403,6 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
               ),
               children: (
                 <div style={{ paddingTop: 8 }}>
-                  {/* {viewMode === "chart" ? (
-                    <Row gutter={[14, 14]}>
-                      <Col xs={24} lg={14}>
-                        <SmartChart
-                          type="bar"
-                          labels={
-                            base.brands?.map((b) => decodeBase64(b.name)) || []
-                          }
-                          height={240}
-                          datasets={[
-                            {
-                              label: "Sends",
-                              data: base.brands?.map((b) => b.sends) || [],
-                              backgroundColor: `${tokens.primary}77`,
-                              borderColor: tokens.primary,
-                              borderWidth: 1.5,
-                              borderRadius: 5,
-                            },
-                            {
-                              label: "Openers",
-                              data: base.brands?.map((b) => b.openers) || [],
-                              backgroundColor: `${tokens.success}77`,
-                              borderColor: tokens.success,
-                              borderWidth: 1.5,
-                              borderRadius: 5,
-                            },
-                            {
-                              label: "Clickers",
-                              data: base.brands?.map((b) => b.clickers) || [],
-                              backgroundColor: `${tokens.warning}77`,
-                              borderColor: tokens.warning,
-                              borderWidth: 1.5,
-                              borderRadius: 5,
-                            },
-                          ]}
-                        />
-                      </Col>
-                      <Col xs={24} lg={10}>
-                        <SmartChart
-                          type="doughnut"
-                          labels={base.brands?.map((b) => b.name) || []}
-                          height={240}
-                          datasets={[
-                            {
-                              data: base.brands?.map((b) => b.sends) || [],
-                              backgroundColor: CHART_PALETTE.slice(
-                                0,
-                                base.brands?.length || 0,
-                              ),
-                              borderWidth: 2,
-                              borderColor: "#fff",
-                            },
-                          ]}
-                        />
-                      </Col>
-                    </Row>
-                  )*/} 
                     <Table
                     dataSource={
                       base.brands?.map((b, i) => ({
@@ -820,28 +425,31 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
               ),
             },
             {
-              key: "dimensions",
-              label: (
-                <span>
-                  <PieChartOutlined /> Dimensions
-                </span>
-              ),
-              children: (
-                <div style={{ paddingTop: 8 }}>
-                  <DimSection
-                    dimensions={base.dimensions}
-                    viewMode={viewMode}
-                    hideFilters
-                    styles={styles}
-                  />
-                </div>
-              ),
-            },
-            {
               key: "Dimensions Brands",
               label:(<span><PieChartOutlined /> Dimensions Brands</span>),
               children:(
-                <div></div>
+                <div style={{}}>
+                  <div style={{display:"flex", paddingBottom:8 }}>
+                    <Text style={{fontWeight:"bold", padding:4,}}>
+                      trier par :
+                    </Text>
+                    <Button
+                      style={{
+                        padding:4,
+                        fontSize:12
+                      }}
+                      type="primary"
+                      onClick={() =>
+                        setBrandSort((prev) => (prev === "asc" ? "desc" : "asc"))
+                      }
+                    >
+                      Nom : {brandSort === "asc" ? "A" : "Z"}
+                    </Button>
+                  </div>
+                  <DimensionsCollapse 
+                    items={getDimensionCollapseItems(base,segmentNames,listNames,viewMode,styles,brandSort)}
+                  />
+                </div>
               )
             }
           ]}
@@ -1043,12 +651,12 @@ useEffect(() => {
       render: usd,
       align: "right",
     },
-    {
-      title: "Analyses",
-      dataIndex: "analyses",
-      width: 260,
-      render: (a) => <AnalyseBadges analyses={a} compact />,
-    },
+    // {
+    //   title: "Analyses",
+    //   dataIndex: "analyses",
+    //   width: 260,
+    //   render: (a) => <AnalyseBadges analyses={a} compact />,
+    // },
   ];
   return (
     <>

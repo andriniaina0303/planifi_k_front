@@ -27,4 +27,8 @@ const pct = (v) => `${Number(v ?? 0).toFixed(2)}%`;
  */
 const usd = (v) => `${Number(v ?? 0).toFixed(2)}`;
 
-export { fmt, pct, usd };
+export { fmt, pct, usd, formatDate };
+
+const formatDate = (date) => {
+  return date.toISOString().split("T")[0];
+}

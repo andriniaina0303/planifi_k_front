@@ -9,9 +9,8 @@
  * - Graphiques comparatifs (chartSwitcher, topTags)
  * - Tableau avec liste détaillée de tous les annonceurs
  */
-
 import React, { useEffect, useMemo, useState } from "react";
-import { get_liste_advertisers, getMappingData, getMappingValue  } from "../../api/advertiser";
+import { get_liste_advertisers, getMappingData, getMappingValue } from "../../api/advertiser";
 import "../../assets/css/advertisers.css";
 import { listetags } from "../../components/table/AdvertisersTable";
 import { Card,Row,Col} from "antd";
@@ -22,6 +21,7 @@ import {MailOutlined,EyeOutlined, LinkOutlined,StopOutlined} from "@ant-design/i
 import ChartSwitcher from "../../components/chart/ChartSwitcher";
 import TopTagsEcpm from "../../components/chart/TopTagsEcpm";
 import FilterAdvertiser, {DEFAULT_FILTERS} from "../../components/filter/FilterAdvertiser";
+import { buildDateMapping } from "../../utils/batchFiltersDating";
 
 /**
  * Composant Advertisers
@@ -43,27 +43,40 @@ const Advertisers = () => {
     // ➕ AJOUTE CES STATES POUR LES MAPPINGS
   const [tagMapping, setTagMapping] = useState({});
 
+  //  Etat pour stocker les dates (nécessaire pour les filtres)
+  const [dateMapping, setDateMapping] = useState({});
 
   /**
    * Récupère la liste complète des annonceurs depuis l'API
    */
-  const fetchReporting = async () => {
-    try {
-      setLoading(true);
-      const res = await get_liste_advertisers();
-      console.log("Fetched advertisers!!!");
-      setListeAdvertisers(res);
-      // setListeAdvertisers(testAdvertisers); // Pour test avec données mockées
-    } catch (error) {
-      console.error("Erreur lors du fetch:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchReporting = async (
+  startDate = null,
+  endDate = null,
+) => {
+  try {
+    setLoading(true);
+
+    const res = await get_liste_advertisers(
+      startDate,
+      endDate,
+    );
+
+    console.log("Fetched advertisers!!!");
+    console.log("Liste des Advertisers: ", res);
+
+    setListeAdvertisers(res);
+
+  } catch (error) {
+    console.error("Erreur lors du fetch:", error);
+
+  } finally {
+    setLoading(false);
+  }
+};
 
   /**
    * Applique les filtres actuels à la liste d'annonceurs
-   * Filtre par : nom, taux_clickers, taux_unsubs, minSends
+   * Filtre par : nom, taux_clickers, taux_unsubs, taux_openers, taux_ca, taux_ecpm, minSends
    * Trie selon le critère sélectionné
    */
   const filteredData = useMemo(() => {
@@ -83,12 +96,34 @@ const Advertisers = () => {
       );
     }
 
+    // Filtrer par taux d'ouverture
+    if (filters.taux_openers !== "ALL") {
+      d = d.filter((a) =>
+        a.globales?.analyse?.taux_openers?.includes(filters.taux_openers),
+      );
+    }
+
     // Filtrer par taux de désabonnement
     if (filters.taux_unsubs !== "ALL") {
       d = d.filter((a) =>
         a.globales?.analyse?.taux_unsubs?.includes(filters.taux_unsubs),
       );
     }
+
+    // Filtrer par eCPM
+    if (filters.taux_ecpm !== "ALL") {
+      d = d.filter((a) =>
+        a.globales?.analyse?.taux_ecpm?.includes(filters.taux_ecpm),
+      );
+    }
+
+    // Filtrer par CA (Chiffre d'affaires)
+    if (filters.taux_ca !== "ALL") {
+      d = d.filter((a) =>
+        a.globales?.analyse?.taux_ca?.includes(filters.taux_ca),
+      );
+    }
+
 
     // Filtrer par nombre minimum d'envois
     d = d.filter((a) => a.globales?.sends >= filters.minSends);
@@ -141,11 +176,10 @@ useEffect(() => {
       // Charger uniquement les tags
       const tags = await getMappingData('tags', 'tags');
       
-      console.log("TAGS API RESULT:", tags);
       setTagMapping(tags);
+    await fetchReporting();
 
-      // Ensuite fetch le reporting
-      await fetchReporting();
+
     } catch (error) {
       console.error("Erreur lors de l'initialisation :", error);
     }
@@ -153,7 +187,6 @@ useEffect(() => {
 
   init();
 }, []);
-
 
 
   if (loading) {
@@ -198,6 +231,7 @@ useEffect(() => {
         filters={filters}
         setFilters={setFilters}
         listeAdvertiser={listeAdvertiser}
+        dateMapping={dateMapping}
       />
 
       {/* ── Table ── */}

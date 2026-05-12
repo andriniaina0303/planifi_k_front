@@ -77,7 +77,6 @@ const tagsPerf = Object.entries(tagMapping).map(([id, name]) => {
   useEffect(() => {
     if (!canvasRef.current) return;
     if (chartRef.current) chartRef.current.destroy();
-    console.log("topTags", topTags);
     // Configuration du graphique Chart.js
     chartRef.current = new Chart(canvasRef.current, {
       type: "bar",

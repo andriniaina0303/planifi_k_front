@@ -181,7 +181,6 @@ const AnalyseTooltip = ({ analyse }) => (
 
 const AdvertisersTable = ({ data, tagMapping = [] }) => {
   const navigate = useNavigate();
-  // console.log("tagMapping:", tagMapping);
 
   // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
   const [searchAdvertiser, setSearchAdvertiser] = React.useState("");
