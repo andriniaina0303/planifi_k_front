@@ -21,7 +21,7 @@ import { useState, useMemo, useEffect } from "react";
 import { AnalyseBadges } from "./common/AnalyseBadge";
 import { getHealthColor,getHealthScore } from "../../utils/healthKitFunc";
 import { HealthExplainer } from "../healthComponents/HealthKit";
-import { pct, fmt, usd } from "../../utils/Helpers";
+import { pct, fmt, usd,formatDate } from "../../utils/Helpers";
 import { tokens } from "../../utils/Tokens";
 import { decodeBase64 } from "../../utils/utils";
 import { RateBar } from "./common/RateBar";

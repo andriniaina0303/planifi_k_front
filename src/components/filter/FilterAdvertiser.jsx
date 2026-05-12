@@ -23,8 +23,9 @@ const { Option } = Select;
  */
 const generateDefaultDates = () => {
   const endDate = dayjs(); // Aujourd'hui
-  const startDate = dayjs().subtract(90, 'days'); // 90 jours avant aujourd'hui
-
+  const startDate = dayjs().subtract(4, 'months'); // 90 jours avant aujourd'hui
+  // const endDate = dayjs('2026-03-12'); // Date qui marche
+  // const startDate = dayjs('2025-12-13'); // Date qui marche
   return {
     scheduleStart: startDate,
     scheduleEnd: endDate,

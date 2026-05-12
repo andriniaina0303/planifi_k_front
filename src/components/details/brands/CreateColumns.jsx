@@ -11,7 +11,7 @@
 
 import { LinkOutlined } from "@ant-design/icons";
 import { Popover, Space, Tooltip, Typography } from "antd";
-import {fmt,pct, usd } from "../../../utils/Helpers";
+import {fmt,pct, usd,formatDate} from "../../../utils/Helpers";
 import { decodeBase64 } from "../../../utils/utils";
 import { tokens } from "../../../utils/Tokens";
 const { Text } = Typography;
@@ -148,10 +148,21 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
     title: "Subject",
     dataIndex: "subject",
     fixed: "left",
-    // width: 450,
+    width: 300,
     render: (v) => (
       <Text ellipsis = {{tooltip:true}} strong style={{ width:500, fontSize: 12 }}>
         {decodeBase64(v)}
+      </Text>
+    ),
+  },
+  {
+    title: <Text  strong>Date Sched.</Text>,
+    dataIndex: "date_schedule",
+    fixed: "left",
+    width:80,
+    render: (v) => (
+      <Text ellipsis = {{tooltip:true}} strong style={{ width:500, fontSize: 12 }}>
+        {v}<br />
       </Text>
     ),
   },
@@ -191,7 +202,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
     title: "Nom Agence",
     dataIndex: "agence_id",
     fixed: "left",
-    width:160,
+    width:120,
     render: (agence_id) => (
         <button
           style={{
@@ -200,13 +211,14 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
             border: "none",
             borderRadius: 4,
             cursor: "auto",
-            padding: "4px 12px",
+            padding: "2px 8px",
             fontSize: 12,
-            fontWeight: 500,
-            marginRight: 8,
+            fontWeight: 400,
           }}
         >
-        {agencyName[agence_id]?.agence_name || `ID: ${agence_id}`}
+          <Text ellipsis={{tooltip:true}}>
+            {agencyName[agence_id]?.agence_name || `ID: ${agence_id}`}
+          </Text>
         </button>
     ),
   },
@@ -225,21 +237,21 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
     }
   },
   {
-    title: "Leads validés",
+    title: "Lead val.",
     dataIndex: "leads_val",
     fixed: "center",
     sorter: (a, b) => a.sends - b.sends,
     render: fmt,
   },
   {
-    title: "Clicks validés",
-    dataIndex: "Clicks_val",
+    title: "Click val.",
+    dataIndex: "clicks_val",
     fixed: "center",
     sorter: (a, b) => a.sends - b.sends,
     render: fmt,
   },
   {
-    title: "Vol. validés",
+    title: "Vol val.",
     dataIndex: "volume_val",
     fixed: "center",
     sorter: (a, b) => a.sends - b.sends,

@@ -40,17 +40,32 @@ export async function get_liste_advertisers(startDate = null, endDate = null) {
   threeMonthsAgo.setMonth(today.getMonth() - 3);
 
   // ── VALEURS PAR DÉFAUT ──
-  const finalStartDate = startDate || formatDate(threeMonthsAgo);
-  const finalEndDate = endDate || formatDate(today);
+  // Convertir les objets dayjs en Date avant d'appeler formatDate
+  let finalStartDate, finalEndDate;
+
+if (startDate && endDate) {
+  console.log("📅 Raw startDate:", startDate);
+  console.log("📅 startDate.toDate():", startDate.toDate());
+  finalStartDate = formatDate(startDate.toDate());
+  finalEndDate = formatDate(endDate.toDate());
+  console.log("📅 finalStartDate:", finalStartDate);
+  console.log("📅 finalEndDate:", finalEndDate);
+} else {
+  // Utiliser les valeurs par défaut (90 jours)
+  finalStartDate = formatDate(threeMonthsAgo);
+  finalEndDate = formatDate(today);
+  console.log("📅 Using defaults:", finalStartDate, "to", finalEndDate);
+}
 
   // ── QUERY PARAMS ──
   const params = new URLSearchParams();
 
-  params.append("start_date", finalStartDate);
-  params.append("end_date", finalEndDate);
+  params.append("date_start", finalStartDate);
+  params.append("date_end", finalEndDate);
 
   // ── URL FINALE ──
   const url = `${config.REACT_APP_ENDPOINT_ALL_ADVERTISERS}?${params.toString()}`;
+  console.log("🔗 API URL:", url);
 
   const response = await api.get(url, {
     timeout: 120000,
