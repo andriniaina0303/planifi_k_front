@@ -294,18 +294,18 @@ const AdvertisersTable = ({ data, tagMapping = [] }) => {
         },
       },
       {
-        title: "Env.",
+        title: "Sends",
         render: (_, r) => <b>{r.globales.sends}</b>,
         sorter: (a, b) => a.globales.sends - b.globales.sends,
       },
       {
-        title: "Ouv.(%)",
+        title: "Openers(%)",
         render: (_, r) => `${r.globales.taux_openers || 0}%`,
         sorter: (a, b) =>
           (a.globales.taux_openers || 0) - (b.globales.taux_openers || 0),
       },
       {
-        title: "Clics(%)",
+        title: "Clickers(%)",
         render: (_, r) => (
           <span style={{ color: "#40a9ff" }}>
             {r.globales.taux_clickers || 0}%
@@ -315,7 +315,7 @@ const AdvertisersTable = ({ data, tagMapping = [] }) => {
           (a.globales.taux_clickers || 0) - (b.globales.taux_clickers || 0),
       },
       {
-        title: "Dés.(%)",
+        title: "Unsubs(%)",
         render: (_, r) => (
           <span style={{ color: "#ff4d4f" }}>
             {r.globales.taux_unsubs || 0}%

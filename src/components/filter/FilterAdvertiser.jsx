@@ -11,14 +11,34 @@
  */
 
 import React from "react";
-import { Card, Row, Col, Select, Button } from "antd";
+import { Card, Row, Col, Select, Button , DatePicker} from "antd";
+import dayjs from "dayjs";
 
 const { Option } = Select;
-
+const {RangePicker} = DatePicker;
 /**
  * Configuration par défaut des filtres
  * @type {Object}
  */
+
+// ─── Helpers date ──────────────────────────────────────────────────────────────
+ 
+/**
+ * Retourne [dateDebut, dateFin] par défaut : les 3 derniers mois jusqu'à aujourd'hui
+ * @returns {[dayjs.Dayjs, dayjs.Dayjs]}
+ */
+const getDefaultDateRange = () => [
+  dayjs().subtract(3, "month").startOf("day"),
+  dayjs().endOf("day"),
+];
+
+// ─── Configuration par défaut des filtres ──────────────────────────────────────
+ 
+/**
+ * Configuration par défaut des filtres
+ * @type {Object}
+ */
+
 const DEFAULT_FILTERS = {
   advertiser: "ALL",
   taux_clickers: "ALL",
@@ -28,6 +48,7 @@ const DEFAULT_FILTERS = {
   taux_ecpm: "ALL",
   minSends: 0,
   sortBy: "sends",
+  dateRange: getDefaultDateRange(),
 };
 
 /**
@@ -47,9 +68,53 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
    */
   const handleReset = () => setFilters(DEFAULT_FILTERS);
 
+   /**
+   * Gère le changement de la plage de dates
+   * @param {[dayjs.Dayjs, dayjs.Dayjs] | null} dates
+   */
+  const handleDateChange = (dates) => {
+    setFilters({ ...filters, dateRange: dates ?? getDefaultDateRange() });
+  };
+
   return (
     <Card style={{ borderRadius: 10, background: "#ffffff" }}>
       <Row gutter={12} align="bottom">
+
+         {/* ================= FILTRE DATES ================= */}
+        <Col span={5}>
+          <div style={styles.filterCol}>
+            <span style={styles.filterLabel}>Période (date_schedule)</span>
+            <RangePicker
+              value={filters.dateRange}
+              onChange={handleDateChange}
+              format="DD/MM/YYYY"
+              allowClear={false}
+              style={{ width: "100%" }}
+              presets={[
+                {
+                  label: "3 derniers mois",
+                  value: getDefaultDateRange(),
+                },
+                {
+                  label: "6 derniers mois",
+                  value: [dayjs().subtract(6, "month").startOf("day"), dayjs().endOf("day")],
+                },
+                {
+                  label: "Cette année",
+                  value: [dayjs().startOf("year"), dayjs().endOf("day")],
+                },
+                {
+                  label: "Année précédente",
+                  value: [
+                    dayjs().subtract(1, "year").startOf("year"),
+                    dayjs().subtract(1, "year").endOf("year"),
+                  ],
+                },
+              ]}
+            />
+          </div>
+        </Col>
+
         {/* ================= FILTRE ANNONCEUR ================= */}
         <Col span={4}>
           <div style={styles.filterCol}>
@@ -71,6 +136,9 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
             </Select>
           </div>
         </Col>
+
+
+        
 
         {/* ================= FILTRE eCPM ================= */}
         <Col span={3}>
@@ -174,5 +242,5 @@ const styles = {
   filterLabel: { fontSize: 12, color: "#888" },
 };
 
-export { DEFAULT_FILTERS };
+export { DEFAULT_FILTERS, getDefaultDateRange };
 export default FilterAdvertiser;

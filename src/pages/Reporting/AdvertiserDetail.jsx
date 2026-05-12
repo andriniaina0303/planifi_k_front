@@ -473,6 +473,7 @@ useEffect(() => {
               clsConfig={clsConfig}
               agenceMapping={agenceMapping}
               allbase={databaseMapping}
+              advertiser_id={advertiser_id} 
             />
           }
 
