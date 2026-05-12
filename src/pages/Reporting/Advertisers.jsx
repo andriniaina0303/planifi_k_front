@@ -5,27 +5,27 @@
  * 
  * Page principale affichant :
  * - KPIs globaux (Sends, Opens, Clicks, Unsubs, CTR)
- * - Filtres avancés sur les annonceurs
+ * - Filtres avancés sur les annonceurs avec plage de dates
  * - Graphiques comparatifs (chartSwitcher, topTags)
  * - Tableau avec liste détaillée de tous les annonceurs
+ * 
+ * Par défaut, affiche les données des 90 derniers jours
  */
-
 import React, { useEffect, useMemo, useState } from "react";
-import { get_liste_advertisers, getMappingData, getMappingValue  } from "../../api/advertiser";
+import { get_liste_advertisers, getMappingData, getMappingValue } from "../../api/advertiser";
 import "../../assets/css/advertisers.css";
 import { listetags } from "../../components/table/AdvertisersTable";
-import { Card,Row,Col} from "antd";
+import { Card, Row, Col } from "antd";
 import KpiCardAdvertiser from "../../components/Kpi/KpiCardAdvertiser";
 import AdvertisersTable from "../../components/table/AdvertisersTable";
-import {MailOutlined,EyeOutlined, LinkOutlined,StopOutlined} from "@ant-design/icons";
-// import testAdvertisers from "../../data/testadv";
+import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-design/icons";
 import ChartSwitcher from "../../components/chart/ChartSwitcher";
 import TopTagsEcpm from "../../components/chart/TopTagsEcpm";
-import FilterAdvertiser, {DEFAULT_FILTERS} from "../../components/filter/FilterAdvertiser";
+import FilterAdvertiser, { DEFAULT_FILTERS } from "../../components/filter/FilterAdvertiser";
 
 /**
  * Composant Advertisers
- * Page de dashboard avec filtrage, statistiques et visualisations des annonceurs
+ * Page de dashboard avec filtrage par date, statistiques et visualisations des annonceurs
  * 
  * @component
  * @returns {JSX.Element} Dashboard complet avec KPIs, filtres, graphiques et tableau
@@ -33,29 +33,49 @@ import FilterAdvertiser, {DEFAULT_FILTERS} from "../../components/filter/FilterA
 const Advertisers = () => {
   // État des annonceurs chargés depuis l'API
   const [listeAdvertiser, setListeAdvertisers] = useState([]);
-  
+
   // État de chargement
   const [loading, setLoading] = useState(true);
-  
-  // État des filtres actifs
-  const [filters, setFilters] = useState(DEFAULT_FILTERS);  
 
-    // ➕ AJOUTE CES STATES POUR LES MAPPINGS
+  // État des filtres actifs — initialise avec les valeurs par défaut (90 derniers jours)
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
+
+  // État pour les mappings de tags
   const [tagMapping, setTagMapping] = useState({});
 
+  /**
+   * Convertit un objet dayjs en string au format YYYY-MM-DD
+   * @param {dayjs.Dayjs} dayjsDate - Date au format dayjs
+   * @returns {string|null} Date au format YYYY-MM-DD ou null
+   */
+  const formatDateToString = (dayjsDate) => {
+    if (!dayjsDate) return null;
+    return dayjsDate.format('YYYY-MM-DD');
+  };
 
   /**
-   * Récupère la liste complète des annonceurs depuis l'API
+   * Récupère la liste complète des annonceurs depuis l'API avec les paramètres de date
+   * @param {dayjs.Dayjs} startDate - Date de début (dayjs object)
+   * @param {dayjs.Dayjs} endDate - Date de fin (dayjs object)
    */
-  const fetchReporting = async () => {
+  const fetchReporting = async (startDate = null, endDate = null) => {
     try {
       setLoading(true);
-      const res = await get_liste_advertisers();
-      console.log("Fetched advertisers!!!");
-      setListeAdvertisers(res);
-      // setListeAdvertisers(testAdvertisers); // Pour test avec données mockées
+
+
+
+      const res = await get_liste_advertisers(startDate, endDate);
+
+      console.log("✅ Fetched advertisers!!!");
+      console.log("Response data:", res);
+      console.log("Is array?", Array.isArray(res));
+      console.log("Length:", res?.length);
+
+      setListeAdvertisers(Array.isArray(res) ? res : []);
+
     } catch (error) {
-      console.error("Erreur lors du fetch:", error);
+      console.error("❌ Erreur lors du fetch:", error);
+      setListeAdvertisers([]);
     } finally {
       setLoading(false);
     }
@@ -63,7 +83,7 @@ const Advertisers = () => {
 
   /**
    * Applique les filtres actuels à la liste d'annonceurs
-   * Filtre par : nom, taux_clickers, taux_unsubs, minSends
+   * Filtre par : nom, taux_clickers, taux_unsubs, taux_openers, taux_ca, taux_ecpm, minSends
    * Trie selon le critère sélectionné
    */
   const filteredData = useMemo(() => {
@@ -79,14 +99,35 @@ const Advertisers = () => {
     // Filtrer par taux de clic
     if (filters.taux_clickers !== "ALL") {
       d = d.filter((a) =>
-        a.globales?.analyse?.taux_clickers?.includes(filters.taux_clickers),
+        a.globales?.analyse?.taux_clickers?.includes(filters.taux_clickers)
+      );
+    }
+
+    // Filtrer par taux d'ouverture
+    if (filters.taux_openers !== "ALL") {
+      d = d.filter((a) =>
+        a.globales?.analyse?.taux_openers?.includes(filters.taux_openers)
       );
     }
 
     // Filtrer par taux de désabonnement
     if (filters.taux_unsubs !== "ALL") {
       d = d.filter((a) =>
-        a.globales?.analyse?.taux_unsubs?.includes(filters.taux_unsubs),
+        a.globales?.analyse?.taux_unsubs?.includes(filters.taux_unsubs)
+      );
+    }
+
+    // Filtrer par eCPM
+    if (filters.taux_ecpm !== "ALL") {
+      d = d.filter((a) =>
+        a.globales?.analyse?.taux_ecpm?.includes(filters.taux_ecpm)
+      );
+    }
+
+    // Filtrer par CA (Chiffre d'affaires)
+    if (filters.taux_ca !== "ALL") {
+      d = d.filter((a) =>
+        a.globales?.analyse?.taux_ca?.includes(filters.taux_ca)
       );
     }
 
@@ -95,29 +136,31 @@ const Advertisers = () => {
 
     // Trier selon le critère sélectionné
     d.sort(
-      (a, b) => b.globales?.[filters.sortBy] - a.globales?.[filters.sortBy],
+      (a, b) => b.globales?.[filters.sortBy] - a.globales?.[filters.sortBy]
     );
 
     return d;
   }, [listeAdvertiser, filters]);
 
-
+  /**
+   * Calcul des statistiques globales (KPIs)
+   */
   const stats = useMemo(() => {
     const totalSends = filteredData.reduce(
-      (acc, a) => acc + a.globales.sends,
-      0,
+      (acc, a) => acc + (a.globales?.sends || 0),
+      0
     );
     const totalOpen = filteredData.reduce(
-      (acc, a) => acc + a.globales.openers,
-      0,
+      (acc, a) => acc + (a.globales?.openers || 0),
+      0
     );
     const totalClick = filteredData.reduce(
-      (acc, a) => acc + a.globales.clickers,
-      0,
+      (acc, a) => acc + (a.globales?.clickers || 0),
+      0
     );
     const totalUnsub = filteredData.reduce(
-      (acc, a) => acc + a.globales.unsubs,
-      0,
+      (acc, a) => acc + (a.globales?.unsubs || 0),
+      0
     );
     return [
       { label: "Sends", value: totalSends, color: "#1890ff" },
@@ -134,27 +177,41 @@ const Advertisers = () => {
     ];
   }, [filteredData]);
 
-
+  /**
+   * Initialisation au montage : chargement des tags et des annonceurs
+   * Les dates par défaut sont dans DEFAULT_FILTERS (90 derniers jours)
+   */
 useEffect(() => {
   const init = async () => {
     try {
-      // Charger uniquement les tags
-      const tags = await getMappingData('tags', 'tags');
+      console.log("🔄 Init starting...");
       
-      console.log("TAGS API RESULT:", tags);
+      const tags = await getMappingData('tags', 'tags');
+      console.log("✅ Tags loaded:", tags.length, "items");
       setTagMapping(tags);
 
-      // Ensuite fetch le reporting
-      await fetchReporting();
+      console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
+      await fetchReporting(DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
+      
+      console.log("✅ Init complete");
     } catch (error) {
-      console.error("Erreur lors de l'initialisation :", error);
+      console.error("❌ Erreur lors de l'initialisation :", error);
     }
   };
 
   init();
 }, []);
 
-
+  /**
+   * Chaque fois que les dates du filtre changent, refetch les données API
+   * Les autres filtres (advertiser, taux_clickers, etc) filtrent côté client
+   */
+  useEffect(() => {
+    // Refetch l'API uniquement si les dates changent
+    if (filters.scheduleStart && filters.scheduleEnd) {
+      fetchReporting(filters.scheduleStart, filters.scheduleEnd);
+    }
+  }, [filters.scheduleStart, filters.scheduleEnd]);
 
   if (loading) {
     return (
@@ -175,23 +232,27 @@ useEffect(() => {
         gap: 16,
       }}
     >
-
       {/* ── KPI Cards ── */}
       <Row gutter={16}>
         {stats.map((s, idx) => (
-          <KpiCardAdvertiser key={idx} label={s.label} value={s.value} color={s.color} />
+          <KpiCardAdvertiser
+            key={idx}
+            label={s.label}
+            value={s.value}
+            color={s.color}
+          />
         ))}
       </Row>
 
-      {/* Chart des Tops */}
-        <Row gutter={12} wrap={false}>
-          <Col flex="auto">
-            <ChartSwitcher data={filteredData} />
-          </Col>  
-          <Col flex="none">
-            <TopTagsEcpm data={filteredData} tagMapping={tagMapping} />
-          </Col>
-        </Row>
+      {/* ── Chart des Tops ── */}
+      <Row gutter={12} wrap={false}>
+        <Col flex="auto">
+          <ChartSwitcher data={filteredData} />
+        </Col>
+        <Col flex="none">
+          <TopTagsEcpm data={filteredData} tagMapping={tagMapping} />
+        </Col>
+      </Row>
 
       {/* ── Filtres ── */}
       <FilterAdvertiser
@@ -202,12 +263,17 @@ useEffect(() => {
 
       {/* ── Table ── */}
       <Row>
-          <Card
-            style={{ borderRadius: 10, height: "100%", width: "100%", overflow: "visible" }}
-            bodyStyle={{ padding: 0 }}
-          >
-          <AdvertisersTable data={filteredData}   tagMapping={tagMapping}/>
-          </Card>
+        <Card
+          style={{
+            borderRadius: 10,
+            height: "100%",
+            width: "100%",
+            overflow: "visible",
+          }}
+          bodyStyle={{ padding: 0 }}
+        >
+          <AdvertisersTable data={filteredData} tagMapping={tagMapping} />
+        </Card>
       </Row>
     </div>
   );
@@ -237,7 +303,7 @@ const styles = {
 const styleSheet = document.styleSheets[0];
 styleSheet.insertRule(
   `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`,
-  styleSheet.cssRules.length,
+  styleSheet.cssRules.length
 );
 
 export default Advertisers;

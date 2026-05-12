@@ -5,27 +5,67 @@ import * as config from "./../config/config";
 
 import mockData from "../temp/all_advertiser.json";
 import mockDataDetail from "../temp/adv_detail.json";
+import { formatDate } from "../utils/Helpers";
 
 const USE_MOCK = false;
 
-
-export async function get_liste_advertisers({ date_start = null, date_end = null } = {}) {
+/**
+ * Récupère la liste complète de tous les annonceurs
+ * 
+ * @async
+ * @returns {Promise<Array>} Liste d'annonceurs avec leurs métriques globales
+ * @description
+ *   - En mode MOCK : retourne les données du fichier all_advertiser.json
+ *   - En mode PROD : appel GET /reporting/all_advertisers avec timeout 120s
+ */
+export async function get_liste_advertisers(startDate = null, endDate = null) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
+
     return new Promise((resolve) => {
       setTimeout(() => resolve(mockData), 300);
     });
   }
 
-    // Construction des query params — on n'envoie que les valeurs renseignées
-  const params = {};
-  if (date_start) params.date_start = date_start;
-  if (date_end)   params.date_end   = date_end;
- 
-  const response = await api.get(config.REACT_APP_ENDPOINT_ALL_ADVERTISERS, {
+  // ── DATE DU JOUR ──
+  const today = new Date();
+
+  // ── AUJOURD'HUI - 3 MOIS ──
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(today.getMonth() - 3);
+
+  // ── VALEURS PAR DÉFAUT ──
+  // Convertir les objets dayjs en Date avant d'appeler formatDate
+  let finalStartDate, finalEndDate;
+
+if (startDate && endDate) {
+  console.log("📅 Raw startDate:", startDate);
+  console.log("📅 startDate.toDate():", startDate.toDate());
+  finalStartDate = formatDate(startDate.toDate());
+  finalEndDate = formatDate(endDate.toDate());
+  console.log("📅 finalStartDate:", finalStartDate);
+  console.log("📅 finalEndDate:", finalEndDate);
+} else {
+  // Utiliser les valeurs par défaut (90 jours)
+  finalStartDate = formatDate(threeMonthsAgo);
+  finalEndDate = formatDate(today);
+  console.log("📅 Using defaults:", finalStartDate, "to", finalEndDate);
+}
+
+  // ── QUERY PARAMS ──
+  const params = new URLSearchParams();
+
+  params.append("date_start", finalStartDate);
+  params.append("date_end", finalEndDate);
+
+  // ── URL FINALE ──
+  const url = `${config.REACT_APP_ENDPOINT_ALL_ADVERTISERS}?${params.toString()}`;
+  console.log("🔗 API URL:", url);
+
+  const response = await api.get(url, {
     timeout: 120000,
-    params,
   });
+
   return response.data;
 }
 

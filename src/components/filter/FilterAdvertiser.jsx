@@ -7,15 +7,31 @@
  * - Filtrer par annonceur spécifique
  * - Filtrer par performance (eCPM, CA, Click Rate, Open Rate, Désabs)
  * - Filtrer par nombre minimum d'envois
+ * - Filtrer par plage de dates (par défaut : 90 derniers jours)
  * - Trier les résultats par métrique
  */
 
 import React from "react";
-import { Card, Row, Col, Select, Button , DatePicker} from "antd";
+import { Card, Row, Col, Select, Button, DatePicker } from "antd";
 import dayjs from "dayjs";
 
 const { Option } = Select;
 const {RangePicker} = DatePicker;
+/**
+ * Génère les dates par défaut : fin = aujourd'hui, début = aujourd'hui - 90 jours
+ * @returns {Object} Objet avec scheduleStart et scheduleEnd en format dayjs
+ */
+const generateDefaultDates = () => {
+  const endDate = dayjs(); // Aujourd'hui
+  const startDate = dayjs().subtract(4, 'months'); // 90 jours avant aujourd'hui
+  // const endDate = dayjs('2026-03-12'); // Date qui marche
+  // const startDate = dayjs('2025-12-13'); // Date qui marche
+  return {
+    scheduleStart: startDate,
+    scheduleEnd: endDate,
+  };
+};
+
 /**
  * Configuration par défaut des filtres
  * @type {Object}
@@ -48,12 +64,12 @@ const DEFAULT_FILTERS = {
   taux_ecpm: "ALL",
   minSends: 0,
   sortBy: "sends",
-  dateRange: getDefaultDateRange(),
+  ...generateDefaultDates(),
 };
 
 /**
  * Composant FilterAdvertiser
- * Affiche une barre de filtres multicritères
+ * Affiche une barre de filtres multicritères avec dates par défaut
  * 
  * @component
  * @param {Object} props
@@ -64,7 +80,7 @@ const DEFAULT_FILTERS = {
  */
 const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
   /**
-   * Réinitialise tous les filtres à leurs valeurs par défaut
+   * Réinitialise tous les filtres à leurs valeurs par défaut (90 derniers jours)
    */
   const handleReset = () => setFilters(DEFAULT_FILTERS);
 
@@ -78,58 +94,28 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
 
   return (
     <Card style={{ borderRadius: 10, background: "#ffffff" }}>
-      <Row gutter={12} align="bottom">
-
-         {/* ================= FILTRE DATES ================= */}
-        <Col span={5}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>Période (date_schedule)</span>
-            <RangePicker
-              value={filters.dateRange}
-              onChange={handleDateChange}
-              format="DD/MM/YYYY"
-              allowClear={false}
-              style={{ width: "100%" }}
-              presets={[
-                {
-                  label: "3 derniers mois",
-                  value: getDefaultDateRange(),
-                },
-                {
-                  label: "6 derniers mois",
-                  value: [dayjs().subtract(6, "month").startOf("day"), dayjs().endOf("day")],
-                },
-                {
-                  label: "Cette année",
-                  value: [dayjs().startOf("year"), dayjs().endOf("day")],
-                },
-                {
-                  label: "Année précédente",
-                  value: [
-                    dayjs().subtract(1, "year").startOf("year"),
-                    dayjs().subtract(1, "year").endOf("year"),
-                  ],
-                },
-              ]}
-            />
-          </div>
-        </Col>
-
+      <Row gutter={12} align="bottom">     
         {/* ================= FILTRE ANNONCEUR ================= */}
         <Col span={4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>Advertiser</span>
             <Select
               showSearch
+              key={filters.advertiser}
               value={filters.advertiser}
-              onChange={(v) => setFilters({ ...filters, advertiser: v })}
+              onChange={(v) =>
+                setFilters({
+                  ...filters,
+                  advertiser: v || "ALL",
+                })
+              }
               style={{ width: "100%" }}
             >
               <Option value="ALL">All advertisers</Option>
               {/* Affiche dynamiquement tous les annonceurs disponibles */}
               {listeAdvertiser &&
                 listeAdvertiser.map((a) => (
-                  <Option key={a.advrtiser_id} value={a.advertiser_name}>
+                  <Option key={a.advertiser_id} value={a.advertiser_name}>
                     {a.advertiser_name}
                   </Option>
                 ))}
@@ -141,7 +127,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
         
 
         {/* ================= FILTRE eCPM ================= */}
-        <Col span={3}>
+        <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>eCPM</span>
             <Select
@@ -158,7 +144,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
         </Col>
 
         {/* ================= FILTRE CA ================= */}
-        <Col span={3}>
+        <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>CA</span>
             <Select
@@ -175,7 +161,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
         </Col>
 
         {/* ================= FILTRE CLICK RATE ================= */}
-        <Col span={3}>
+        <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>Click Rate</span>
             <Select
@@ -192,7 +178,7 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
         </Col>
 
         {/* ================= FILTRE OPEN RATE ================= */}
-        <Col span={3}>
+        <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>Open Rate</span>
             <Select
@@ -208,7 +194,8 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
           </div>
         </Col>
 
-        <Col span={3}>
+        {/* ================= FILTRE UNSUB RATE ================= */}
+        <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>Unsub Rate</span>
             <Select
@@ -224,7 +211,46 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
           </div>
         </Col>
 
-        <Col span={3}>
+        {/* ================= DATE DÉBUT ================= */}
+        <Col span={2.4}>
+          <div style={styles.filterCol}>
+            <span style={styles.filterLabel}>Start Date</span>
+            <DatePicker
+              value={filters.scheduleStart}
+              onChange={(date) =>
+                setFilters({
+                  ...filters,
+                  scheduleStart: date,
+                })
+              }
+              style={{ width: "100%" }}
+              format="YYYY-MM-DD"
+              placeholder="Start"
+            />
+          </div>
+        </Col>
+
+        {/* ================= DATE FIN ================= */}
+        <Col span={2.4}>
+          <div style={styles.filterCol}>
+            <span style={styles.filterLabel}>End Date</span>
+            <DatePicker
+              value={filters.scheduleEnd}
+              onChange={(date) =>
+                setFilters({
+                  ...filters,
+                  scheduleEnd: date,
+                })
+              }
+              style={{ width: "100%" }}
+              format="YYYY-MM-DD"
+              placeholder="End"
+            />
+          </div>
+        </Col>
+
+        {/* ================= BOUTON RESET ================= */}
+        <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>&nbsp;</span>
             <Button type="primary" style={{ width: "100%" }} onClick={handleReset}>
@@ -242,5 +268,5 @@ const styles = {
   filterLabel: { fontSize: 12, color: "#888" },
 };
 
-export { DEFAULT_FILTERS, getDefaultDateRange };
+export { DEFAULT_FILTERS, generateDefaultDates };
 export default FilterAdvertiser;
