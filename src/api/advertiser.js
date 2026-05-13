@@ -2,7 +2,6 @@
 
 import api from "./interceptor";
 import * as config from "./../config/config";
-
 import mockData from "../temp/all_advertiser.json";
 import mockDataDetail from "../temp/adv_detail.json";
 import { formatDate } from "../utils/Helpers";

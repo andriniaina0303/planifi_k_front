@@ -1,19 +1,6 @@
-/**
- * ═══════════════════════════════════════════════════════════════════════════
- * APP.JSX - Composant racine avec routage
- * ═══════════════════════════════════════════════════════════════════════════
- * 
- * Définit la structure globale de l'application avec React Router :
- * - Route /login : Page de connexion
- * - Route / : Page d'accueil avec sous-routes
- *   - /reporting/advertisers : Liste des annonceurs
- *   - /reporting/advertisers/:advertiser_id : Détails d'un annonceur
- *   - /reporting/database : Gestion des bases de données
- *   - /counting : Module de comptage
- */
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 // Pages principales
 import Home from "./pages/Home/Home";
 import Advertisers from "./pages/Reporting/Advertisers/Advertisers";
@@ -21,28 +8,86 @@ import AdvertiserDetail from "./pages/Reporting/Advertisers/AdvertiserDetail";
 import Databases from "./pages/Reporting/Databases/Databases";
 import Counting from "./pages/Counting/Counting";
 import LoginPage from "./pages/Login/Login";
+import { resetInactivityTimer } from "./api/interceptor";
+
+// Événements considérés comme une "activité" utilisateur
+const ACTIVITY_EVENTS = ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "click"];
+
+/**
+ * Hook qui écoute les événements d'activité et reset le timer.
+ * Actif uniquement quand l'utilisateur est connecté (token présent).
+ */
+function useInactivityWatcher() {
+  useEffect(() => {
+    // Démarre le timer dès le chargement si l'utilisateur est déjà connecté
+    resetInactivityTimer();
+
+    // Handler partagé pour tous les événements d'activité
+    const handleActivity = () => resetInactivityTimer();
+
+    ACTIVITY_EVENTS.forEach((event) =>
+      window.addEventListener(event, handleActivity, { passive: true })
+    );
+
+    return () => {
+      ACTIVITY_EVENTS.forEach((event) =>
+        window.removeEventListener(event, handleActivity)
+      );
+    };
+  }, []);
+}
+
+
+
+/**
+ * Garde de route : redirige vers /login si aucun token n'est présent.
+ * Mémorise la page demandée pour y revenir après connexion.
+ *
+ * @param {{ children: JSX.Element }} props
+ * @returns {JSX.Element}
+ */
+
+
+function ProtectedRoute({ children }) {
+  const location = useLocation();
+  const token = localStorage.getItem("access_token");
+
+  if (!token) {
+    // Redirige vers /login en passant la page d'origine dans l'état
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
 
 /**
  * Composant racine de l'application
- * Configure toutes les routes et leur hiérarchie
- * 
+ *
  * @component
  * @returns {JSX.Element} Router avec toutes les pages
  */
 export default function App() {
+    // Active la surveillance d'inactivité pour toute l'application
+  useInactivityWatcher();
   return (
     <BrowserRouter>
       <Routes>
-        {/* Route de connexion - accessible sans authentification */}
+        {/* ── Route publique ── */}
         <Route path="/login" element={<LoginPage />} />
-        
-        {/* Route principale - toutes les pages protégées sont sous Home */}
-        <Route path="/" element={<Home />}>
+
+        {/* ── Routes protégées ── */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        >
           {/* Page d'accueil */}
           <Route index element={<h2>Bienvenue sur Planifik 🚀</h2>} />
 
-          {/* ================= MODULE REPORTING ================= */}
-          {/* Affiche la liste de tous les annonceurs */}
+          {/* ── MODULE REPORTING ── */}
           <Route path="reporting/advertisers" element={<Advertisers />} />
           
           {/* Affiche les détails spécifiques d'un annonceur */}
@@ -52,13 +97,15 @@ export default function App() {
           {/* Gestion des bases de données */}
           <Route path="reporting/database" element={<Databases />} />
 
-          {/* ================= MODULE COUNTING ================= */}
+          {/* ── MODULE COUNTING ── */}
           <Route path="counting" element={<Counting />}>
-            {/* Sous-route pour les tâches de comptage */}
             <Route path="tasks" element={<Counting />} />
           </Route>
         </Route>
-      </Routes>                                                                                                                                                                       
+
+        {/* Fallback : toute URL inconnue → accueil (protégé) */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </BrowserRouter>
   );
 }

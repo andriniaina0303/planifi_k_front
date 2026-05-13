@@ -1,124 +1,169 @@
-/**
- * ═══════════════════════════════════════════════════════════════════════════
- * SIDEBARCONTENT.JSX - Navigation sidebar principale
- * ═══════════════════════════════════════════════════════════════════════════
- * 
- * Contient la navigation principale de l'application :
- * - Logo Planifik
- * - Menu Reporting (Advertisers, Advertiser Detail, Databases)
- * - Menu Counting (Comptage/Segmentation)
- * - Boutons Settings et Logout
- * 
- * Responsive :
- * - Affichée en sidebar sur desktop
- * - Affichée en offcanvas sur mobile
- */
 
-import {
-  FiSettings,
-  FiLogOut,
-  FiBell,
-} from "react-icons/fi";
 
+import { useState, useEffect } from "react";
+import { FiSettings, FiLogOut, FiBell } from "react-icons/fi";
 import { AiFillCalendar } from "react-icons/ai";
+import { useLocation, useNavigate } from "react-router-dom";
 
-// Menus principaux (composants déjà créés)
 import ReportingMenu from "./ReportingMenu";
 import MenuItem from "../bouton/MenuItem";
 import CountingMenuItem from "./CountingMenuItem";
 
-/**
- * Composant SidebarContent - Barre latérale de navigation
- * 
- * @param {Object} props
- * @param {Function} props.onClose - Callback pour fermer le sidebar mobile
- * @returns {JSX.Element} Sidebar avec navigation complète
- */
-const SidebarContent = ({ onClose }) => (
-  <div
-    // Conteneur principal du sidebar
-    className="d-flex flex-column bg-dark text-white p-4"
+import api, { logout } from "../../api/interceptor";
 
-    // Style inline : hauteur + largeur fixe
-    style={{ minHeight: "100vh", width: 240 }}
-  >
+const activeStyle = {
+  backgroundColor: "rgba(79, 209, 197, 0.15)",
+  borderLeft: "3px solid #4fd1c5",
+  borderRadius: "6px",
+};
 
-    {/* ================= LOGO ================= */}
-    <h5 className="d-flex align-items-center mb-4">
-      {/* Petit rectangle décoratif à gauche du logo */}
-      <span
-        style={{
-          width: 6,
-          height: 24,
-          backgroundColor: "#4fd1c5",
-          marginRight: 8,
-          borderRadius: 4,
-        }}
-      />
+const SidebarContent = ({ onClose }) => {
+  const location = useLocation();
 
-      {/* Nom de l'application */}
-      Planifik
-    </h5>
 
-    {/* ================= MENUS PRINCIPAUX ================= */}
+  const isActive = (path) => location.pathname.startsWith(path);
 
-    {/* Menu Reporting (avec sous-menu) */}
-    <ReportingMenu onClose={onClose} />
+   // Infos utilisateur récupérées depuis l'API
+  const [user, seteUser] = useState({email:"", username:""});
 
-    {/* Menu Counting (avec sous-menu) */}
-    <CountingMenuItem onClose={onClose} />
+  useEffect(() => {
+     // Appel GET /auth/infos — le token est ajouté automatiquement par l'intercepteur
+     api
+      .get("/auth/infos")
+      .then((res) =>{
+        seteUser({
+          email: res.data.email || "",
+          username: res.data.username || "",
+        });
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la récupération des infos utilisateur :", err);
+        
+      });
+       
+    }, []); 
+     // Initiales pour l'avatar (ex: "Andre Kontiki" → "AK")
+  const initials = user.username
+    ? user.username
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "?";
 
-    {/* Menu simple sans sous-menu */}
-    <MenuItem
-      icon={AiFillCalendar}
-      label="Automatic Schedule"
-      onClick={onClose} // ferme sidebar si nécessaire
-    />
+  return (
+    <div
+      className="d-flex flex-column bg-dark text-white p-4"
+      style={{ minHeight: "100vh", width: 240 }}
+    >
+      {/* ================= LOGO ================= */}
+      <h5 className="d-flex align-items-center mb-4">
+        <span
+          style={{
+            width: 6,
+            height: 24,
+            backgroundColor: "#4fd1c5",
+            marginRight: 8,
+            borderRadius: 4,
+          }}
+        />
+        Planifik
+      </h5>
 
-    {/* Menu paramètres */}
-    <MenuItem
-      icon={FiSettings}
-      label="Paramètres"
-      onClick={onClose}
-    />
+      {/* ================= MENUS ================= */}
 
-    {/* ================= BAS DU SIDEBAR ================= */}
-    <div className="mt-auto">
+      <ReportingMenu onClose={onClose} />
 
-      {/* Ligne de séparation */}
-      <hr className="text-secondary" />
+      <CountingMenuItem onClose={onClose} />
 
-      {/* ================= NOTIFICATIONS ================= */}
-      <div className="d-flex align-items-center gap-2 mb-3">
-        <FiBell />
-        <span>Notifications</span>
+      {/* Automatic Schedule */}
+      <div style={isActive("/automatic-schedule") ? activeStyle : {}}>
+        <MenuItem
+          icon={AiFillCalendar}
+          label="Automatic Schedule"
+          onClick={onClose}
+        />
       </div>
 
-      {/* ================= USER ================= */}
-      <div className="d-flex align-items-center gap-2 mb-3">
+      {/* Paramètres */}
+      <div style={isActive("/parametres") ? activeStyle : {}}>
+        {/* <MenuItem
+          icon={FiSettings}
+          label="Paramètres"
+          onClick={() => {
+            navigate("/parametres");
+            onClose?.();
+          }}
+        /> */}
+         <MenuItem
+          icon={FiSettings}
+          label="Paramètres" 
+          onClick={onClose}
+        />
 
-        {/* Avatar utilisateur */}
-        <div
-          className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
-          style={{ width: 32, height: 32 }}
-        >
-          AK
+      </div>
+
+      {/* ================= BAS DU SIDEBAR ================= */}
+      <div className="mt-auto">
+        <hr className="text-secondary" />
+
+          {/* Notifications */}
+        <div className="d-flex align-items-center gap-2 mb-3" style={isActive("/notifications") ? activeStyle : {}}>
+          <MenuItem
+            icon={FiBell}
+            label="Notifications"
+            onClick={onClose}
+           />
+         </div>
+
+
+        {/* User */}
+        <div className="d-flex align-items-center gap-2 mb-3">
+          
+            {/* Avatar avec initiales du username */}
+          <div
+            className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center flex-shrink-0"
+            style={{ width: 36, height: 36, fontSize: 13, fontWeight: 600 }}
+          >
+            {initials}
+          </div>
+          <div className="d-flex flex-column" >
+            <span
+            className="fw-semibold"
+             style={{ fontSize: 13, lineHeight: 1.3 }}
+          >
+            {user.username || "—"}
+          </span>
+
+          <span
+              className="text-secondary"
+              style={{
+                fontSize: 13,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {user.email || "—"}
+            </span>
+
+          </div>
+          
+
         </div>
 
-        {/* Nom utilisateur */}
-        <span>Andre Kontiki</span>
+        {/* Logout */}
+        <button
+          className="btn btn-outline-success btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
+          onClick={logout}
+        >
+          <FiLogOut />
+          Déconnexion
+        </button>
       </div>
-
-      {/* ================= LOGOUT ================= */}
-      <button
-        className="btn btn-outline-success btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
-      >
-        <FiLogOut />
-        Déconnexion
-      </button>
-
     </div>
-  </div>
-);
+  );
+};
 
 export default SidebarContent;
