@@ -16,7 +16,9 @@ export const REACT_APP_ENDPOINT_ADVERTISER_DETAIL = REACT_APP_ENDPOINT + '/repor
 
 // // ================= ENDPOINTS DATABASES & SEGMENTS =================
 // /** Récupère la liste complète des bases de données disponibles */
-export const REACT_APP_ENDPOINT_ALL_DATABASES = REACT_APP_ENDPOINT + '/database'
+export const REACT_APP_ENDPOINT_ALL_DATABASES = REACT_APP_ENDPOINT + '/reporting/all_bases'
+/** Récupère les détails complets d'un annonceur spécifique par son ID */
+export const REACT_APP_ENDPOINT_DATABASE_DETAIL = REACT_APP_ENDPOINT + '/reporting/database/'
 
 // /** Récupère les segments disponibles pour filtrer/segmenter les données */
 export const REACT_APP_ENDPOINT_ALL_SEGMENT = REACT_APP_ENDPOINT + '/reporting/segment'

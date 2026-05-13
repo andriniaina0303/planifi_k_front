@@ -56,7 +56,7 @@ const getDefaultDateRange = () => [
  */
 
 const DEFAULT_FILTERS = {
-  advertiser: "ALL",
+  all_fields: "ALL",
   taux_clickers: "ALL",
   taux_openers: "ALL",
   taux_unsubs: "ALL",
@@ -78,7 +78,7 @@ const DEFAULT_FILTERS = {
  * @param {Array} props.listeAdvertiser - Liste complète des annonceurs disponibles
  * @returns {JSX.Element} Barre de filtres avec sélecteurs
  */
-const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
+const FilterReporting = ({labelFilter, filters, setFilters, listes, idList, keyList }) => {
   /**
    * Réinitialise tous les filtres à leurs valeurs par défaut (90 derniers jours)
    */
@@ -98,25 +98,25 @@ const FilterAdvertiser = ({ filters, setFilters, listeAdvertiser }) => {
         {/* ================= FILTRE ANNONCEUR ================= */}
         <Col span={4}>
           <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>Advertiser</span>
+            <span style={styles.filterLabel}>{labelFilter}</span>
             <Select
               showSearch
-              key={filters.advertiser}
-              value={filters.advertiser}
+              key={filters.all_fields}
+              value={filters.all_fields}
               onChange={(v) =>
                 setFilters({
                   ...filters,
-                  advertiser: v || "ALL",
+                  all_fields: v || "ALL",
                 })
               }
               style={{ width: "100%" }}
             >
-              <Option value="ALL">All advertisers</Option>
+              <Option value="ALL">All {labelFilter}</Option>
               {/* Affiche dynamiquement tous les annonceurs disponibles */}
-              {listeAdvertiser &&
-                listeAdvertiser.map((a) => (
-                  <Option key={a.advertiser_id} value={a.advertiser_name}>
-                    {a.advertiser_name}
+              {listes &&
+                listes.map((a) => (
+                  <Option key={a[idList]} value={a[keyList]}>
+                    {a[keyList]}
                   </Option>
                 ))}
             </Select>
@@ -269,4 +269,4 @@ const styles = {
 };
 
 export { DEFAULT_FILTERS, generateDefaultDates };
-export default FilterAdvertiser;
+export default FilterReporting;

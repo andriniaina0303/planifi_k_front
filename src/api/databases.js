@@ -2,13 +2,14 @@ import api from "./interceptor";
 import * as config from "./../config/config";
 import mockData from "../temp/all_advertiser.json";
 import mockDataDetail from "../temp/adv_detail.json";
+import { formatDate } from "../utils/Helpers";
 
 /**
  * 🔥 SWITCH MODE DÉVELOPPEMENT
  * true = Utilise les données mockées (fichiers JSON statiques)
  * false = Utilise les appels API réels au backend
  */
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 // ================= CACHE CONFIGURATION =================
 /** Clé pour stocker les bases de données en cache localStorage */
@@ -30,58 +31,55 @@ const CACHE_TTL = 1000 * 60 * 60;
  *   4. Sauvegarde les données en cache avec timestamp
  *   5. En cas d'erreur : retourne le cache expiré (fallback)
  */
-export async function get_all_databases(forceRefresh = false) {
-  try {
-      // Mode développement : données mockées
-      if (USE_MOCK) {
-        console.log("⚡ Using MOCK data");
-        return new Promise((resolve) => {
-          setTimeout(() => resolve(mockData), 300);
-        });
-      }
+export async function get_all_databases(startDate = null, endDate = null) {
+  if (USE_MOCK) {
+    console.log("⚡ Using MOCK data");
 
-      // Vérifier le cache locale
-      const cached = localStorage.getItem(CACHE_DATBASE_KEY);
-      if (!forceRefresh && cached) {
-        const { data, timestamp } = JSON.parse(cached);
-        
-        // ✅ Cache encore valide (moins de 1h)
-        if (Date.now() - timestamp < CACHE_TTL) {
-          console.log("✅ Cache valide - données renvoyées du cache");
-          return data;
-        }
-      }
-
-      // ❌ Cache expiré ou vide → faire l'appel API
-      console.log("📡 Appel API pour récupérer les bases de données");
-      const response = await api.get(
-        config.REACT_APP_ENDPOINT_ALL_DATABASES,
-        { timeout: 120000 }
-      );
-      const data = response.data;
-
-      // 💾 Sauvegarder en cache avec timestamp
-      localStorage.setItem(
-        CACHE_DATBASE_KEY,
-        JSON.stringify({
-          data,
-          timestamp: Date.now(),
-        })
-      );
-
-      return data;
-  } catch (error) {
-    console.error("❌ Erreur get_all_databases:", error);
-    
-    // 🔁 Fallback : retourner le cache même expiré si disponible
-    const cached = localStorage.getItem(CACHE_DATBASE_KEY);
-    if (cached) {
-      console.warn("⚠️ Cache expiré retourné en fallback");
-      return JSON.parse(cached).data;
-    }
-    
-    throw error;
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(mockData), 300);
+    });
   }
+
+  // ── DATE DU JOUR ──
+  const today = new Date();
+
+  // ── AUJOURD'HUI - 3 MOIS ──
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(today.getMonth() - 3);
+
+  // ── VALEURS PAR DÉFAUT ──
+  // Convertir les objets dayjs en Date avant d'appeler formatDate
+  let finalStartDate, finalEndDate;
+
+if (startDate && endDate) {
+  console.log("📅 Raw startDate:", startDate);
+  console.log("📅 startDate.toDate():", startDate.toDate());
+  finalStartDate = formatDate(startDate.toDate());
+  finalEndDate = formatDate(endDate.toDate());
+  console.log("📅 finalStartDate:", finalStartDate);
+  console.log("📅 finalEndDate:", finalEndDate);
+} else {
+  // Utiliser les valeurs par défaut (90 jours)
+  finalStartDate = formatDate(threeMonthsAgo);
+  finalEndDate = formatDate(today);
+  console.log("📅 Using defaults:", finalStartDate, "to", finalEndDate);
+}
+
+  // ── QUERY PARAMS ──
+  const params = new URLSearchParams();
+
+  params.append("date_start", finalStartDate);
+  params.append("date_end", finalEndDate);
+
+  // ── URL FINALE ──
+  const url = `${config.REACT_APP_ENDPOINT_ALL_DATABASES}?${params.toString()}`;
+  console.log("🔗 API URL:", url);
+
+  const response = await api.get(url, {
+    timeout: 120000,
+  });
+
+  return response.data;
 }
 
 /**

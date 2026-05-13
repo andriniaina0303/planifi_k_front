@@ -65,34 +65,34 @@ import {
   DislikeOutlined,
 } from "@ant-design/icons";
 import { Chart, registerables } from "chart.js";
-import AdvertiserDetailCharts from "../../components/chart/AdvertiserDetailChart"; 
-import { get_advertisers_detail, getMappingData, getMappingValue} from "../../api/advertiser";
+import AdvertiserDetailCharts from "../../../components/chart/AdvertiserDetailChart.jsx"; 
+import { get_advertisers_detail, getMappingData, getMappingValue} from "../../../api/advertiser.js";
 import { useLocation } from "react-router-dom";
-import { TabExtraContent } from "../../components/bouton/SwitchBtnTableChart.jsx";
+import { TabExtraContent } from "../../../components/bouton/SwitchBtnTableChart.jsx";
 
 // import testAdvertisers from "../../data/testadv";
 // import testandre from "../../temp/adv_detail.json";
 // import { get_all_databases } from "../../api/databases";
 // import KpiCard from "../../components/Kpi/KpiCardAdvertiserDetail";
-import {HeadersDetails} from "../../components/headers/HeadersDetails";
+import {HeadersDetails} from "../../../components/headers/HeadersDetails.jsx";
 import {
   HealthExplainer,
   HealthGauge,
-} from "../../components/healthComponents/HealthKit";
-import { getHealthScore,getHealthLabel } from "../../utils/healthKitFunc";
+} from "../../../components/healthComponents/HealthKit.jsx";
+import { getHealthScore,getHealthLabel } from "../../../utils/healthKitFunc.js";
 Chart.register(...registerables);
 
 const { Option } = Select;
 const { Title, Text, Paragraph } = Typography;
-import { SmartChart } from "../../components/chart/AdvertiserDetailChart";
-import { tokens } from "../../utils/Tokens";
-import {fmt, pct, usd} from "../../utils/Helpers";
-import { AnalyseBadges } from "../../components/details/common/AnalyseBadge";
-import { RateBar } from "../../components/details/common/RateBar";
-import { FunnelViz } from "../../components/details/common/FunnelViz";
-import { GlobalOverview } from "../../components/details/GlobalOverView";
-import { GlobalTable } from "../../components/details/GlobalTable";
-import { DimSection } from "../../components/details/common/DimSection";
+import { SmartChart } from "../../../components/chart/AdvertiserDetailChart.jsx";
+import { tokens } from "../../../utils/Tokens.js";
+import {fmt, pct, usd} from "../../../utils/Helpers.js";
+import { AnalyseBadges } from "../../../components/details/common/AnalyseBadge.jsx";
+import { RateBar } from "../../../components/details/common/RateBar.jsx";
+import { FunnelViz } from "../../../components/details/common/FunnelViz.jsx";
+import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
+import { GlobalTable } from "../../../components/details/GlobalTable.jsx";
+import { DimSection } from "../../../components/details/common/DimSection.jsx";
 
 
 /* 
@@ -288,7 +288,6 @@ const AdvertiserDetail = ({ _mockData }) => {
   const [loading, setLoading] = useState(!_mockData);             // État chargement
   const [viewMode, setViewMode] = useState("chart");              // Mode affichage : \"chart\" ou \"table\"
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"
-  const { state } = useLocation();
   const [openPopover, setOpenPopover] = useState(null) // Etat pour gérer l'ouverture du popover d'explication du health score
   
   // Etat pour stocker les mapping agences et databases 

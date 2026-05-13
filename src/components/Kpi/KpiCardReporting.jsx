@@ -63,7 +63,7 @@ const getIcon = (label, color) => {
  *   color="#1890ff"
  * />
  */
-const KpiCardAdvertiser = ({ label, value, color }) => {
+const KpiCardReporting = ({ label, value, color }) => {
   const Icon = getIcon(label, color);
 
   return (
@@ -118,4 +118,4 @@ const KpiCardAdvertiser = ({ label, value, color }) => {
   );
 };
 
-export default KpiCardAdvertiser;
+export default KpiCardReporting;

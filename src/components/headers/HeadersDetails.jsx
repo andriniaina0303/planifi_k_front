@@ -16,7 +16,9 @@ import { tokens } from "../../utils/Tokens";
 
 export const HeadersDetails = ({open,setOpen,styles,data,totalBrands,health,navigate,getHealthLabel}) => {
     const location = useLocation();
-    const advertiser = location.state?.advertiser;
+    console.log("State in HeadersDetails:", location.state);
+    const advertiser = location.state?.record;
+    console.log("Advertiser in HeadersDetails:", advertiser);
     const fmt = (v) => Number(v ?? 0).toLocaleString("fr-FR");
 
 // ── SmartChart ────────────────────────────────────────────────────────────────

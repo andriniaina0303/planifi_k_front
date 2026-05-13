@@ -16,9 +16,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Pages principales
 import Home from "./pages/Home/Home";
-import Advertisers from "./pages/Reporting/Advertisers";
-import AdvertiserDetail from "./pages/Reporting/AdvertiserDetail";
-import Database from "./pages/Reporting/Databases";
+import Advertisers from "./pages/Reporting/Advertisers/Advertisers";
+import AdvertiserDetail from "./pages/Reporting/Advertisers/AdvertiserDetail";
+import Databases from "./pages/Reporting/Databases/Databases";
 import Counting from "./pages/Counting/Counting";
 import LoginPage from "./pages/Login/Login";
 
@@ -50,7 +50,7 @@ export default function App() {
           <Route path="reporting/advertisers/:advertiser_id" element={<AdvertiserDetail />} />
           
           {/* Gestion des bases de données */}
-          <Route path="reporting/database" element={<Database />} />
+          <Route path="reporting/database" element={<Databases />} />
 
           {/* ================= MODULE COUNTING ================= */}
           <Route path="counting" element={<Counting />}>

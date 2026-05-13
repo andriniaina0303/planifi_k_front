@@ -12,16 +12,16 @@
  * Par défaut, affiche les données des 90 derniers jours
  */
 import React, { useEffect, useMemo, useState } from "react";
-import { get_liste_advertisers, getMappingData, getMappingValue } from "../../api/advertiser";
-import "../../assets/css/advertisers.css";
-import { listetags } from "../../components/table/AdvertisersTable";
+import { get_liste_advertisers, getMappingData, getMappingValue } from "../../../api/advertiser";
+import "../../../assets/css/advertisers.css";
+import { listetags } from "../../../components/table/AdvertisersTable";
 import { Card, Row, Col } from "antd";
-import KpiCardAdvertiser from "../../components/Kpi/KpiCardAdvertiser";
-import AdvertisersTable from "../../components/table/AdvertisersTable";
+import KpiCardReporting from "../../../components/Kpi/KpiCardReporting";
+import AdvertisersTable from "../../../components/table/AdvertisersTable";
 import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-design/icons";
-import ChartSwitcher from "../../components/chart/ChartSwitcher";
-import TopTagsEcpm from "../../components/chart/TopTagsEcpm";
-import FilterAdvertiser, { DEFAULT_FILTERS } from "../../components/filter/FilterAdvertiser";
+import ChartSwitcher from "../../../components/chart/ChartSwitcher";
+import TopTagsEcpm from "../../../components/chart/TopTagsEcpm";
+import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
 
 /**
  * Composant Advertisers
@@ -92,8 +92,8 @@ const Advertisers = () => {
     let d = [...listeAdvertiser];
 
     // Filtrer par annonceur spécifique si sélectionné
-    if (filters.advertiser !== "ALL") {
-      d = d.filter((a) => a.advertiser_name === filters.advertiser);
+    if (filters.all_fields !== "ALL") {
+      d = d.filter((a) => a.advertiser_name === filters.all_fields);
     }
 
     // Filtrer par taux de clic
@@ -235,7 +235,7 @@ useEffect(() => {
       {/* ── KPI Cards ── */}
       <Row gutter={16}>
         {stats.map((s, idx) => (
-          <KpiCardAdvertiser
+          <KpiCardReporting
             key={idx}
             label={s.label}
             value={s.value}
@@ -243,6 +243,16 @@ useEffect(() => {
           />
         ))}
       </Row>
+      
+      {/* ── Filtres ── */}
+      <FilterReporting
+        labelFilter="Advertisers"
+        filters={filters}
+        setFilters={setFilters}
+        listes={listeAdvertiser}
+        idList="advertiser_id"
+        keyList="advertiser_name"
+      />
 
       {/* ── Chart des Tops ── */}
       <Row gutter={12} wrap={false}>
@@ -254,12 +264,6 @@ useEffect(() => {
         </Col>
       </Row>
 
-      {/* ── Filtres ── */}
-      <FilterAdvertiser
-        filters={filters}
-        setFilters={setFilters}
-        listeAdvertiser={listeAdvertiser}
-      />
 
       {/* ── Table ── */}
       <Row>
@@ -272,7 +276,7 @@ useEffect(() => {
           }}
           bodyStyle={{ padding: 0 }}
         >
-          <AdvertisersTable data={filteredData} tagMapping={tagMapping} />
+          <AdvertisersTable data={filteredData} tagMapping={tagMapping} dataKey="advertiser" />
         </Card>
       </Row>
     </div>

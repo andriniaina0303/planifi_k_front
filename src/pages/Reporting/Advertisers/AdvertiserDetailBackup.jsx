@@ -1710,7 +1710,7 @@ import {
   CrownOutlined, HeartOutlined,
 } from "@ant-design/icons";
 import { Chart, registerables } from "chart.js";
-import { get_advertisers_detail } from "../../api/advertiser";
+import { get_advertisers_detail } from "../../../api/advertiser";
 
 Chart.register(...registerables);
 

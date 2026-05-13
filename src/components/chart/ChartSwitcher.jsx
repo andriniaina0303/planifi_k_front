@@ -52,7 +52,7 @@ const ChartCanvas = ({ config, height = 220 }) => {
  * @param {Object} props
  * @param {Array} props.data - Données des annonceurs
  */
-const ChartSwitcher = ({ data }) => {
+const ChartSwitcher = ({ data, keyFields="advertiser_name" }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Calculs des top 10 par métrique
@@ -88,7 +88,7 @@ const ChartSwitcher = ({ data }) => {
       config: {
         type: "bar",
         data: {
-          labels: top5Sends.map((a) => a.advertiser_name),
+          labels: top5Sends.map((a) => a[keyFields]),
           datasets: [{ label: "Sends", data: top5Sends.map((a) => a.globales.sends), backgroundColor: "#1890ff", borderRadius: 4}],
         },
         options: commonBarOptions(),
@@ -104,7 +104,7 @@ const ChartSwitcher = ({ data }) => {
       config: {
         type: "bar",
         data: {
-          labels: top5Sends.map((a) => a.advertiser_name),
+          labels: top5Sends.map((a) => a[keyFields]),
           datasets: [
             { label: "Openers", data: top5Sends.map((a) => a.globales.openers), backgroundColor: "#52c41a", borderRadius: 4, stack: "a" },
             { label: "Clickers", data: top5Sends.map((a) => a.globales.clickers), backgroundColor: "#faad14", borderRadius: 4, stack: "a" },
@@ -123,7 +123,7 @@ const ChartSwitcher = ({ data }) => {
       config: {
         type: "bar",
         data: {
-          labels: top5CA.map((a) => a.advertiser_name),
+          labels: top5CA.map((a) => a[keyFields]),
           datasets: [{
             data: top5CA.map((a) => a.globales.ca),
             backgroundColor: COLORS.slice(0, top5CA.length),
@@ -145,7 +145,7 @@ const ChartSwitcher = ({ data }) => {
       config: {
         type: "bar",
         data: {
-          labels: top5eCPM.map((a) => a.advertiser_name),
+          labels: top5eCPM.map((a) => a[keyFields]),
           datasets: [{ label: "eCPM", data: top5eCPM.map((a) => a.globales.ecpm), backgroundColor: "#722ed1", borderRadius: 4 }],
         },
         options: commonBarOptions(),
