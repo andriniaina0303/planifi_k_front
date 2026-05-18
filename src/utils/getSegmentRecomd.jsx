@@ -1,13 +1,13 @@
 import { tokens } from "./Tokens";
 import { TeamOutlined, HeartOutlined, GlobalOutlined } from "@ant-design/icons";
 
-export const buildRecommendations = (data) => {
+export const buildRecommendations = (data, key_value) => {
   const merged = {};
 
-  data.bases.forEach((base) => {
-    if (!base.dimensions) return;
+  data[key_value]?.forEach((key_val) => {
+    if (!key_val.dimensions) return;
 
-    Object.entries(base.dimensions).forEach(([dimKey, dimData]) => {
+    Object.entries(key_val.dimensions).forEach(([dimKey, dimData]) => {
       if (!merged[dimKey]) merged[dimKey] = {};
 
       Object.entries(dimData).forEach(([seg, vals]) => {

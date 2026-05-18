@@ -9,18 +9,21 @@ import {
     QuestionCircleOutlined,
     BarChartOutlined,
     TableOutlined,
+    NotificationFilled 
 } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import { HealthExplainer } from "../healthComponents/HealthKit";
 import { tokens } from "../../utils/Tokens";
 
-export const HeadersDetails = ({open,setOpen,styles,data,totalBrands,health,navigate,getHealthLabel}) => {
+export const HeadersDetails = ({labelKey,open,setOpen,styles,data,totalBrands,health,navigate,getHealthLabel}) => {
     const location = useLocation();
     console.log("State in HeadersDetails:", location.state);
-    const advertiser = location.state?.record;
-    console.log("Advertiser in HeadersDetails:", advertiser);
+    const record = location.state?.record;
+    console.log(`${labelKey} in HeadersDetails:`, record);
     const fmt = (v) => Number(v ?? 0).toLocaleString("fr-FR");
 
+    // Conditionner lés clés a utiliser en fonction du labelKey 
+    const key_value = labelKey === "database" ? "advertisers" : "bases";
 // ── SmartChart ────────────────────────────────────────────────────────────────
 
 const SmartChart = ({
@@ -145,13 +148,13 @@ const SmartChart = ({
                 letterSpacing: -0.5,
                 }}
             >
-                {advertiser.advertiser_name}
+                {record[`${labelKey}_name`]}
             </div>
             <div style={{ display: "flex", gap: 16, marginTop: 4 }}>
                 {[
                 {
-                    icon: <DatabaseOutlined />,
-                    text: `${data?.bases?.length || 0} bases`,
+                    icon: labelKey === "advertiser" ? <DatabaseOutlined /> : <NotificationFilled/> ,
+                    text: `${data[key_value]?.length || 0} ${key_value}`,
                 },
                 {
                     icon: <MailOutlined />,

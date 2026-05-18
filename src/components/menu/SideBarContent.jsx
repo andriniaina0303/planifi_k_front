@@ -10,12 +10,35 @@ import MenuItem from "../bouton/MenuItem";
 import CountingMenuItem from "./CountingMenuItem";
 
 import api, { logout } from "../../api/interceptor";
+import { Modal } from "antd";
+import  {ExclamationCircleFilled} from "@ant-design/icons";
 
 const activeStyle = {
   backgroundColor: "rgba(79, 209, 197, 0.15)",
   borderLeft: "3px solid #4fd1c5",
   borderRadius: "6px",
 };
+
+
+const showLogoutModal = () => {
+  Modal.confirm({
+    title: "Déconnexion",
+    icon: <ExclamationCircleFilled />,
+    content: "Voulez-vous vraiment vous déconnecter ?",
+
+    centered: true,
+
+    okText: "Se déconnecter",
+    cancelText: "Annuler",
+
+    okButtonProps: {
+      danger: true,
+    },
+
+    onOk: logout,
+  });
+};
+
 
 const SidebarContent = ({ onClose }) => {
   const location = useLocation();
@@ -154,13 +177,14 @@ const SidebarContent = ({ onClose }) => {
         </div>
 
         {/* Logout */}
-        <button
-          className="btn btn-outline-success btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
-          onClick={logout}
-        >
-          <FiLogOut />
-          Déconnexion
-        </button>
+
+          <button
+            className="btn btn-outline-success btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
+            onClick={showLogoutModal}
+            >
+            <FiLogOut />
+            Déconnexion
+          </button>
       </div>
     </div>
   );

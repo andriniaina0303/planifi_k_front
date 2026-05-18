@@ -12,16 +12,13 @@
  * Par défaut, affiche les données des 90 derniers jours
  */
 import React, { useEffect, useMemo, useState } from "react";
-import { getMappingData } from "../../../api/advertiser";
 import { get_all_databases} from "../../../api/databases";
 import "../../../assets/css/advertisers.css";
-import { listetags } from "../../../components/table/AdvertisersTable";
 import { Card, Row, Col } from "antd";
 import KpiCardReporting from "../../../components/Kpi/KpiCardReporting";
-import AdvertisersTable from "../../../components/table/AdvertisersTable";
+import ReportingTable from "../../../components/table/ReportingTable";
 import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-design/icons";
 import ChartSwitcher from "../../../components/chart/ChartSwitcher";
-import TopTagsEcpm from "../../../components/chart/TopTagsEcpm";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
 import {TopDBEcpm} from "../../../components/chart/TopDBEcpm"
 
@@ -42,8 +39,6 @@ const Databases = () => {
   // État des filtres actifs — initialise avec les valeurs par défaut (90 derniers jours)
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-  // État pour les mappings de tags
-  const [tagMapping, setTagMapping] = useState({});
 
   /**
    * Convertit un objet dayjs en string au format YYYY-MM-DD
@@ -180,18 +175,12 @@ const Databases = () => {
   }, [filteredData]);
 
   /**
-   * Initialisation au montage : chargement des tags et des annonceurs
    * Les dates par défaut sont dans DEFAULT_FILTERS (90 derniers jours)
    */
 useEffect(() => {
   const init = async () => {
     try {
       console.log("🔄 Init starting...");
-      
-      const tags = await getMappingData('tags', 'tags');
-      console.log("✅ Tags loaded:", tags.length, "items");
-      console.log("allTags:", tags);
-      setTagMapping(tags);
 
       console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
       await fetchReporting(DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
@@ -277,7 +266,7 @@ useEffect(() => {
           }}
           bodyStyle={{ padding: 0 }}
         >
-          <AdvertisersTable data={filteredData} dataKey="database" />
+          <ReportingTable data={filteredData} dataKey="database" />
         </Card>
       </Row>
     </div>

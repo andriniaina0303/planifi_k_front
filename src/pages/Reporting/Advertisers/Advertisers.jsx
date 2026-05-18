@@ -14,10 +14,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { get_liste_advertisers, getMappingData, getMappingValue } from "../../../api/advertiser";
 import "../../../assets/css/advertisers.css";
-import { listetags } from "../../../components/table/AdvertisersTable";
+import { listetags } from "../../../components/table/ReportingTable";
 import { Card, Row, Col } from "antd";
 import KpiCardReporting from "../../../components/Kpi/KpiCardReporting";
-import AdvertisersTable from "../../../components/table/AdvertisersTable";
+import ReportingTable from "../../../components/table/ReportingTable";
 import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-design/icons";
 import ChartSwitcher from "../../../components/chart/ChartSwitcher";
 import TopTagsEcpm from "../../../components/chart/TopTagsEcpm";
@@ -276,7 +276,7 @@ useEffect(() => {
           }}
           bodyStyle={{ padding: 0 }}
         >
-          <AdvertisersTable data={filteredData} tagMapping={tagMapping} dataKey="advertiser" />
+          <ReportingTable data={filteredData} tagMapping={tagMapping} dataKey="advertiser" />
         </Card>
       </Row>
     </div>

@@ -97,6 +97,11 @@ const tagsPerf = Object.entries(tagMapping).map(([id, name]) => {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 25,
+          },
+        },
         plugins: {
           legend: { display: false },
           tooltip: {

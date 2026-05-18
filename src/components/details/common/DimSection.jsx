@@ -2,7 +2,7 @@ import {TeamOutlined, HeartOutlined, GlobalOutlined} from "@ant-design/icons";
 import { Card, Col, Row, Table, Tag, Typography } from "antd";
 import { fmt, pct} from "../../../utils/Helpers";
 import { tokens } from "../../../utils/Tokens";
-import { SmartChart } from "../../chart/AdvertiserDetailChart";
+import { SmartChart } from "../../chart/ReportingDetailsChart";
 import { AnalyseBadges } from "./AnalyseBadge";
 
 const { Text } = Typography;
