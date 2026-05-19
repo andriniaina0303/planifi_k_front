@@ -65,8 +65,9 @@ import {
   DislikeOutlined,
 } from "@ant-design/icons";
 import { Chart, registerables } from "chart.js";
-import ReportingDetailCharts from "../../../components/chart/ReportingDetailsChart.jsx"; 
-import { get_advertisers_detail, getMappingData, getMappingValue} from "../../../api/advertiser.js";
+import ReportingDetailCharts from "../../../components/chart/ReportingDetailsChart.jsx";
+import { get_databases_detail } from "../../../api/databases.js";
+import { getMappingData } from "../../../api/advertiser.js";
 import { useLocation } from "react-router-dom";
 import { TabExtraContent } from "../../../components/bouton/SwitchBtnTableChart.jsx";
 
@@ -278,8 +279,8 @@ const KpiDashboard = ({ g }) => {
  * Affiche un header avec informations globales, puis 3 onglets (Analyse globale, Bases, Dimensions).
  * Gère les états : loading, data absent, viewMode (chart/table), mainTab (global/bases/dimensions).
  */
-const AdvertiserDetail = ({ _mockData }) => {
-  const { advertiser_id } = useParams();
+const DatabaseDetail = ({ _mockData }) => {
+  const { database_id } = useParams();
   const navigate = useNavigate();
   
   // État de la page
@@ -292,7 +293,7 @@ const AdvertiserDetail = ({ _mockData }) => {
   
   // Etat pour stocker les mapping agences et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
-  const [databaseMapping, setDatabaseMapping] = useState({});
+  const [advertiserMapping, setAdvertiserMapping] = useState({});
 
 useEffect(() => {
   const handleScroll = (e) =>{
@@ -311,13 +312,14 @@ useEffect(() => {
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
   const fetchMappings = useCallback(async () => {
   try {
-    const [agences, databases] = await Promise.all([
+    const [agences, advertiser] = await Promise.all([
       getMappingData('agences', 'agences'),
-      getMappingData('all_bases', 'databases'),
+      getMappingData('all_advertisers', 'advertiser'),
     ]);
 
     setAgenceMapping(agences);
-    setDatabaseMapping(databases);
+    console.log("Advertiser Mapping:", advertiser);
+    setAdvertiserMapping(advertiser);
 
   } catch (e) {
     console.error(e);
@@ -328,7 +330,8 @@ useEffect(() => {
   const fetchd = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await get_advertisers_detail(advertiser_id);
+      console.log("Database ID:", database_id);
+      const res = await get_databases_detail(database_id);
       console.log(res);
       setData(res);
     } catch (e) {
@@ -336,13 +339,13 @@ useEffect(() => {
     } finally {
       setLoading(false);
     }
-  }, [advertiser_id]);
+  }, [database_id]);
 
   /* Effect : charge les bases au mount et recharge les données si _mockData change ou ID change */
   useEffect(() => {
     fetchMappings();
     if (!_mockData) fetchd();
-  }, [advertiser_id, _mockData, fetchMappings]);
+  }, [database_id, _mockData, fetchMappings]);
 
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
@@ -413,7 +416,7 @@ useEffect(() => {
               </Text>
               <br />
               <Text type="secondary" style={{ fontSize: 12 }}>
-                Advertiser #{advertiser_id}
+                Database #{database_id}
               </Text>
             </div>
           }
@@ -432,14 +435,14 @@ useEffect(() => {
   /* Calculs pour l'affichage du header : score de santé global et nombre total de brands */
   const health = getHealthScore(data.globales);
   const totalBrands =
-    data.bases?.reduce((s, b) => s + (b.brands?.length || 0), 0) || 0;
+    data.advertisers?.reduce((s, b) => s + (b.brands?.length || 0), 0) || 0;
 
   /* Rendu principal : page complète du rapport avec header et onglets */
   return (
     <div style={styles.page}>
       {/* Header */}
       <HeadersDetails 
-        labelKey="advertiser"
+        labelKey="database"
         open={openPopover}
         setOpen={setOpenPopover}
         styles={styles} 
@@ -464,18 +467,18 @@ useEffect(() => {
           tabBarStyle={{ marginBottom: 0, fontWeight: 600 }}
 
           // Ajouter Segmented
-          tabBarExtraContent={
-            <TabExtraContent
-              mainTab={mainTab}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              data={data}
-              clsConfig={clsConfig}
-              agenceMapping={agenceMapping}
-              allbase={databaseMapping}
-              advertiser_id={advertiser_id} 
-            />
-          }
+          // tabBarExtraContent={
+          //   <TabExtraContent
+          //     mainTab={mainTab}
+          //     viewMode={viewMode}
+          //     setViewMode={setViewMode}
+          //     data={data}
+          //     clsConfig={clsConfig}
+          //     agenceMapping={agenceMapping}
+          //     allbase={advertiserMapping}
+          //     advertiser_id={advertiser_id} 
+          //   />
+          // }
 
           items={[
             {
@@ -488,7 +491,7 @@ useEffect(() => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" />
+                  {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} /> */}
                 </div>
               ),
             },
@@ -513,7 +516,7 @@ useEffect(() => {
                   overflow: "hidden",
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
-                  <GlobalTable bases={data.bases} allbase={databaseMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} />
+                  {/* <GlobalTable bases={data.bases} allbase={advertiserMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} /> */}
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />
                     Détail par base ({data.bases?.length})
@@ -540,9 +543,9 @@ useEffect(() => {
                   {/* Onglet 3 : Analyse agrégée des dimensions (Age, Genre, ISP) sur toutes les bases */}
                   {(() => {
                     const merged = {};
-                    data.bases.forEach((base) => {
-                      if (!base.dimensions) return;
-                      Object.entries(base.dimensions).forEach(
+                    data.advertisers.forEach((adv) => {
+                      if (!adv.dimensions) return;
+                      Object.entries(adv.dimensions).forEach(
                         ([dimKey, dimData]) => {
                           if (!merged[dimKey]) merged[dimKey] = {};
                           Object.entries(dimData).forEach(([seg, vals]) => {
@@ -604,11 +607,11 @@ useEffect(() => {
           fontSize: 11,
         }}
       >
-        Rapport généré automatiquement · Advertiser #{data.advertiser_id} ·{" "}
+        Rapport généré automatiquement · Database #{data.database_id} ·{" "}
         {new Date().toLocaleDateString("fr-FR")}
       </div>
     </div>
   );
 };
 
-export default AdvertiserDetail;
+export default DatabaseDetail;

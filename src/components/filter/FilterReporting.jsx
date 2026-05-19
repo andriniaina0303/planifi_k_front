@@ -11,8 +11,9 @@
  * - Trier les résultats par métrique
  */
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Card, Row, Col, Select, Button, DatePicker } from "antd";
+import { FilterOutlined, ReloadOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 const { Option } = Select;
@@ -79,24 +80,103 @@ const DEFAULT_FILTERS = {
  * @returns {JSX.Element} Barre de filtres avec sélecteurs
  */
 const FilterReporting = ({labelFilter, filters, setFilters, listes, idList, keyList }) => {
+  // ── État local pour les dates en attente de validation ──
+  const [pendingDates, setPendingDates] = useState({
+    scheduleStart: filters.scheduleStart,
+    scheduleEnd: filters.scheduleEnd,
+  });
+
+  // ── Déterminer si les dates ont changé ──
+  const hasDateChanged = useMemo(() => {
+    return (
+      !pendingDates.scheduleStart?.isSame(filters.scheduleStart) ||
+      !pendingDates.scheduleEnd?.isSame(filters.scheduleEnd)
+    );
+  }, [pendingDates, filters]);
+
   /**
    * Réinitialise tous les filtres à leurs valeurs par défaut (90 derniers jours)
    */
-  const handleReset = () => setFilters(DEFAULT_FILTERS);
+  const handleReset = () => {
+    setFilters(DEFAULT_FILTERS);
+    setPendingDates({
+      scheduleStart: DEFAULT_FILTERS.scheduleStart,
+      scheduleEnd: DEFAULT_FILTERS.scheduleEnd,
+    });
+  };
 
-   /**
-   * Gère le changement de la plage de dates
-   * @param {[dayjs.Dayjs, dayjs.Dayjs] | null} dates
+  /**
+   * Applique les dates en attente à l'état global des filtres
    */
-  const handleDateChange = (dates) => {
-    setFilters({ ...filters, dateRange: dates ?? getDefaultDateRange() });
+  const handleApplyDateFilter = () => {
+    setFilters({
+      ...filters,
+      scheduleStart: pendingDates.scheduleStart,
+      scheduleEnd: pendingDates.scheduleEnd,
+    });
+  };
+
+  /**
+   * Annule les modifications de dates (restaure les valeurs précédentes)
+   */
+  const handleCancelDateFilter = () => {
+    setPendingDates({
+      scheduleStart: filters.scheduleStart,
+      scheduleEnd: filters.scheduleEnd,
+    });
   };
 
   return (
     <Card style={{ borderRadius: 10, background: "#ffffff" }}>
-      <Row gutter={12} align="bottom">     
+      <Row gutter={8} align="bottom">     
         {/* ================= FILTRE ANNONCEUR ================= */}
-        <Col span={4}>
+
+        {/* ================= DATE DÉBUT ================= */}
+        <Col span={2.4}>
+          <div style={styles.filterCol}>
+            <span style={styles.filterLabel}>Start Date</span>
+            <DatePicker
+              value={pendingDates.scheduleStart}
+              onChange={(date) =>
+                setPendingDates({
+                  ...pendingDates,
+                  scheduleStart: date,
+                })
+              }
+              style={{ width: "80%" }}
+              format="YYYY-MM-DD"
+              placeholder="Start"
+              status={
+                hasDateChanged ? "warning" : ""
+              }
+            />
+          </div>
+        </Col>
+
+        {/* ================= DATE FIN ================= */}
+        <Col span={2.4}>
+          <div style={styles.filterCol}>
+            <span style={styles.filterLabel}>End Date</span>
+            <DatePicker
+              value={pendingDates.scheduleEnd}
+              onChange={(date) =>
+                setPendingDates({
+                  ...pendingDates,
+                  scheduleEnd: date,
+                })
+              }
+              style={{ width: "80%" }}
+              format="YYYY-MM-DD"
+              placeholder="End"
+              status={
+                hasDateChanged ? "warning" : ""
+              }
+            />
+          </div>
+        </Col>
+
+        {/* ================= FILTRE {labelFilter} ================= */}
+        <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>{labelFilter}</span>
             <Select
@@ -122,9 +202,6 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, idList, keyL
             </Select>
           </div>
         </Col>
-
-
-        
 
         {/* ================= FILTRE eCPM ================= */}
         <Col span={2.4}>
@@ -211,53 +288,49 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, idList, keyL
           </div>
         </Col>
 
-        {/* ================= DATE DÉBUT ================= */}
-        <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>Start Date</span>
-            <DatePicker
-              value={filters.scheduleStart}
-              onChange={(date) =>
-                setFilters({
-                  ...filters,
-                  scheduleStart: date,
-                })
-              }
-              style={{ width: "100%" }}
-              format="YYYY-MM-DD"
-              placeholder="Start"
-            />
-          </div>
-        </Col>
-
-        {/* ================= DATE FIN ================= */}
-        <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>End Date</span>
-            <DatePicker
-              value={filters.scheduleEnd}
-              onChange={(date) =>
-                setFilters({
-                  ...filters,
-                  scheduleEnd: date,
-                })
-              }
-              style={{ width: "100%" }}
-              format="YYYY-MM-DD"
-              placeholder="End"
-            />
-          </div>
-        </Col>
-
-        {/* ================= BOUTON RESET ================= */}
+        {/* ================= BOUTON RESET (TOUJOURS VISIBLE) ================= */}
         <Col span={2.4}>
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>&nbsp;</span>
-            <Button type="primary" style={{ width: "100%" }} onClick={handleReset}>
+            <Button 
+              type="primary"
+              icon={<ReloadOutlined />}
+              style={{ width: "100%" }} 
+              onClick={handleReset}
+              title="Réinitialiser tous les filtres"
+            >
               Reset
             </Button>
           </div>
         </Col>
+
+        {/* ================= BOUTON FILTER (APPARAÎT SI DATES MODIFIÉES) ================= */}
+        {hasDateChanged && (
+          <Col span={2.4}>
+            <div style={styles.filterCol}>
+              <span style={styles.filterLabel}>&nbsp;</span>
+              <div style={{ display: "flex", gap: 6 }}>
+                <Button 
+                  type="primary"
+                  icon={<FilterOutlined />}
+                  style={{ flex: 1, background: "#1890ff", borderColor: "#1890ff" }}
+                  onClick={handleApplyDateFilter}
+                  title="Appliquer la plage de dates"
+                >
+                  Filter
+                </Button>
+                <Button 
+                  type="default"
+                  style={{ flex: 1 }}
+                  onClick={handleCancelDateFilter}
+                  title="Annuler les modifications"
+                >
+                  ✕
+                </Button>
+              </div>
+            </div>
+          </Col>
+        )}
       </Row>
     </Card>
   );

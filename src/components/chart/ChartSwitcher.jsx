@@ -76,7 +76,7 @@ const ChartSwitcher = ({ data, keyFields="advertiser_name" }) => {
     plugins: { legend: { display: false } },
     scales: {
       x: { grid: { color: "rgba(0,0,0,0.06)" } },
-      y: { grid: { display: false }, ticks:{autoSkip:false,padding:8}}
+      y: { grid: { display: false }, ticks:{autoSkip:false,padding:0}}
     },
   });
 

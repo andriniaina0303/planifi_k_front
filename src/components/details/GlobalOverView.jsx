@@ -1,6 +1,6 @@
 import { getHealthScore } from "../../utils/healthKitFunc";
-import { SmartChart } from "../chart/AdvertiserDetailChart";
-import AdvertiserDetailCharts from "../chart/AdvertiserDetailChart";
+import { SmartChart } from "../chart/ReportingDetailsChart";
+import ReportingDetailCharts from "../chart/ReportingDetailsChart";
 import { HealthGauge, HealthExplainer } from "../healthComponents/HealthKit";
 import {
   FundOutlined,
@@ -31,6 +31,7 @@ import { pct,fmt } from "../../utils/Helpers";
 import { buildRecommendations } from "../../utils/getSegmentRecomd";
 import { TopBrandsSlider } from "./common/CreateColsTop";
 import { decodeBase64 } from "../../utils/utils";
+import { getKeyMapping } from "../../utils/getDataKeys";
 
 const {Text, Paragraph} = Typography;
 
@@ -41,7 +42,7 @@ const {Text, Paragraph} = Typography;
  * Calcule pour chaque dimension : meilleur CTR, meilleur open rate, moins de désabos, segment à éviter.
  * Affiche recommandations formatées avec synthèse textuelle pour optimiser le ciblage.
  */
-const SegmentRecommendations = ({ data, styles,recommendations }) => {
+const SegmentRecommendations = ({styles,recommendations }) => {
  
  
   if (recommendations.length === 0) return null;
@@ -421,12 +422,16 @@ const SyntheseText = ({ recommendations = [] }) => {
  * En haut (côte à côte) : slider Top Brands et recommandations par segment.
  * En bas : graphiques comparatifs par base et autres analyses.
  */
-export const GlobalOverview = ({ open, setOpen, data, allbase, styles}) => {
+export const GlobalOverview = ({ open, setOpen, data, mappingData, styles, label_value }) => {
   const g = data.globales;
+  const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(mappingData);
+  const key_value = label_value === "database" ? "advertisers" : "bases";
   const health = getHealthScore(g);
-  const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
+  console.log("MappingData:", mappingData);
+  const dataMapped = Object.fromEntries(mappingData.map((db) => [db[idKey], db[nameKey]]));
+  console.log("DataMapped:", dataMapped);
   const recommendations = useMemo(() => {
-    return buildRecommendations(data);
+    return buildRecommendations(data,key_value);
   }, [data]);
   
   return (
@@ -435,7 +440,6 @@ export const GlobalOverview = ({ open, setOpen, data, allbase, styles}) => {
         {/* Slider Top Brands */}
         <Col xs={24} lg={24}>
           <SegmentRecommendations 
-            data={data} 
             styles={styles} 
             recommendations={recommendations}
           />     
@@ -445,13 +449,8 @@ export const GlobalOverview = ({ open, setOpen, data, allbase, styles}) => {
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         {/* Slider Top Brands */}
         <Col xs={24} lg={24}>
-          <TopBrandsSlider data={data} styles={styles} />
+          <TopBrandsSlider data={data} styles={styles} key_value={key_value} label_value={label_value} />
         </Col>
-
-        {/* Recommandations par segment */}
-        {/* <Col xs={24} lg={9}>
-
-        </Col> */}
       </Row>
 
       {/* ── SECTION BASSE : KPIs ET GRAPHIQUES ── */}
@@ -534,9 +533,12 @@ export const GlobalOverview = ({ open, setOpen, data, allbase, styles}) => {
       </Row>
         
      {/* ── CHARTS : Taux d'engagement et revenue par base ── */}
-      <AdvertiserDetailCharts
-        bases={data.bases}
-        dbMap={dbMap}
+      <ReportingDetailCharts
+        key_value={data[key_value]}
+        label_value={key_value}
+        idKey = {idKey}
+        nameKey = {nameKey}
+        dataMapped={dataMapped}
         styles={styles}
         tokens={tokens}
         SmartChart={SmartChart}

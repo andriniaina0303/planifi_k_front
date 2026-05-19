@@ -82,6 +82,28 @@ if (startDate && endDate) {
   return response.data;
 }
 
+
+export async function get_databases_detail(database_id) {
+  if (USE_MOCK) {
+    console.log("⚡ Using MOCK data");
+    return new Promise((resolve) => { setTimeout(() => resolve(mockDataDetail), 300); });
+  }
+  const response = await api.get(config.REACT_APP_ENDPOINT_DATABASE_DETAIL + database_id, { timeout: 120000 });
+  return response.data;
+}
+
+// export async function get_segment_name(database_id, segment_id) {
+//   if (!database_id || !segment_id) return null;
+//   const response = await api.get(
+//     `${config.REACT_APP_ENDPOINT_ALL_SEGMENT}?database_id=${database_id}&segment_id=${segment_id}`,
+//     { timeout: 120000 }
+//   );
+//   const data = response.data;
+//   if (Array.isArray(data) && data.length > 0) return data[0].segment_name;
+//   return data?.segment_name ?? null;
+// }
+
+
 /**
  * Récupère tous les segments disponibles pour filtrer les données
  * 

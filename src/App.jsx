@@ -6,6 +6,7 @@ import Home from "./pages/Home/Home";
 import Advertisers from "./pages/Reporting/Advertisers/Advertisers";
 import AdvertiserDetail from "./pages/Reporting/Advertisers/AdvertiserDetail";
 import Databases from "./pages/Reporting/Databases/Databases";
+import DatabaseDetail from "./pages/Reporting/Databases/DatabaseDetails";
 import Counting from "./pages/Counting/Counting";
 import LoginPage from "./pages/Login/Login";
 import { resetInactivityTimer } from "./api/interceptor";
@@ -96,6 +97,10 @@ export default function App() {
           
           {/* Gestion des bases de données */}
           <Route path="reporting/database" element={<Databases />} />
+
+          {/* Affiche les détails spécifiques d'un Database */}
+          {/* :advertiser_id est un paramètre dynamique extrait de l'URL */}
+          <Route path="reporting/database/:database_id" element={<DatabaseDetail />} />
 
           {/* ── MODULE COUNTING ── */}
           <Route path="counting" element={<Counting />}>

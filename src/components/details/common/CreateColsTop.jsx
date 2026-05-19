@@ -22,7 +22,7 @@ const { Text } = Typography;
  * 3. Top 10 objets par Open Rate
  * Les titres et sous-titres sont dynamiques selon l'onglet.
  */
-export const TopBrandsSlider = ({ data, styles }) => {
+export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
   const carouselRef = useRef();
 
   // Configuration des 3 vues
@@ -61,14 +61,14 @@ export const TopBrandsSlider = ({ data, styles }) => {
     return viewConfigs.map((config) => {
       const allBrands = [];
 
-      if (data?.bases && Array.isArray(data.bases)) {
-        data.bases.forEach((base) => {
-          if (base.brands && Array.isArray(base.brands)) {
-            base.brands.forEach((brand) => {
+      if (data[key_value] && Array.isArray(data[key_value])) {
+        data[key_value].forEach((kv) => {
+          if (kv.brands && Array.isArray(kv.brands)) {
+            kv.brands.forEach((brand) => {
               allBrands.push({
                 ...brand,
-                database_name: base.database_name,
-                database_id: base.database_id,
+                [`${label_value}_name`]: kv[`${label_value}_name`],
+                [`${label_value}_id`]: kv[`${label_value}_id`],
               });
             });
           }
@@ -237,7 +237,7 @@ export const TopBrandsSlider = ({ data, styles }) => {
   const getTableData = (brands) =>
     brands.map((brand, index) => ({
       ...brand,
-      key: `${brand.database_id}-${brand.name || brand.subject}`,
+      key: `${brand[`${label_value}_id`]}-${brand.name || brand.subject}`,
       rank: index + 1,
     }));
 

@@ -179,7 +179,7 @@ const AnalyseTooltip = ({ analyse }) => (
   </div>
 );
 
-const AdvertisersTable = ({ data, tagMapping = [], dataKey }) => {
+const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
   const navigate = useNavigate();
 
   // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
@@ -417,5 +417,5 @@ const AdvertisersTable = ({ data, tagMapping = [], dataKey }) => {
   );
 };
 
-export default AdvertisersTable;
+export default ReportingTable;
 

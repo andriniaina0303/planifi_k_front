@@ -111,25 +111,24 @@ export const SmartChart = ({
  * @param {object[]} bases  - Tableau des bases de l'advertiser
  * @param {object}   dbMap  - Map { database_id → basename }
  */
-export const EngagementByBaseChart = ({ bases, dbMap,styles}) => (
+export const EngagementByBaseChart = ({ key_value, label_value, idKey, nameKey, dataMapped,styles}) => (
   <Card
     size="small"
     style={styles.card}
     title={
       <span style={styles.sectionTitle}>
-        <RiseOutlined style={{ color: tokens.success }} /> Taux d'engagement par
-        base
+        <RiseOutlined style={{ color: tokens.success }} /> Taux d'engagement par {label_value}
       </span>
     }
   >
     <SmartChart
       type="line"
-      labels={bases.map((b) => dbMap[b.database_id] || `DB #${b.database_id}`)}
+      labels={key_value.map((b) => dataMapped[b[idKey]] || `DB #${b[nameKey]}`)}
       height={200}
       datasets={[
         {
           label: "Open %",
-          data: bases.map((b) => b.taux_openers),
+          data: key_value.map((b) => b.taux_openers),
           borderColor: tokens.success,
           backgroundColor: `${tokens.success}22`,
           fill: true,
@@ -141,7 +140,7 @@ export const EngagementByBaseChart = ({ bases, dbMap,styles}) => (
         },
         {
           label: "CTR %",
-          data: bases.map((b) => b.taux_clickers),
+          data: key_value.map((b) => b.taux_clickers),
           borderColor: tokens.warning,
           backgroundColor: `${tokens.warning}22`,
           fill: true,
@@ -153,7 +152,7 @@ export const EngagementByBaseChart = ({ bases, dbMap,styles}) => (
         },
         {
           label: "Unsub %",
-          data: bases.map((b) => b.taux_unsubs),
+          data: key_value.map((b) => b.taux_unsubs),
           borderColor: tokens.danger,
           backgroundColor: `${tokens.danger}22`,
           fill: true,
@@ -176,24 +175,24 @@ export const EngagementByBaseChart = ({ bases, dbMap,styles}) => (
  * @param {object[]} bases  - Tableau des bases de l'advertiser
  * @param {object}   dbMap  - Map { database_id → basename }
  */
-export const RevenueByBaseChart = ({ bases, dbMap,styles }) => (
+export const RevenueByBaseChart = ({ key_value, label_value, idKey, nameKey, dataMapped,styles }) => (
   <Card
     size="small"
     style={styles.card}
     title={
       <span style={styles.sectionTitle}>
-        <DollarOutlined style={{ color: tokens.pink }} /> Revenue par base
+        <DollarOutlined style={{ color: tokens.pink }} /> Revenue par {label_value}
       </span>
     }
   >
     <SmartChart
       type="bar"
-      labels={bases.map((b) => dbMap[b.database_id] || `DB #${b.database_id}`)}
+      labels={key_value.map((b) => dataMapped[b[idKey]] || `DB #${b[nameKey]}`)}
       height={200}
       datasets={[
         {
           label: "CA",
-          data: bases.map((b) => b.ca || 0),
+          data: key_value.map((b) => b.ca || 0),
           backgroundColor: `${tokens.pink}66`,
           borderColor: tokens.pink,
           borderWidth: 1.5,
@@ -201,7 +200,7 @@ export const RevenueByBaseChart = ({ bases, dbMap,styles }) => (
         },
         {
           label: "eCPM",
-          data: bases.map((b) => b.ecpm || 0),
+          data: key_value.map((b) => b.ecpm || 0),
           backgroundColor: `${tokens.purple}66`,
           borderColor: tokens.purple,
           borderWidth: 1.5,
@@ -212,7 +211,7 @@ export const RevenueByBaseChart = ({ bases, dbMap,styles }) => (
   </Card>
 );
 
-// ── AdvertiserDetailCharts (wrapper regroupant les deux) ──────────────────────
+// ── ReportingDetailCharts (wrapper regroupant les deux) ──────────────────────
 
 /**
  * Composant combiné exposant les deux charts côte à côte dans une Row Ant Design.
@@ -220,15 +219,15 @@ export const RevenueByBaseChart = ({ bases, dbMap,styles }) => (
  * @param {object[]} bases  - Tableau des bases de l'advertiser
  * @param {object}   dbMap  - Map { database_id → basename }
  */
-const AdvertiserDetailCharts = ({ bases, dbMap, styles }) => (
+const ReportingDetailCharts = ({ key_value,label_value, idKey, nameKey, dataMapped, styles }) => (
   <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
     <Col xs={24} lg={12}>
-      <EngagementByBaseChart bases={bases} dbMap={dbMap} styles={styles} tokens={tokens} SmartChart={SmartChart} />
+      <EngagementByBaseChart key_value={key_value} label_value={label_value} idKey = {idKey} nameKey = {nameKey} dataMapped={dataMapped} styles={styles} tokens={tokens} SmartChart={SmartChart} />
     </Col>
     <Col xs={24} lg={12}>
-      <RevenueByBaseChart bases={bases} dbMap={dbMap} styles={styles} tokens={tokens} SmartChart={SmartChart}/>
+      <RevenueByBaseChart key_value={key_value} label_value={label_value} idKey = {idKey} nameKey = {nameKey} dataMapped={dataMapped} styles={styles} tokens={tokens} SmartChart={SmartChart}/>
     </Col>
   </Row>
 );
 
-export default AdvertiserDetailCharts;
+export default ReportingDetailCharts;
