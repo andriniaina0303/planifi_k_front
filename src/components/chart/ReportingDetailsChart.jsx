@@ -219,7 +219,8 @@ export const RevenueByBaseChart = ({ key_value, label_value, idKey, nameKey, dat
  * @param {object[]} bases  - Tableau des bases de l'advertiser
  * @param {object}   dbMap  - Map { database_id → basename }
  */
-const ReportingDetailCharts = ({ key_value,label_value, idKey, nameKey, dataMapped, styles }) => (
+const ReportingDetailCharts = ({ key_value,label_value, idKey, nameKey, dataMapped, styles }) =>{
+ return(
   <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
     <Col xs={24} lg={12}>
       <EngagementByBaseChart key_value={key_value} label_value={label_value} idKey = {idKey} nameKey = {nameKey} dataMapped={dataMapped} styles={styles} tokens={tokens} SmartChart={SmartChart} />
@@ -229,5 +230,5 @@ const ReportingDetailCharts = ({ key_value,label_value, idKey, nameKey, dataMapp
     </Col>
   </Row>
 );
-
+}
 export default ReportingDetailCharts;

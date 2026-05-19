@@ -529,7 +529,7 @@ useEffect(() => {
   const brandCols = createBrandCols(segmentNames,bases,listNames); // ← AJOUTE CETTE LIGNE
   const cols = [
     {
-      title: "Database",
+      title: "Advertiser",
       dataIndex: "database_id",
       fixed: "left",
       width: 180,

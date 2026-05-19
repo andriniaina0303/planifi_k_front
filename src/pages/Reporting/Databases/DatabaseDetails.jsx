@@ -467,18 +467,18 @@ useEffect(() => {
           tabBarStyle={{ marginBottom: 0, fontWeight: 600 }}
 
           // Ajouter Segmented
-          // tabBarExtraContent={
-          //   <TabExtraContent
-          //     mainTab={mainTab}
-          //     viewMode={viewMode}
-          //     setViewMode={setViewMode}
-          //     data={data}
-          //     clsConfig={clsConfig}
-          //     agenceMapping={agenceMapping}
-          //     allbase={advertiserMapping}
-          //     advertiser_id={advertiser_id} 
-          //   />
-          // }
+          tabBarExtraContent={
+            <TabExtraContent
+              mainTab={mainTab}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              data={data}
+              clsConfig={clsConfig}
+              agenceMapping={agenceMapping}
+              allbase={advertiserMapping}
+              advertiser_id={database_id} 
+            />
+          }
 
           items={[
             {
@@ -491,7 +491,7 @@ useEffect(() => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} /> */}
+                  <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} label_value="database" />
                 </div>
               ),
             },
@@ -501,7 +501,7 @@ useEffect(() => {
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <DatabaseOutlined /> Bases
                   <Badge
-                    count={data.bases?.length || 0}
+                    count={data.advertisers?.length || 0}
                     style={{
                       backgroundColor: tokens.primary,
                       fontSize: 10,
@@ -516,18 +516,7 @@ useEffect(() => {
                   overflow: "hidden",
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
-                  {/* <GlobalTable bases={data.bases} allbase={advertiserMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} /> */}
-                  {/* <div style={styles.sectionTitle}>
-                    <DatabaseOutlined style={{ color: tokens.primary }} />
-                    Détail par base ({data.bases?.length})
-                  </div>
-                  {data.bases.map((base) => (
-                    <BaseCard
-                      key={base.database_id}
-                      base={base}
-                      viewMode={viewMode}
-                    />
-                  ))} */}
+                  <GlobalTable bases={data.advertisers} allbase={advertiserMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} />
                 </div>
               ),
             },
