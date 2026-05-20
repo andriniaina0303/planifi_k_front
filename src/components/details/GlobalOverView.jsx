@@ -427,9 +427,9 @@ export const GlobalOverview = ({ open, setOpen, data, mappingData, styles, label
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(mappingData);
   const key_value = label_value === "database" ? "advertisers" : "bases";
   const health = getHealthScore(g);
-  console.log("MappingData:", mappingData);
+  // console.log("MappingData:", mappingData);
   const dataMapped = Object.fromEntries(mappingData.map((db) => [db[idKey], db[nameKey]]));
-  console.log("DataMapped:", dataMapped);
+  // console.log("DataMapped:", dataMapped);
   const recommendations = useMemo(() => {
     return buildRecommendations(data,key_value);
   }, [data]);

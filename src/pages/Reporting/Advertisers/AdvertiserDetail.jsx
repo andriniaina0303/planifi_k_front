@@ -513,7 +513,15 @@ useEffect(() => {
                   overflow: "hidden",
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
-                  <GlobalTable bases={data.bases} allbase={databaseMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} />
+                  <GlobalTable 
+                    bases={data.bases} 
+                    allbase={databaseMapping} 
+                    agencyName={agenceMapping} 
+                    clsConfig={clsConfig} 
+                    styles={styles} 
+                    viewMode={viewMode} 
+                    setViewMode={setViewMode} 
+                  />
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />
                     Détail par base ({data.bases?.length})

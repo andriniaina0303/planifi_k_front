@@ -50,7 +50,12 @@ const PopoverButton = ({
 
 
 
-export const buildSegmentButton = (segmentIds, segmentNames, baseId, tokens) => {
+export const buildSegmentButton = (segmentIds, segmentNames, Brand, tokens) => {
+  if (!Brand || !Brand.name) {
+    console.warn("Brand manquant ou sans .name:", Brand);
+    return null;
+  }
+  const brandKey = Brand.name;
   const content = (
     <div>
       {(!segmentIds || segmentIds.length === 0) ? (
@@ -59,7 +64,8 @@ export const buildSegmentButton = (segmentIds, segmentNames, baseId, tokens) => 
         </div>
       ) : (
         segmentIds.map((id) => {
-          const key = `${baseId}_${id}`;
+          const key = `${brandKey}_${id}`;
+          console.log(`Nom du segment pour ID ${id} : ${segmentNames[key] || "Inconnu"}`);
           return (
             <div key={id} style={{ padding: 8, fontSize: 12 }}>
               • {segmentNames[key] || id}
@@ -173,10 +179,9 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
   fixed: "left",
   render: (segmentIds, record) => {
     const listNamesForBrand = listNames[record.name] || [];
-
     const segmentBtn =
       segmentIds?.length > 0
-        ? buildSegmentButton(segmentIds, segmentNames, base.database_id, tokens)
+        ? buildSegmentButton(segmentIds, segmentNames, record, tokens)
         : null;
 
     const listBtn =

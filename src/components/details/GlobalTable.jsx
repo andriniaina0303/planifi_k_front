@@ -31,6 +31,7 @@ import { get_segment_name } from "../../api/advertiser";
 import { TabExtraContent } from "../bouton/SwitchBtnTableChart"; 
 import { createBrandCols } from "./brands/CreateColumns";
 import { getDimensionCollapseItems, DimensionsCollapse} from "./brands/DimensionsCollaps";
+import { getKeyMapping } from "../../utils/getDataKeys";
 const { Text } = Typography;
 
 
@@ -58,11 +59,12 @@ const CHART_PALETTE = [
  * Contient 3 onglets : Aperçu (KPIs + Funnel), Brands (tableau/chart), Dimensions (segments).
  * Affiche la classification (A/B/C/D), l'indicateur de santé, et les KPIs clés en header.
  */
-const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, segmentNames, listNames, agencyName }) => {
+const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, segmentNames, listNames, agencyName, idKey, nameKey }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
-  const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
+  const dbMap = Object.fromEntries(allbase.map((db) => [db[idKey], db[nameKey]]));
+  console.log("ListeName dans BaseCard: ", listNames)
   const brandCols = createBrandCols(segmentNames,base,listNames,agencyName)
   // Etat pour filtrer dans dimensions brands 
   const [brandSort, setBrandSort] = useState("asc");
@@ -110,7 +112,7 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <Text style={{ fontSize: 15, fontWeight: 700, color: "#111827" }}>
-                {dbMap[base.database_id]}
+                {dbMap[base[idKey]]}
               </Text>
               <span
                 style={{
@@ -465,72 +467,72 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
  * Colonnes : Database, Classe, Health, Sends, Openers, Open %, Clickers, CTR %, Unsubs, CA, eCPM, Analyses.
  * Clic sur une ligne ouvre un modal avec le détail de la base (BaseCard).
  */
-export const GlobalTable = ({ bases, allbase, agencyName, clsConfig, styles, viewMode, setViewMode}) => {
+export const GlobalTable = ({ database_id, bases, allbase, agencyName, clsConfig, styles, viewMode, setViewMode, dataLabel}) => {
   const [f, setF] = useState({ minSends: null, cls: null });
   const [segmentNames, setSegmentNames] = useState({});
   const [listNames, setListNames] = useState([]);
   const [selectedBase, setSelectedBase] = useState(null); // ← ajout
   const [loadingSegments, setLoadingSegments] = useState(false);
-// Charger les noms des segments depuis l'API
-useEffect(() => {
-  if (!selectedBase) return; // ← Si pas de base sélectionnée, on sort
+  const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
 
-  setLoadingSegments(true); // ← AU DÉBUT
+  const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database'
+  useEffect(() => {
+    if (!selectedBase) return; // ← Si pas de base sélectionnée, on sort
 
-  const loadSegmentNames = async () => {
-    const newSegmentNames = { ...segmentNames }; // ← Garder le cache existant
-    const newListNames = {...listNames};
-
-    // Boucler SEULEMENT sur les brands de LA BASE SÉLECTIONNÉE
-    for (const brand of selectedBase.brands || []) {
-
-      // RÉCUPÉRER LES NOMS DE LISTES
-      // ListName est un array : ["acheter-malin.com", "autre-liste.com"]
-      if (brand.ListName && Array.isArray(brand.ListName)) {
+    setLoadingSegments(true); // ← AU DÉBUT
+    const loadSegmentNames = async () => {
+      const newSegmentNames = { ...segmentNames }; // ← Garder le cache existant
+      const newListNames = {...listNames};
+      // Boucler SEULEMENT sur les brands de LA BASE SÉLECTIONNÉE
+      for (const brand of selectedBase.brands || []) {
+        // RÉCUPÉRER LES NOMS DE LISTES
+        // ListName est un array : ["acheter-malin.com", "autre-liste.com"]
         const brandKey = brand.name; // ou brand.id si tu as un ID unique
-        newListNames[brandKey] = brand.ListName; // Stocker l'array complet
-      }
-      // Boucler sur tous les segment_id du brand
-      for (const segmentId of brand.segment_id || []) {
-        const key = `${selectedBase.database_id}_${segmentId}`;
-        
-        // Si pas déjà chargé, appeler l'API
-        if (!newSegmentNames[key]) {
-          try {
-            const name = await get_segment_name(selectedBase.database_id, segmentId);
-            if (name) {
-              newSegmentNames[key] = name;
-              // console.log(`NOM segment (${key}) : ${newSegmentNames[key]}`)
+        if (brand.ListName && Array.isArray(brand.ListName)) {
+          newListNames[brandKey] = brand.ListName; // Stocker l'array complet
+        }
+        // Boucler sur tous les segment_id du brand
+        for (const segmentId of brand.segment_id || []) {
+        const key = `${brandKey}_${segmentId}`;
+          if (!newSegmentNames[key]) {
+            try {
+              console.log("Database ID : ", database_id)
+              let db_ID = selectedBase.database_id;
+              if (database_id && database_id !== null){
+                db_ID = database_id;
+              }
+              console.log("DB_ID utilisé : ",db_ID)
+              const name = await get_segment_name(db_ID, segmentId);
+              if (name) {
+                newSegmentNames[key] = name;
+              }
+            } catch (error) {
+              console.error(`Erreur segment ${segmentId}:`, error);
             }
-          } catch (error) {
-            console.error(`Erreur segment ${segmentId}:`, error);
           }
         }
       }
-    }
+      setSegmentNames(newSegmentNames);
+      setListNames(newListNames); // ← Stocker les listes
+      setLoadingSegments(false);
+    };
 
-    setSegmentNames(newSegmentNames);
-    setListNames(newListNames); // ← Stocker les listes
-    setLoadingSegments(false);
-  };
-
-  loadSegmentNames();
-}, [selectedBase]); // ← Dépendance: selectedBase, pas bases
-
+    loadSegmentNames();
+  }, [selectedBase]); // ← Dépendance: selectedBase, pas bases
 
   const rows = useMemo(() => {
-    let d = bases.map((b) => ({ key: b.database_id, ...b }));
+    let d = bases.map((b) => ({ key: b[`${dataIndex}_id`], ...b }));
     if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
     if (f.cls) d = d.filter((r) => r.classification === f.cls);
     return d;
   }, [bases, f]);
 
-  const dbMap = Object.fromEntries(allbase.map((db) => [db.database_id, db.database_name]));
-  const brandCols = createBrandCols(segmentNames,bases,listNames); // ← AJOUTE CETTE LIGNE
+  const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
+  // console.log("dbMap: ", dbMap)
   const cols = [
     {
       title: "Advertiser",
-      dataIndex: "database_id",
+      dataIndex: `${idKey}`,
       fixed: "left",
       width: 180,
       render: (v) => (
@@ -677,6 +679,7 @@ useEffect(() => {
           onRow={(record) => ({
           onClick: () => {
             setSelectedBase(record);
+            // console.log("Selected base:", record);
             console.log("loader: ",loadingSegments)
             setLoadingSegments(true);
           },
@@ -708,6 +711,8 @@ useEffect(() => {
           segmentNames={segmentNames}
           listNames={listNames}
           agencyName={agencyName}
+          idKey={idKey}
+          nameKey={nameKey}
         />
       ) : (
         <div style={{ padding: '40px', textAlign: 'center' }}>

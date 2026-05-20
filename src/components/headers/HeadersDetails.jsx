@@ -17,9 +17,9 @@ import { tokens } from "../../utils/Tokens";
 
 export const HeadersDetails = ({labelKey,open,setOpen,styles,data,totalBrands,health,navigate,getHealthLabel}) => {
     const location = useLocation();
-    console.log("State in HeadersDetails:", location.state);
+    // console.log("State in HeadersDetails:", location.state);
     const record = location.state?.record;
-    console.log(`${labelKey} in HeadersDetails:`, record);
+    // console.log(`${labelKey} in HeadersDetails:`, record);
     const fmt = (v) => Number(v ?? 0).toLocaleString("fr-FR");
 
     // Conditionner lés clés a utiliser en fonction du labelKey 
