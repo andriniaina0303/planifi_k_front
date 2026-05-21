@@ -18,7 +18,7 @@ export default function LoginPage() {
     try {
       const res = await api.post("/auth/login", { email, password });
       localStorage.setItem("access_token", res.data.access_token);
-      navigate("/");
+      navigate("/reporting/advertisers");
     } catch {
       setError("Identifiants incorrects ou erreur serveur.");
     } finally {
@@ -148,8 +148,8 @@ export default function LoginPage() {
           flex-shrink: 0;
         }
         .left-logo-name {
-          font-family: 'Syne', sans-serif;
-          font-size: 24px; font-weight: 800;
+          
+          font-size: 28px; font-weight: 800;
           color: #fff;
           letter-spacing: -0.4px;
         }
@@ -180,7 +180,7 @@ export default function LoginPage() {
         }
 
         .left-headline {
-          font-family: 'Syne', sans-serif;
+      
           font-size: 22px; font-weight: 800;
           color: #fff;
           line-height: 1.25;
@@ -462,7 +462,7 @@ export default function LoginPage() {
               </div>
 
               <p className="left-desc">
-                Planifiez, suivez et collaborez sur vos projets en toute simplicité.
+                Suivi, analyse et planification automatiques de vos campagnes d'emailing.
               </p>
 
               <div className="left-features">
@@ -472,11 +472,11 @@ export default function LoginPage() {
                 </div>
                 <div className="feature-item">
                   <div className="feature-dot dot-blue" />
-                  Gestion centralisée des activités
+                  Analyse détaillée des campagnes
                 </div>
                 <div className="feature-item">
                   <div className="feature-dot dot-amber" />
-                  Rapports et analyses avancés
+                  Gestion avancée des campagnes
                 </div>
               </div>
             </div>

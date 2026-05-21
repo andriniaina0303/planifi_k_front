@@ -126,3 +126,36 @@ export async function get_all_SEGMENT() {
     console.error("❌ Erreur get_all_SEGMENT:", error);
   }
 }
+
+
+// ─── Cache interne pour les noms de bases ─────────────────────────────────────
+let _dbListCache = null;
+/**
+ * Récupère le nom d'une base depuis son ID
+ * Appelle REACT_APP_ENDPOINT_ALL_DATABASES (/reporting/all_bases) avec cache
+ * @param {string|number} database_id
+ * @returns {Promise<string>} database_name, ou "DB #id" en fallback
+ */
+
+export async function get_database_name(database_id) {
+  if (!database_id) return String(database_id ?? "");
+
+  // Réutilise le cache si déjà chargé
+  if (!_dbListCache) {
+    try {
+      const response = await api.get(
+        config.REACT_APP_ENDPOINT_ALL_DATABASES,
+        { timeout: 120000 }
+      );
+      _dbListCache = Array.isArray(response.data) ? response.data : [response.data];
+    } catch (error) {
+      console.error("get_database_name: fetch error", error);
+      return "DB #" + database_id;
+    }
+  }
+
+  const found = _dbListCache.find(
+    (db) => String(db.database_id) === String(database_id)
+  );
+  return found?.database_name || ("DB #" + database_id);
+}

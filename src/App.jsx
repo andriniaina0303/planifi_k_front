@@ -85,7 +85,7 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          {/* Page d'accueil */}
+          Page d'accueil
           <Route index element={<h2>Bienvenue sur Planifik 🚀</h2>} />
 
           {/* ── MODULE REPORTING ── */}

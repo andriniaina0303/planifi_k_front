@@ -293,7 +293,8 @@ const DatabaseDetail = ({ _mockData }) => {
   
   // Etat pour stocker les mapping agences et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
-  const [advertiserMapping, setAdvertiserMapping] = useState({});
+  const [
+    advertiserMapping, setAdvertiserMapping] = useState({});
 
 useEffect(() => {
   const handleScroll = (e) =>{
@@ -496,10 +497,10 @@ useEffect(() => {
               ),
             },
             {
-              key: "bases",
+              key: "advertisers",
               label: (
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <DatabaseOutlined /> Bases
+                  <DatabaseOutlined /> Advertisers
                   <Badge
                     count={data.advertisers?.length || 0}
                     style={{

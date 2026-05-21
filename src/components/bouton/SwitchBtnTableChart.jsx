@@ -1,9 +1,11 @@
-
-import {useState} from "react";
+import { useState } from "react";
 import { BarChartOutlined, DownloadOutlined, TableOutlined } from "@ant-design/icons";
 import { Button, Segmented } from "antd";
 import { exportGlobalTableXLS } from "../details/common/ExportBase";
+import { exportAdvertiserXLS } from "../details/common/ExportAdvertiser";
 import { get_advertiser_name } from "../../api/advertiser";
+import { get_database_name } from "../../api/databases"; // mapping database_id → database_name via /reporting/all_bases
+
 
 export const TabExtraContent = ({
   mainTab,
@@ -12,11 +14,36 @@ export const TabExtraContent = ({
   data,
   clsConfig,
   agenceMapping,
-  advertiser_id,   // ID de l'annonceur courant (depuis useParams dans le parent)
+  advertiser_id,   // utilisé dans AdvertiserDetail (ExportBase)
+  database_id,     // utilisé dans DatabaseDetail (ExportAdvertiser)
   allbase,
 }) => {
   const [exporting, setExporting] = useState(false);
 
+  // ── Bouton style partagé ────────────────────────────────────────────────────
+  const btnStyle = {
+    marginTop: 10,
+    marginRight: 10,
+    backgroundColor: exporting ? "#a0c4ff" : "#1677ff",
+    borderColor:     exporting ? "#a0c4ff" : "#1677ff",
+    color: "#fff",
+    fontWeight: "500",
+    borderRadius: "6px",
+    transition: "all 0.3s ease",
+  };
+
+  const onMouseEnter = (e) => {
+    if (exporting) return;
+    e.currentTarget.style.backgroundColor = "#4096ff";
+    e.currentTarget.style.borderColor = "#4096ff";
+  };
+  const onMouseLeave = (e) => {
+    if (exporting) return;
+    e.currentTarget.style.backgroundColor = "#1677ff";
+    e.currentTarget.style.borderColor = "#1677ff";
+  };
+
+  // ── Onglet dimensions → Segmented chart/table ──────────────────────────────
   if (mainTab === "dimensions") {
     return (
       <Segmented
@@ -32,50 +59,69 @@ export const TabExtraContent = ({
     );
   }
 
+  // ── Onglet "bases" → ExportBase (AdvertiserDetail) ─────────────────────────
   if (mainTab === "bases") {
     return (
       <Button
         icon={<DownloadOutlined />}
         size="middle"
-        loading={exporting}  // ← spinner natif Ant Design pendant l'export
-        disabled={exporting}  // ← empêche un double-clic
-        style={{
-          marginTop: 10,
-          marginRight: 10,
-          backgroundColor: exporting? "#a0c4ff" : "#1677ff",
-          borderColor:exporting? "#a0c4ff" : "#1677ff",
-          color: "#fff",
-          fontWeight: "500",
-          borderRadius: "6px",
-          transition: "all 0.3s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#4096ff";
-          e.currentTarget.style.borderColor = "#4096ff";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "#1677ff";
-          e.currentTarget.style.borderColor = "#1677ff";
-        }}
+        loading={exporting}
+        disabled={exporting}
+        style={btnStyle}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         onClick={async () => {
-          if (exporting) return;  // Sécurité anti-double-clic
+          if (exporting) return;
           setExporting(true);
-          try{
-             // Résolution du nom via l'API all_advertisers (avec cache — pas de double fetch)
-          const advertiserName = await get_advertiser_name(advertiser_id);
-          await exportGlobalTableXLS( 
-            data.bases,
-            allbase,
-            clsConfig,
-            agenceMapping,
-            { id: advertiser_id, name: advertiserName }
-          );
+          try {
+            const advertiserName = await get_advertiser_name(advertiser_id);
+            await exportGlobalTableXLS(
+              data.bases,
+              allbase,
+              clsConfig,
+              agenceMapping,
+              { id: advertiser_id, name: advertiserName }
+            );
           } finally {
-            setExporting(false);  // ← s'exécute uniquement quand l'export est vraiment terminé
+            setExporting(false);
           }
         }}
       >
-        {exporting ? "Exporting en cours..." : "Export xls"}
+        {exporting ? "Export en cours..." : "Export xls"}
+      </Button>
+    );
+  }
+
+  // ── Onglet "advertisers" → ExportAdvertiser (DatabaseDetail) ───────────────
+  if (mainTab === "advertisers") {
+    return (
+      <Button
+        icon={<DownloadOutlined />}
+        size="middle"
+        loading={exporting}
+        disabled={exporting}
+        style={btnStyle}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onClick={async () => {
+          if (exporting) return;
+          setExporting(true);
+          try {
+            // data.database_id existe mais data.database_name n'est PAS retourné par /reporting/database/{id}
+            // → on résout le nom via /reporting/all_bases (avec cache dans get_database_name)
+            const dbName = await get_database_name(data.database_id || database_id);
+            await exportAdvertiserXLS(
+              data.advertisers,
+              agenceMapping,
+              clsConfig,
+              { id: data.database_id || database_id, name: dbName }
+            );
+          } finally {
+            setExporting(false);
+          }
+        }}
+      >
+        {exporting ? "Export en cours..." : "Export xls"}
       </Button>
     );
   }

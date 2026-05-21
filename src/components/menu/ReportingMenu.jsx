@@ -56,7 +56,7 @@ const ReportingMenu = ({ onClose }) => {
             />
           </div>
 
-          {/* Database */}
+          {/* Database */}  
           <div style={isActive("/reporting/database") ? activeStyle : {}}>
             <SubMenuItem
               icon={FiDatabase}
