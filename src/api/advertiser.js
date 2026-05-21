@@ -79,14 +79,31 @@ export async function get_advertisers_detail(adv_id) {
 }
 
 export async function get_segment_name(database_id, segment_id) {
-  if (!database_id || !segment_id) return null;
+  if (!database_id) return null;
+
+  const params = new URLSearchParams({
+    database_id,
+  });
+
+  if (segment_id) {
+    params.append("id_segment", segment_id);
+  }
+
   const response = await api.get(
-    `${config.REACT_APP_ENDPOINT_ALL_SEGMENT}?database_id=${database_id}&id_segment=${segment_id}`,
+    `${config.REACT_APP_ENDPOINT_ALL_SEGMENT}?${params.toString()}`,
     { timeout: 120000 }
   );
+
   const data = response.data;
-  if (Array.isArray(data) && data.length > 0) return data[0].segment_name;
-  return data?.segment_name ?? null;
+  const isvalid = Array.isArray(data) && data.length > 0
+  if(isvalid && !segment_id)
+  {   
+    return data || null;
+  }
+  else if (isvalid) {
+    return data[0].segment_name;
+  }
+
 }
 
 /**

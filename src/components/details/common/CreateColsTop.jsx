@@ -1,17 +1,18 @@
-import { Card, Table, Tag, Row, Col, Typography, Tooltip, Carousel } from "antd";
+import { Card, Table, Tag, Row, Col, Typography, Tooltip, Carousel,Space} from "antd";
 import {
   FireOutlined,
   TrophyOutlined,
   AimOutlined,
   EyeOutlined,
-LeftOutlined,
+  LeftOutlined,
   RightOutlined,
+  LinkOutlined
 } from "@ant-design/icons";
 import { tokens } from "../../../utils/Tokens"; 
 import { pct, fmt } from "../../../utils/Helpers";
 import { useMemo, useRef } from "react";
 import { decodeBase64 } from "../../../utils/utils";
-import { createBrandCols } from "../brands/CreateColumns";
+import { buildSegmentButton, buildListButton } from "../brands/CreateColumns";
 
 const { Text } = Typography;
 
@@ -23,7 +24,7 @@ const { Text } = Typography;
  * 3. Top 10 objets par Open Rate
  * Les titres et sous-titres sont dynamiques selon l'onglet.
  */
-export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
+export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_value }) => {
   const carouselRef = useRef();
 
   // Configuration des 3 vues
@@ -62,6 +63,8 @@ export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
                 ...brand,
                 [`${label_value}_name`]: kv[`${label_value}_name`],
                 [`${label_value}_id`]: kv[`${label_value}_id`],
+                advertiser_name: kv.advertiser_name,
+                advertiser_id: kv.advertiser_id,
               });
             });
           }
@@ -135,6 +138,85 @@ export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
         </Tooltip>
       ),
     },
+
+  ...(label_value === "database" ?[
+      {
+        title: "Advertisers",
+        dataIndex: "advertiser_name",
+        key: "advertiser_name",
+        width: 100,
+        align: "left",
+        // sorter: (a, b) => a.sends - b.sends,
+        render: (value) => (
+          <Text style={{ fontSize: 12, color: "#6b7280", fontWeight:"bolder" }}>
+            {value}          
+          </Text>
+        ),
+      },
+      {
+        title: "Brands",
+        dataIndex: "name",
+        key:"brand_name",
+        // fixed: "left",
+        width: 110,
+        render: (_, v) => (
+          <div style={{display: "flex",flexDirection: "column",gap: 2}}>
+            <Text ellipsis = {{tooltip:true}} strong style={{ fontSize: 12 }}>
+              {decodeBase64(v.name)}
+            </Text>
+            <Tooltip title={v.creativities}>    
+              <a   
+                href={v.creativities}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontSize: 11,
+                  color: tokens.primary,
+                  maxWidth: 170,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "inline-block",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <LinkOutlined style={{ marginRight: 4 }} />
+                Lien du kit
+              </a>
+            </Tooltip>
+          </div>
+        ),
+      },
+      {
+        title: "Segment",
+        dataIndex: "segment_id",
+        width:190,
+        fixed: "left",
+        render: (segmentIds, record) => {
+          // const listNamesForBrand = listNames[record.name] || [];
+          const segmentBtn =
+            segmentIds?.length > 0
+              ? buildSegmentButton(segmentIds, segmentNames, record, tokens)
+              : null;
+
+          // const listBtn =
+          //   listNamesForBrand?.length > 0
+          //     ? buildListButton(listNamesForBrand, tokens)
+          //     : null;
+
+          return (
+            <Space>
+              {segmentBtn}
+              {/* {listBtn} */}
+              {!segmentBtn && !listBtn && (
+                <span style={{ fontSize: 12, color: "#999" }}>
+                  Aucun segment/liste
+                </span>
+              )}
+            </Space>
+          );
+        },
+      },
+    ]:[]),
     {
       title: config.modeFilter === "taux_clickers" ? "CTR" : "Open Rate",
       dataIndex: config.modeFilter,
@@ -286,7 +368,8 @@ const getTableData = (brands) =>
       }
     >
       <Carousel ref={carouselRef} autoplay={true} dots>
-        {topBrandsData.map((viewData, idx) => (
+        {topBrandsData.map((viewData, idx) =>
+          (
           <div key={viewData.id}>
             {/* ── TITRE DYNAMIQUE ── */}
             <div style={{ marginBottom: 16 }}>

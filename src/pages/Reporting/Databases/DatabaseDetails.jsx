@@ -67,7 +67,7 @@ import {
 import { Chart, registerables } from "chart.js";
 import ReportingDetailCharts from "../../../components/chart/ReportingDetailsChart.jsx";
 import { get_databases_detail } from "../../../api/databases.js";
-import { getMappingData } from "../../../api/advertiser.js";
+import { getMappingData, get_segment_name } from "../../../api/advertiser.js";
 import { useLocation } from "react-router-dom";
 import { TabExtraContent } from "../../../components/bouton/SwitchBtnTableChart.jsx";
 
@@ -292,8 +292,10 @@ const DatabaseDetail = ({ _mockData }) => {
   
   // Etat pour stocker les mapping agences et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
-  const [
-    advertiserMapping, setAdvertiserMapping] = useState({});
+  const [advertiserMapping, setAdvertiserMapping] = useState({});
+
+  // Etat de tout les segments de la base 
+  const [allsegmentNames,setAllSegmentNames] = useState({})
 
 useEffect(() => {
   const handleScroll = (e) =>{
@@ -312,7 +314,7 @@ useEffect(() => {
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
   const fetchMappings = useCallback(async () => {
   try {
-    const [agences, advertiser] = await Promise.all([
+    const [agences] = await Promise.all([
       getMappingData('agences', 'agences'),
     ]);
     setAgenceMapping(agences);
@@ -325,7 +327,6 @@ useEffect(() => {
   const fetchd = useCallback(async () => {
     try {
       setLoading(true);
-      console.log("Database ID:", database_id);
       const res = await get_databases_detail(database_id);
       console.log(res);
       setData(res);
@@ -341,11 +342,36 @@ useEffect(() => {
     }
   }, [database_id]);
 
+
+const fetchAllSegments = async () => {
+    try {
+      console.log("fetching des segments name ")      
+      const data = await get_segment_name(database_id)
+      // console.log("Tous les segments: ",data)
+      // const data = Array.isArray(response.data) ? response.data : [];
+      // Transformer en objet { segment_id: "segment_name" }
+      const segmentMap = {};
+      data.forEach((seg) => {
+        segmentMap[seg.id_segment] = seg.segment_name;
+      });
+      
+      setAllSegmentNames(segmentMap);
+    } catch (error) {
+      console.error("❌ Erreur lors du fetch des segments:", error);
+      setAllSegmentNames({});
+    } 
+  };
+
+
+
   /* Effect : charge les bases au mount et recharge les données si _mockData change ou ID change */
   useEffect(() => {
+    setLoading(true);
+    fetchAllSegments();
     fetchMappings();
     if (!_mockData) fetchd();
   }, [database_id, _mockData, fetchMappings]);
+// console.log("Contenu de allSegments: ",allsegmentNames)
 
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
@@ -491,7 +517,7 @@ useEffect(() => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} label_value="database" />
+                  <GlobalOverview segmentNames = {allsegmentNames} open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} label_value="database" />
                 </div>
               ),
             },
