@@ -422,7 +422,7 @@ const SyntheseText = ({ recommendations = [] }) => {
  * En haut (côte à côte) : slider Top Brands et recommandations par segment.
  * En bas : graphiques comparatifs par base et autres analyses.
  */
-export const GlobalOverview = ({ open, setOpen, data, mappingData, styles, label_value }) => {
+export const GlobalOverview = ({ segmentNames, open, setOpen, data, mappingData, styles, label_value }) => {
   const g = data.globales;
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(mappingData);
   const key_value = label_value === "database" ? "advertisers" : "bases";
@@ -449,7 +449,7 @@ export const GlobalOverview = ({ open, setOpen, data, mappingData, styles, label
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         {/* Slider Top Brands */}
         <Col xs={24} lg={24}>
-          <TopBrandsSlider data={data} styles={styles} key_value={key_value} label_value={label_value} />
+          <TopBrandsSlider segmentNames ={segmentNames} data={data} styles={styles} key_value={key_value} label_value={label_value} />
         </Col>
       </Row>
 

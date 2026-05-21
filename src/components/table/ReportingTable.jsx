@@ -13,7 +13,7 @@
  */
 
 import React, { useMemo, useState } from "react";
-import { Table, Tag, Tooltip, Input } from "antd";
+import { Table, Tag, Tooltip, Input, Dropdown } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -106,6 +106,7 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
                 onClick={() => {
                   clearFilters();
                   setSearchAdvertiser("");
+                  confirm({closeDropdown:true})
                 }}
               >
                 Reset

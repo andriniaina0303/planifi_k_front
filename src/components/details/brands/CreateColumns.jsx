@@ -55,7 +55,6 @@ export const buildSegmentButton = (segmentIds, segmentNames, Brand, tokens) => {
     console.warn("Brand manquant ou sans .name:", Brand);
     return null;
   }
-  const brandKey = Brand.name;
   const content = (
     <div>
       {(!segmentIds || segmentIds.length === 0) ? (
@@ -64,8 +63,8 @@ export const buildSegmentButton = (segmentIds, segmentNames, Brand, tokens) => {
         </div>
       ) : (
         segmentIds.map((id) => {
-          const key = `${brandKey}_${id}`;
-          console.log(`Nom du segment pour ID ${id} : ${segmentNames[key] || "Inconnu"}`);
+          const key = `${id}`;
+          // console.log(`Nom du segment pour ID ${id} : ${segmentNames[key] || "Inconnu"}`);
           return (
             <div key={id} style={{ padding: 8, fontSize: 12 }}>
               • {segmentNames[key] || id}

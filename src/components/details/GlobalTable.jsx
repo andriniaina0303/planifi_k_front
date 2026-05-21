@@ -64,7 +64,6 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db[idKey], db[nameKey]]));
-  console.log("ListeName dans BaseCard: ", listNames)
   const brandCols = createBrandCols(segmentNames,base,listNames,agencyName)
   // Etat pour filtrer dans dimensions brands 
   const [brandSort, setBrandSort] = useState("asc");
@@ -502,15 +501,15 @@ export const GlobalTable = ({
         }
         // Boucler sur tous les segment_id du brand
         for (const segmentId of brand.segment_id || []) {
-        const key = `${brandKey}_${segmentId}`;
+        const key = `${segmentId}`;
           if (!newSegmentNames[key]) {
             try {
-              console.log("Database ID : ", database_id)
+              // console.log("Database ID : ", database_id)
               let db_ID = selectedBase.database_id;
               if (database_id && database_id !== null){
                 db_ID = database_id;
               }
-              console.log("DB_ID utilisé : ",db_ID)
+              // console.log("DB_ID utilisé : ",db_ID)
               const name = await get_segment_name(db_ID, segmentId);
               if (name) {
                 newSegmentNames[key] = name;
