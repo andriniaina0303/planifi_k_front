@@ -285,7 +285,6 @@ const DatabaseDetail = ({ _mockData }) => {
   
   // État de la page
   const [data, setData] = useState(_mockData || null);           // Données complètes du rapport
-  const [segmentList, setSegmentList] = useState([])              //Etat pour stocker les segments de chaque campagne 
   const [loading, setLoading] = useState(!_mockData);             // État chargement
   const [viewMode, setViewMode] = useState("chart");              // Mode affichage : \"chart\" ou \"table\"
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"
@@ -315,13 +314,8 @@ useEffect(() => {
   try {
     const [agences, advertiser] = await Promise.all([
       getMappingData('agences', 'agences'),
-      getMappingData('all_advertisers', 'advertiser'),
     ]);
-
     setAgenceMapping(agences);
-    console.log("Advertiser Mapping:", advertiser);
-    setAdvertiserMapping(advertiser);
-
   } catch (e) {
     console.error(e);
   }
@@ -335,6 +329,11 @@ useEffect(() => {
       const res = await get_databases_detail(database_id);
       console.log(res);
       setData(res);
+      const advMapping = res.advertisers.map((adv) => ({
+        advertiser_id: adv.advertiser_id,
+        advertiser_name: adv.advertiser_name,
+      }));
+      setAdvertiserMapping(advMapping);
     } catch (e) {
       console.error(e);
     } finally {
@@ -517,7 +516,17 @@ useEffect(() => {
                   overflow: "hidden",
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
-                  <GlobalTable bases={data.advertisers} allbase={advertiserMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} />
+                  <GlobalTable
+                  database_id={database_id}
+                   bases={data.advertisers} 
+                   allbase={advertiserMapping} 
+                   agencyName={agenceMapping} 
+                   clsConfig={clsConfig} 
+                   styles={styles} 
+                   viewMode={viewMode} 
+                   setViewMode={setViewMode} 
+                   dataLabel = "database"
+                  />
                 </div>
               ),
             },

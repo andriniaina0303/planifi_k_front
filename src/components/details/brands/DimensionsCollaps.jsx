@@ -74,7 +74,7 @@ export const getDimensionCollapseItems = (base = {},segmentNames,listNames,viewM
             {buildSegmentButton(
                 brand.segment_id,
                 segmentNames,
-                base.database_id,
+                brand,
                 tokens
             )}
 

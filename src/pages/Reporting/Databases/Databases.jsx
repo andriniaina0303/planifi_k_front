@@ -63,10 +63,10 @@ const Databases = () => {
 
       const res = await get_all_databases(startDate, endDate);
 
-      console.log("✅ Fetched databases!!!");
-      console.log("Response data:", res);
-      console.log("Is array?", Array.isArray(res));
-      console.log("Length:", res?.length);
+      // console.log("✅ Fetched databases!!!");
+      // console.log("Response data:", res);
+      // console.log("Is array?", Array.isArray(res));
+      // console.log("Length:", res?.length);
 
       setListeDatabases(Array.isArray(res) ? res : []);
 

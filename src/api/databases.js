@@ -95,7 +95,7 @@ export async function get_databases_detail(database_id) {
 // export async function get_segment_name(database_id, segment_id) {
 //   if (!database_id || !segment_id) return null;
 //   const response = await api.get(
-//     `${config.REACT_APP_ENDPOINT_ALL_SEGMENT}?database_id=${database_id}&segment_id=${segment_id}`,
+//     `${config.REACT_APP_ENDPOINT_ALL_SEGMENT}?advertiser_id=${database_id}&segment_id=${segment_id}`,
 //     { timeout: 120000 }
 //   );
 //   const data = response.data;

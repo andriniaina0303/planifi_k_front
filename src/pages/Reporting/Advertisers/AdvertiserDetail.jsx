@@ -284,7 +284,6 @@ const AdvertiserDetail = ({ _mockData }) => {
   
   // État de la page
   const [data, setData] = useState(_mockData || null);           // Données complètes du rapport
-  const [segmentList, setSegmentList] = useState([])              //Etat pour stocker les segments de chaque campagne 
   const [loading, setLoading] = useState(!_mockData);             // État chargement
   const [viewMode, setViewMode] = useState("chart");              // Mode affichage : \"chart\" ou \"table\"
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"
@@ -513,7 +512,15 @@ useEffect(() => {
                   overflow: "hidden",
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
-                  <GlobalTable bases={data.bases} allbase={databaseMapping} agencyName={agenceMapping} clsConfig={clsConfig} styles={styles} viewMode={viewMode} setViewMode={setViewMode} />
+                  <GlobalTable 
+                    bases={data.bases} 
+                    allbase={databaseMapping} 
+                    agencyName={agenceMapping} 
+                    clsConfig={clsConfig} 
+                    styles={styles} 
+                    viewMode={viewMode} 
+                    setViewMode={setViewMode} 
+                  />
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />
                     Détail par base ({data.bases?.length})
