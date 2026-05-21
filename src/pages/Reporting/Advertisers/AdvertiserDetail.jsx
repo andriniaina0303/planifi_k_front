@@ -284,7 +284,6 @@ const AdvertiserDetail = ({ _mockData }) => {
   
   // État de la page
   const [data, setData] = useState(_mockData || null);           // Données complètes du rapport
-  const [segmentList, setSegmentList] = useState([])              //Etat pour stocker les segments de chaque campagne 
   const [loading, setLoading] = useState(!_mockData);             // État chargement
   const [viewMode, setViewMode] = useState("chart");              // Mode affichage : \"chart\" ou \"table\"
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"

@@ -467,7 +467,16 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
  * Colonnes : Database, Classe, Health, Sends, Openers, Open %, Clickers, CTR %, Unsubs, CA, eCPM, Analyses.
  * Clic sur une ligne ouvre un modal avec le détail de la base (BaseCard).
  */
-export const GlobalTable = ({ database_id, bases, allbase, agencyName, clsConfig, styles, viewMode, setViewMode, dataLabel}) => {
+export const GlobalTable = ({ 
+  database_id, 
+  bases, 
+  allbase, 
+  agencyName, 
+  clsConfig, 
+  styles, 
+  viewMode, 
+  setViewMode, 
+  dataLabel}) => {
   const [f, setF] = useState({ minSends: null, cls: null });
   const [segmentNames, setSegmentNames] = useState({});
   const [listNames, setListNames] = useState([]);

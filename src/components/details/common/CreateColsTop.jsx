@@ -11,6 +11,7 @@ import { tokens } from "../../../utils/Tokens";
 import { pct, fmt } from "../../../utils/Helpers";
 import { useMemo, useRef } from "react";
 import { decodeBase64 } from "../../../utils/utils";
+import { createBrandCols } from "../brands/CreateColumns";
 
 const { Text } = Typography;
 
@@ -28,15 +29,6 @@ export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
   // Configuration des 3 vues
   const viewConfigs = [
     {
-      id: "brands-ctr",
-      modeFilter: "taux_clickers",
-      getInfo: "name",
-      icon: <FireOutlined />,
-      title: "Top 10 Marques",
-      subtitle: "Les 10 meilleures marques triées par taux de clics (CTR).",
-      tagLabel: "Par CTR",
-    },
-    {
       id: "subject-ctr",
       modeFilter: "taux_clickers",
       getInfo: "subject",
@@ -45,15 +37,16 @@ export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
       subtitle: "Les 10 meilleurs sujets d'email triés par taux de clics (CTR).",
       tagLabel: "Par CTR",
     },
+    ...(`${label_value}_name` === "advertiser_name" ? [
     {
-      id: "subject-open",
-      modeFilter: "taux_openers",
-      getInfo: "subject",
-      icon: <EyeOutlined />,
-      title: "Top 10 Objets",
-      subtitle: "Les 10 meilleurs sujets d'email triés par taux d'ouverture.",
-      tagLabel: "Par Open Rate",
-    },
+      id: "brands-ctr",
+      modeFilter: "taux_clickers",
+      getInfo: "name",
+      icon: <FireOutlined />,
+      title: "Top 10 Marques",
+      subtitle: "Les 10 meilleures marques triées par taux de clics (CTR).",
+      tagLabel: "Par CTR",
+    },]: [])
   ];
 
   // Extraire et trier les top 10 par configuration
@@ -234,61 +227,63 @@ export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
   ];
 
   // Préparer les données de la table
-  const getTableData = (brands) =>
-    brands.map((brand, index) => ({
-      ...brand,
-      key: `${brand[`${label_value}_id`]}-${brand.name || brand.subject}`,
-      rank: index + 1,
-    }));
+const getTableData = (brands) =>
+  brands.map((brand, index) => ({
+    ...brand,
+    key: `${label_value}_${index}`,  // ← Suffisant et stable
+    rank: index + 1,
+  }));
 
   return (
     <Card
-    size="small"
-    title={
-        <div
-        style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-        }}
-        >
-        <div style={{ display: "flex", gap: 8 }}>
-            <div
-            onClick={() => carouselRef.current?.prev()}
+      size="small"
+      title={
+        label_value === "advertiser" ? (
+          <div
             style={{
-                width: 30,
-                height: 30,
-                borderRadius: "50%",
                 display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                border: `1px solid ${tokens.primary}33`,
-                transition: "all 0.2s",
             }}
-            >
-            <LeftOutlined />
-            </div>
+          >
+            <div style={{ display: "flex", gap: 8 }}>
+              <div
+                onClick={() => carouselRef.current?.prev()}
+                style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    border: `1px solid ${tokens.primary}33`,
+                    transition: "all 0.2s",
+                }}
+              >
+                <LeftOutlined />
+              </div>
 
-            <div
-            onClick={() => carouselRef.current?.next()}
-            style={{
-                width: 30,
-                height: 30,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                border: `1px solid ${tokens.primary}33`,
-                transition: "all 0.2s",
-            }}
-            >
-            <RightOutlined />
+              <div
+                onClick={() => carouselRef.current?.next()}
+                style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    border: `1px solid ${tokens.primary}33`,
+                    transition: "all 0.2s",
+                }}
+              >
+                <RightOutlined />
+              </div>
             </div>
-        </div>
-        </div>
-    }
+          </div>
+        ) : null
+      }
     >
       <Carousel ref={carouselRef} autoplay={true} dots>
         {topBrandsData.map((viewData, idx) => (
@@ -299,7 +294,7 @@ export const TopBrandsSlider = ({ data, styles, key_value, label_value }) => {
                 {viewData.icon}
                 {viewData.title}
                 <Tag
-                  color="orange"
+                  color={tokens.success}
                   style={{ borderRadius: 10, fontSize: 10, marginLeft: 8 }}
                 >
                   {viewData.tagLabel}

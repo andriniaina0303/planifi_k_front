@@ -14,7 +14,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { get_liste_advertisers, getMappingData, getMappingValue } from "../../../api/advertiser";
 import "../../../assets/css/advertisers.css";
-import { listetags } from "../../../components/table/ReportingTable";
+// import { listetags } from "../../../components/table/ReportingTable";
 import { Card, Row, Col } from "antd";
 import KpiCardReporting from "../../../components/Kpi/KpiCardReporting";
 import ReportingTable from "../../../components/table/ReportingTable";
@@ -90,7 +90,13 @@ const Advertisers = () => {
     if (!listeAdvertiser || !Array.isArray(listeAdvertiser)) return [];
 
     let d = [...listeAdvertiser];
-
+  // let d = [...listeAdvertiser].map(item => ({
+  //   ...item,
+  //   globales: {
+  //     ...item.globales,
+  //     taux_cto: item.globales.taux_cto || 0,  // ← Ajoute une valeur par défaut
+  //   }
+  // }));
     // Filtrer par annonceur spécifique si sélectionné
     if (filters.all_fields !== "ALL") {
       d = d.filter((a) => a.advertiser_name === filters.all_fields);
