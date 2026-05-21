@@ -79,7 +79,7 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
       };
     });
   }, [data]);
-
+console.log("Contenu de topBrandsData à afficher: ", topBrandsData)
   // Décoder le nom depuis base64
   const decodeBrandName = (encodedName) => {
     try {
@@ -192,21 +192,23 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
         width:190,
         fixed: "left",
         render: (segmentIds, record) => {
-          // const listNamesForBrand = listNames[record.name] || [];
+          // console.log("Contenu de record: ", record)
+          const listNamesForBrand = record.ListName || [];
+          console.log("ListeName: ",listNamesForBrand)
           const segmentBtn =
             segmentIds?.length > 0
-              ? buildSegmentButton(segmentIds, segmentNames, record, tokens)
+              ? buildSegmentButton(segmentIds, segmentNames, tokens)
               : null;
 
-          // const listBtn =
-          //   listNamesForBrand?.length > 0
-          //     ? buildListButton(listNamesForBrand, tokens)
-          //     : null;
+          const listBtn =
+            listNamesForBrand?.length > 0
+              ? buildListButton(listNamesForBrand, tokens)
+              : null;
 
           return (
             <Space>
               {segmentBtn}
-              {/* {listBtn} */}
+              {listBtn}
               {!segmentBtn && !listBtn && (
                 <span style={{ fontSize: 12, color: "#999" }}>
                   Aucun segment/liste

@@ -50,11 +50,8 @@ const PopoverButton = ({
 
 
 
-export const buildSegmentButton = (segmentIds, segmentNames, Brand, tokens) => {
-  if (!Brand || !Brand.name) {
-    console.warn("Brand manquant ou sans .name:", Brand);
-    return null;
-  }
+export const buildSegmentButton = (segmentIds, segmentNames, tokens) => {
+
   const content = (
     <div>
       {(!segmentIds || segmentIds.length === 0) ? (
@@ -180,7 +177,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
     const listNamesForBrand = listNames[record.name] || [];
     const segmentBtn =
       segmentIds?.length > 0
-        ? buildSegmentButton(segmentIds, segmentNames, record, tokens)
+        ? buildSegmentButton(segmentIds, segmentNames, tokens)
         : null;
 
     const listBtn =
