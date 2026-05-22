@@ -151,7 +151,7 @@ api.interceptors.response.use(
       try {
         // Appel direct axios (pas `api`) pour éviter de passer par l'intercepteur
         const response = await axios.post(
-          "https://pl1.kontikimedia.com:9000/auth/refresh",
+          "https://pl1.kontikimedia.com:9000/auth/refresh_token",
           { refresh_token: refreshToken }
         );
 

@@ -603,7 +603,7 @@ useEffect(() => {
       </Card>
 
       {/* Footer du rapport : informations de génération */}
-      <div
+      {/* <div
         style={{
           textAlign: "center",
           padding: "20px 0 8px",
@@ -613,7 +613,7 @@ useEffect(() => {
       >
         Rapport généré automatiquement · Advertiser #{data.advertiser_id} ·{" "}
         {new Date().toLocaleDateString("fr-FR")}
-      </div>
+      </div> */}
     </div>
   );
 };
