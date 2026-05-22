@@ -290,9 +290,10 @@ const DatabaseDetail = ({ _mockData }) => {
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"
   const [openPopover, setOpenPopover] = useState(null) // Etat pour gérer l'ouverture du popover d'explication du health score
   
-  // Etat pour stocker les mapping agences et databases 
+  // Etat pour stocker les mapping agences, tags et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
   const [advertiserMapping, setAdvertiserMapping] = useState({});
+  const [tagMapping, setTagMapping] = useState({});
 
   // Etat de tout les segments de la base 
   const [allsegmentNames,setAllSegmentNames] = useState({})
@@ -314,10 +315,12 @@ useEffect(() => {
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
   const fetchMappings = useCallback(async () => {
   try {
-    const [agences] = await Promise.all([
+    const [agences,tags] = await Promise.all([
       getMappingData('agences', 'agences'),
+      getMappingData('tags','tags'),
     ]);
     setAgenceMapping(agences);
+    setTagMapping(tags)
   } catch (e) {
     console.error(e);
   }
@@ -543,15 +546,16 @@ const fetchAllSegments = async () => {
                 }}>
                   {/* Onglet 2 : Tableau de toutes les bases de données avec tri/filtres et modal détail au clic */}
                   <GlobalTable
-                  database_id={database_id}
-                   bases={data.advertisers} 
-                   allbase={advertiserMapping} 
-                   agencyName={agenceMapping} 
-                   clsConfig={clsConfig} 
-                   styles={styles} 
-                   viewMode={viewMode} 
-                   setViewMode={setViewMode} 
-                   dataLabel = "database"
+                    database_id={database_id}
+                    bases={data.advertisers} 
+                    allbase={advertiserMapping} 
+                    tagName = {tagMapping}
+                    agencyName={agenceMapping} 
+                    clsConfig={clsConfig} 
+                    styles={styles} 
+                    viewMode={viewMode} 
+                    setViewMode={setViewMode} 
+                    dataLabel = "database"
                   />
                 </div>
               ),

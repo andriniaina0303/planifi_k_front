@@ -7,6 +7,7 @@ import Advertisers from "./pages/Reporting/Advertisers/Advertisers";
 import AdvertiserDetail from "./pages/Reporting/Advertisers/AdvertiserDetail";
 import Databases from "./pages/Reporting/Databases/Databases";
 import DatabaseDetail from "./pages/Reporting/Databases/DatabaseDetails";
+import { FranceMap } from "./pages/Reporting/FranceMap/FranceMap";
 import Counting from "./pages/Counting/Counting";
 import LoginPage from "./pages/Login/Login";
 import { resetInactivityTimer } from "./api/interceptor";
@@ -102,6 +103,7 @@ export default function App() {
           {/* :advertiser_id est un paramètre dynamique extrait de l'URL */}
           <Route path="reporting/database/:database_id" element={<DatabaseDetail />} />
 
+          <Route path= "reporting/FranceMap" element={<FranceMap/>}/>
           {/* ── MODULE COUNTING ── */}
           <Route path="counting" element={<Counting />}>
             <Route path="tasks" element={<Counting />} />

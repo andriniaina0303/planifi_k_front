@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "../../assets/css/sidebar.css";
 
-import { FiBarChart, FiDatabase } from "react-icons/fi";
+import { FiBarChart, FiDatabase, FiMap } from "react-icons/fi";
 import { BsFillMegaphoneFill } from "react-icons/bs";
 
 import MenuItem from "../bouton/MenuItem";
@@ -69,6 +69,17 @@ const ReportingMenu = ({ onClose }) => {
             />
           </div>
 
+          <div style={isActive("/reporting/FranceMap") ? activeStyle : {}}>
+            <SubMenuItem
+              icon={FiMap }
+              label="FranceMap"
+              color="#6f91eee3"
+              onClick={() => {
+                navigate("/reporting/FranceMap");
+                onClose?.();
+              }}
+            />
+          </div>
         </div>
       )}
     </>

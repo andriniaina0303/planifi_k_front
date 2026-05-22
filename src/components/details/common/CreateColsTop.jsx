@@ -79,7 +79,7 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
       };
     });
   }, [data]);
-console.log("Contenu de topBrandsData à afficher: ", topBrandsData)
+// console.log("Contenu de topBrandsData à afficher: ", topBrandsData)
   // Décoder le nom depuis base64
   const decodeBrandName = (encodedName) => {
     try {
@@ -120,16 +120,13 @@ console.log("Contenu de topBrandsData à afficher: ", topBrandsData)
       title: config.getInfo === "subject" ? "Subjects" : "Brands",
       dataIndex: config.getInfo,
       key: config.getInfo,
-      width: 280,
+      width: config.getInfo === "subject" ? 400 : "auto",
       render: (text) => (
         <Tooltip title={decodeBrandName(text)}>
           <Text
             style={{
               fontSize: 12,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              maxWidth: 300,
               display: "block",
             }}
           >

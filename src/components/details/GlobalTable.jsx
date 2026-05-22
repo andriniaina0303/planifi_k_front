@@ -470,6 +470,7 @@ export const GlobalTable = ({
   database_id, 
   bases, 
   allbase, 
+  tagName,
   agencyName, 
   clsConfig, 
   styles, 
@@ -536,7 +537,16 @@ export const GlobalTable = ({
   }, [bases, f]);
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
-  // console.log("dbMap: ", dbMap)
+  const tagMap = useMemo(() => {
+    if (dataLabel !== "database" || !Array.isArray(tagName)) {
+      return {};
+    }
+
+    return Object.fromEntries(
+      tagName.map((tag) => [tag.tag_id, tag.tag_name])
+    );
+  }, [dataLabel, tagName]);
+  console.log("tagMap: ", tagMap)
   const cols = [
     {
       title: "Advertiser",
@@ -552,6 +562,24 @@ export const GlobalTable = ({
         </Text>
       ),
     },
+
+    ...dataLabel === "database" ?[
+      {
+        title: "Tags",
+        width: 180,
+        render: (_, record) => {
+          const firstBrand = record.brands?.[0];
+
+          const tagId = firstBrand?.tag_id;
+
+          return (
+            <Tag color="blue">
+              {tagMap[tagId] || `Tag #${tagId}`}
+            </Tag>
+          );
+        },
+      }
+    ]:[],
 
     {
       title: "Classe",

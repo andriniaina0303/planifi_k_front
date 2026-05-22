@@ -21,12 +21,12 @@ import {
   TrophyOutlined
 } from "@ant-design/icons";
 import { Chart } from "chart.js";
-import { Tooltip, Tag, Card, Col, Divider, Popover, Row, Typography,Collapse,Table, Flex} from "antd";
+import { Tooltip, Tag, Card, Col, Divider, Popover, Row, Typography,Collapse,Table, Flex, FloatButton} from "antd";
 import { FunnelViz } from "./common/FunnelViz";
 import { RateBar } from "./common/RateBar";
 import { AnalyseBadges } from "./common/AnalyseBadge";
 import { tokens } from "../../utils/Tokens";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { pct,fmt } from "../../utils/Helpers";
 import { buildRecommendations } from "../../utils/getSegmentRecomd";
 import { TopBrandsSlider } from "./common/CreateColsTop";
@@ -427,6 +427,8 @@ export const GlobalOverview = ({ segmentNames, open, setOpen, data, mappingData,
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(mappingData);
   const key_value = label_value === "database" ? "advertisers" : "bases";
   const health = getHealthScore(g);
+
+  const [ShowBackTop,setShowBackTop] = useState(false)
   // console.log("MappingData:", mappingData);
   const dataMapped = Object.fromEntries(mappingData.map((db) => [db[idKey], db[nameKey]]));
   // console.log("DataMapped:", dataMapped);
@@ -434,8 +436,52 @@ export const GlobalOverview = ({ segmentNames, open, setOpen, data, mappingData,
     return buildRecommendations(data,key_value);
   }, [data]);
   
+useEffect(() =>{
+    const BtnOnScroll = () => {
+    // Afficher le bouton si on a scrollé plus de 300px
+    setShowBackTop(window.scrollY > 100);
+    console.log("Valeur de ShowBackTop: ",ShowBackTop)
+  };
+
+  window.addEventListener("scroll", BtnOnScroll);
+  return () => window.removeEventListener("scroll", BtnOnScroll);
+},[])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
   return (
-    <div>
+    <div style={{height:"auto"}}>
+{/* Bouton Back to Top Custom */}
+      {ShowBackTop && (
+        <button
+          onClick={scrollToTop}
+          className="flex bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-lg transition-all duration-200 flex items-center justify-center"
+          style={{
+            width: "48px",
+            height: "48px",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 16l-4-4m0 0l4-4m-4 4h18"
+            />
+          </svg>
+        </button>
+      )}
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         {/* Slider Top Brands */}
         <Col xs={24} lg={24}>

@@ -288,7 +288,7 @@ const AdvertiserDetail = ({ _mockData }) => {
   const [viewMode, setViewMode] = useState("chart");              // Mode affichage : \"chart\" ou \"table\"
   const [mainTab, setMainTab] = useState("global");               // Onglet actif : \"global\", \"bases\", \"dimensions\"
   const [openPopover, setOpenPopover] = useState(null) // Etat pour gérer l'ouverture du popover d'explication du health score
-  
+
   // Etat pour stocker les mapping agences et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
   const [databaseMapping, setDatabaseMapping] = useState({});
@@ -305,6 +305,8 @@ useEffect(() => {
     window.removeEventListener("wheel", handleScroll);
   };
 }, []);
+
+
 
 
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
@@ -601,7 +603,7 @@ useEffect(() => {
           ]}
         />
       </Card>
-
+          
       {/* Footer du rapport : informations de génération */}
       {/* <div
         style={{
