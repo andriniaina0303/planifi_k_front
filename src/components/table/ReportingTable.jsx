@@ -104,7 +104,8 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
               </a>
               <a
                 onClick={() => {
-                  clearFilters();
+                  clearFilters() ; 
+                  confirm ({closeDropdown : true});
                   setSearchAdvertiser("");
                   confirm({closeDropdown:true})
                 }}
@@ -151,7 +152,11 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
                 <a onClick={() => confirm()} style={{ color: "#1677ff" }}>
                   Search
                 </a>
-                <a onClick={() => clearFilters()}>Reset</a>
+                <a onClick={() =>
+                  {
+                    clearFilters();
+                    confirm({closeDropdown : true})
+                  } }>Reset</a>
               </div>
             </div>
           ),
