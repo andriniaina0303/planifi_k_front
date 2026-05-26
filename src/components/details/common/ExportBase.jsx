@@ -158,7 +158,8 @@ export async function exportGlobalTableXLS(
     { label: "eCPM",       width: 14, align: "center"  },  // C21
     { label: "Clicks val", width: 12, align: "center"  },  // C22
     { label: "Leads val",  width: 12, align: "center"  },  // C23
-    { label: "Volume val", width: 12, align: "center"  },  // C24
+    { label: "Conversion",   width: 12, align: "center"  },  // C24
+    { label: "Volume val", width: 12, align: "center"  },  // C25
   ];
   const NB = COLS.length;
   COLS.forEach((col, i) => { sheet.getColumn(i + 1).width = col.width; });
@@ -331,8 +332,24 @@ export async function exportGlobalTableXLS(
       row.getCell(23).value = brand.leads_val ?? null;
       sc(row.getCell(23), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
 
-      row.getCell(24).value = brand.volume_val ?? null;
-      sc(row.getCell(24), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+      // C24 : Taux de transformation
+      const conversion =
+         brand.leads_val > 0 && brand.clickers != null
+            ? (brand.leads_val / brand.clickers)
+            : 0;
+
+      row.getCell(24).value = conversion;
+
+      sc(row.getCell(24), {
+        fg: COLOR.black,
+        bg: rowBg,
+        bold: true,
+        align: "center",
+        fmt: "0.00%",
+      });
+
+      row.getCell(25).value = brand.volume_val ?? null;
+      sc(row.getCell(25), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
     }
   }
 
@@ -348,14 +365,14 @@ export async function exportGlobalTableXLS(
   for (let c = 2; c <= 11; c++) blank(totalRow.getCell(c), COLOR.header_bg);
 
   // SUM : Sends(11), Openers(12), Clickers(14), Unsubs(16), clicks_val(21), leads_val(22), volume_val(23)
-  [12, 13, 15, 17, 22, 23, 24].forEach((c) => {
+  [12, 13, 15, 17, 22, 23, 25].forEach((c) => {
     const L = sheet.getColumn(c).letter;
     totalRow.getCell(c).value = { formula: "SUM(" + L + firstDataRow + ":" + L + lastDataRow + ")" };
     sc(totalRow.getCell(c), { fg: COLOR.header_fg, bg: COLOR.header_bg, bold: true, align: "center", fmt: "#,##0" });
   });
 
   // AVERAGE : Open%(13), CTR%(15), Unsub%(17), CTO%(18)
-  [[14, COLOR.success], [16, COLOR.warning], [18, COLOR.danger], [19, COLOR.warning]].forEach(([c, color]) => {
+  [[14, COLOR.success], [16, COLOR.warning], [18, COLOR.danger], [19, COLOR.warning],[24, COLOR.success]].forEach(([c, color]) => {
     const L = sheet.getColumn(c).letter;
     totalRow.getCell(c).value = { formula: "AVERAGE(" + L + firstDataRow + ":" + L + lastDataRow + ")" };
     sc(totalRow.getCell(c), { fg: color, bg: COLOR.header_bg, bold: true, align: "center", fmt: "0.00%" });
