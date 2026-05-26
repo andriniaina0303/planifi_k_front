@@ -506,6 +506,7 @@ const fetchAllSegments = async () => {
               agenceMapping={agenceMapping}
               allbase={advertiserMapping}
               advertiser_id={database_id} 
+              tag_name = {tagMapping}
             />
           }
 

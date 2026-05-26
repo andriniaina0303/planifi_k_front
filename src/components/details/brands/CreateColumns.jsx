@@ -215,6 +215,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
             padding: "2px 8px",
             fontSize: 12,
             fontWeight: 400,
+            width:100
           }}
         >
           <Text ellipsis={{tooltip:true}}>
@@ -236,6 +237,17 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
         </Text>
       );
     }
+  },
+  {
+    title: "Conv %",
+    render: (_, record) => {
+      const value =
+        record.leads_val && record.clickers
+          ? (record.leads_val / record.clickers) * 100
+          : 0;
+
+      return `${value.toFixed(2)} %`;
+    },
   },
   {
     title: "Lead val.",
