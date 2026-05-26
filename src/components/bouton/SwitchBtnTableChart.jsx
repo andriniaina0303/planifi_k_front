@@ -45,7 +45,7 @@ export const TabExtraContent = ({
   };
 
   // ── Onglet dimensions → Segmented chart/table ──────────────────────────────
-  if (mainTab === "dimensions") {
+  if (mainTab?.toLowerCase().includes("dimensions")) {
     return (
       <Segmented
         value={viewMode}

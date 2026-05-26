@@ -358,7 +358,7 @@ export async function exportAdvertiserXLS(
       sc(row.getCell(24), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
 
       // Conversion
-      const conversion = brand.leads_val > 0 && brand.clickers != null
+      const conversion = brand.leads_val && brand.clickers > 0
       ? (brand.leads_val / brand.clickers) : 0 ; 
 
       row.getCell(25).value = conversion;

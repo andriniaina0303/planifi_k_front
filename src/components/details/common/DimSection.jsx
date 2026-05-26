@@ -93,12 +93,12 @@ const dimCols = [
     render: pct,
     align: "right",
   },
-  {
-    title: "Analyses",
-    dataIndex: "analyses",
-    width: 280,
-    render: (a) => <AnalyseBadges analyses={a} compact />,
-  },
+  // {
+  //   title: "Analyses",
+  //   dataIndex: "analyses",
+  //   width: 280,
+  //   render: (a) => <AnalyseBadges analyses={a} compact />,
+  // },
 ];
 
 export const DimSection = ({ dimensions, viewMode, hideFilter= false, styles }) => (
