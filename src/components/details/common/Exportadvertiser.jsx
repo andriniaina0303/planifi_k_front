@@ -99,9 +99,10 @@ async function buildSegmentCache(advertisers, database_id) {
 export async function exportAdvertiserXLS(
   advertisers,
   agenceMapping,
+  tag_name,
   clsConfig,
   databaseInfo = {},
-  tagMapping,
+  
 ) {
   // ── Nom de fichier depuis databaseInfo.name ───────────────────────────────
   const safeName = (databaseInfo.name || "database")
@@ -116,9 +117,7 @@ export async function exportAdvertiserXLS(
     (agenceMapping || []).map((a) => [a.agence_id, a.agence_name])
   );
 
-  const tagMap =  Object.fromEntries(
-    (tagMapping || []).map((tag) => [tag.tag_id, tag.tag_name])
-  );
+  const tagMap = Object.fromEntries((tag_name || []).map((tag) =>[tag.tag_id,tag.tag_name]))
 
   // ── 2. Pré-chargement parallèle des segments ──────────────────────────────
   const segmentCache = await buildSegmentCache(advertisers, databaseInfo.id);
@@ -137,27 +136,29 @@ export async function exportAdvertiserXLS(
     { label: "Classe",      width: 10, align: "center"  },  // C2
     { label: "Health",      width: 10, align: "center"  },  // C3
     { label: "Brand",       width: 24, align: "center"   },  // C4
-    { label: "Lien du Kit", width: 46, align: "center"   },  // C5
-    { label: "Subject",     width: 46, align: "center"   },  // C6
-    { label: "Date",        width: 14, align: "center"  },  // C7
-    { label: "Segment(s)",  width: 28, align: "center"   },  // C8
-    { label: "ListName",    width: 22, align: "center"   },  // C9
-    { label: "Model(s)",    width: 20, align: "center"   },  // C10
-    { label: "Agence",      width: 18, align: "center"   },  // C11
-    { label: "Sends",       width: 14, align: "center"  },  // C12
-    { label: "Openers",     width: 14, align: "center"  },  // C13
-    { label: "Open %",      width: 11, align: "center"  },  // C14
-    { label: "Clickers",    width: 14, align: "center"  },  // C15
-    { label: "CTR %",       width: 11, align: "center"  },  // C16
-    { label: "Unsubs",      width: 14, align: "center"  },  // C17
-    { label: "Unsub %",     width: 11, align: "center"  },  // C18
-    { label: "CTO %",       width: 11, align: "center"  },  // C19
-    { label: "CA",          width: 14, align: "center"  },  // C20
-    { label: "eCPM",        width: 14, align: "center"  },  // C21
-    { label: "Clicks val",  width: 12, align: "center"  },  // C22
-    { label: "Leads val",   width: 12, align: "center"  },  // C23
-    { label: "Volume val",  width: 12, align: "center"  },  // C24
-    { label: "Tag",  width: 12, align: "center"  },  // C24
+     { label: "Tag",        width: 28, align: "center"  },  // C5
+    { label: "Lien du Kit", width: 46, align: "center"   },  // C6
+    { label: "Subject",     width: 46, align: "center"   },  // C7
+    { label: "Date",        width: 14, align: "center"  },  // C8
+    { label: "Segment(s)",  width: 28, align: "center"   },  // C9
+    { label: "ListName",    width: 22, align: "center"   },  // C10
+    { label: "Model(s)",    width: 20, align: "center"   },  // C11
+    { label: "Agence",      width: 18, align: "center"   },  // C12
+    { label: "Sends",       width: 14, align: "center"  },  // C13
+    { label: "Openers",     width: 14, align: "center"  },  // C14
+    { label: "Open %",      width: 11, align: "center"  },  // C15
+    { label: "Clickers",    width: 14, align: "center"  },  // C16
+    { label: "CTR %",       width: 11, align: "center"  },  // C17
+    { label: "Unsubs",      width: 14, align: "center"  },  // C18
+    { label: "Unsub %",     width: 11, align: "center"  },  // C19
+    { label: "CTO %",       width: 11, align: "center"  },  // C20
+    { label: "CA",          width: 14, align: "center"  },  // C21
+    { label: "eCPM",        width: 14, align: "center"  },  // C22
+    { label: "Clicks val",  width: 12, align: "center"  },  // C23
+    { label: "Leads val",   width: 12, align: "center"  },  // C24
+    { label: "Conversion",   width: 12, align: "center"  },  // C25
+    { label: "Volume val",  width: 12, align: "center"  },  // C26
+   
   ];
   const NB = COLS.length;
   COLS.forEach((col, i) => { sheet.getColumn(i + 1).width = col.width; });
@@ -208,7 +209,7 @@ export async function exportAdvertiserXLS(
       const dates      = (brand.date_schedule || []).join(", ");
       const listname   = (brand.ListName || []).join(", ");
       const agenceName = agenceMap[brand.agence_id] || (brand.agence_id != null ? String(brand.agence_id) : "–");
-      const tagName= tagMap[brand.tag_id] || (brand.tag_id != null ? String(brand.tag_id) : "–");
+      const tagName = tagMap[brand.tag_id] || (brand.tag_id !=null ? String (brand.tag_id) : "-");
       // Segments depuis cache — aucun appel réseau
       const segments = (brand.segment_id || [])
         .map((segId) => segmentCache[`${databaseInfo.id}_${segId}`] || String(segId))
@@ -246,10 +247,13 @@ export async function exportAdvertiserXLS(
       row.getCell(4).value  = brandName;
       sc(row.getCell(4),  { fg: COLOR.black,   bg: rowBg, bold: true });
 
+      row.getCell(5).value = tagName;
+      sc(row.getCell(5), { fg: COLOR.black,   bg: rowBg });
+
        // C5 : Lien du Kit
       // row.getCell(5).value = brand.creativities ?? null;
       // sc(row.getCell(5), { fg: COLOR.black,   bg: rowBg });
-      const cell = row.getCell(5);
+      const cell = row.getCell(6);
       const url = brand.creativities;
 
             if (url) {
@@ -279,84 +283,91 @@ export async function exportAdvertiserXLS(
         }
 
       // C6 : Subject
-      row.getCell(6).value  = subject;
-      sc(row.getCell(6),  { fg: COLOR.black,   bg: rowBg, italic: true });
+      row.getCell(7).value  = subject;
+      sc(row.getCell(7),  { fg: COLOR.black,   bg: rowBg, italic: true });
 
       // C7 : Date schedule
-      row.getCell(7).value  = dates;
-      sc(row.getCell(7),  { fg: COLOR.black,   bg: rowBg, align: "center" });
+      row.getCell(8).value  = dates;
+      sc(row.getCell(8),  { fg: COLOR.black,   bg: rowBg, align: "center" });
 
       // C8 : Segment(s)
-      row.getCell(8).value  = segments;
-      sc(row.getCell(8),  { fg: COLOR.black,   bg: rowBg });
-
-      // C9 : ListName
-      row.getCell(9).value  = listname;
+      row.getCell(9).value  = segments;
       sc(row.getCell(9),  { fg: COLOR.black,   bg: rowBg });
 
-      // C10 : Model(s)
-      row.getCell(10).value  = models;
+      // C9 : ListName
+      row.getCell(10).value  = listname;
       sc(row.getCell(10),  { fg: COLOR.black,   bg: rowBg });
 
+      // C10 : Model(s)
+      row.getCell(11).value  = models;
+      sc(row.getCell(11),  { fg: COLOR.black,   bg: rowBg });
+
       // C11 : Agence
-      row.getCell(11).value = agenceName;
-      sc(row.getCell(11), { fg: COLOR.black,   bg: rowBg });
+      row.getCell(12).value = agenceName;
+      sc(row.getCell(12), { fg: COLOR.black,   bg: rowBg });
 
       // C12 : Sends
-      row.getCell(12).value = brand.sends ?? null;
-      sc(row.getCell(12), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
-
-      // C13 : Openers
-      row.getCell(13).value = brand.openers ?? null;
+      row.getCell(13).value = brand.sends ?? null;
       sc(row.getCell(13), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
 
+      // C13 : Openers
+      row.getCell(14).value = brand.openers ?? null;
+      sc(row.getCell(14), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+
       // C14 : Open % — vert
-      row.getCell(14).value = brand.taux_openers != null ? brand.taux_openers / 100 : null;
-      sc(row.getCell(14), { fg: COLOR.success, bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
+      row.getCell(15).value = brand.taux_openers != null ? brand.taux_openers / 100 : null;
+      sc(row.getCell(15), { fg: COLOR.success, bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
 
       // C15 : Clickers
-      row.getCell(15).value = brand.clickers ?? null;
-      sc(row.getCell(15), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+      row.getCell(16).value = brand.clickers ?? null;
+      sc(row.getCell(16), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
 
       // C16 : CTR % — orange
-      row.getCell(16).value = brand.taux_clickers != null ? brand.taux_clickers / 100 : null;
-      sc(row.getCell(16), { fg: COLOR.warning, bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
+      row.getCell(17).value = brand.taux_clickers != null ? brand.taux_clickers / 100 : null;
+      sc(row.getCell(17), { fg: COLOR.warning, bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
 
       // C17 : Unsubs
-      row.getCell(17).value = brand.unsubs ?? null;
-      sc(row.getCell(17), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+      row.getCell(18).value = brand.unsubs ?? null;
+      sc(row.getCell(18), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
 
       // C18 : Unsub % — rouge
-      row.getCell(18).value = brand.taux_unsubs != null ? brand.taux_unsubs / 100 : null;
-      sc(row.getCell(18), { fg: COLOR.danger,  bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
+      row.getCell(19).value = brand.taux_unsubs != null ? brand.taux_unsubs / 100 : null;
+      sc(row.getCell(19), { fg: COLOR.danger,  bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
 
       // C19 : CTO % — orange
-      row.getCell(19).value = brand.taux_cto != null ? brand.taux_cto / 100 : null;
-      sc(row.getCell(19), { fg: COLOR.warning, bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
+      row.getCell(20).value = brand.taux_cto != null ? brand.taux_cto / 100 : null;
+      sc(row.getCell(20), { fg: COLOR.warning, bg: rowBg, bold: true, align: "center", fmt: "0.00%" });
 
       // C20 : CA
-      row.getCell(20).value = brand.ca ?? null;
-      sc(row.getCell(20), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0.00" });
-
-      // C21 : eCPM
-      row.getCell(21).value = brand.ecpm ?? null;
+      row.getCell(21).value = brand.ca ?? null;
       sc(row.getCell(21), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0.00" });
 
-      // C22 : clicks_val
-      row.getCell(22).value = brand.clicks_val ?? null;
-      sc(row.getCell(22), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+      // C21 : eCPM
+      row.getCell(22).value = brand.ecpm ?? null;
+      sc(row.getCell(22), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0.00" });
 
-      // C23 : leads_val
-      row.getCell(23).value = brand.leads_val ?? null;
+      // C22 : clicks_val
+      row.getCell(23).value = brand.clicks_val ?? null;
       sc(row.getCell(23), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
 
-      // C24 : volume_val
-      row.getCell(24).value = brand.volume_val ?? null;
+      // C23 : leads_val
+      row.getCell(24).value = brand.leads_val ?? null;
       sc(row.getCell(24), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+
+      // Conversion
+      const conversion = brand.leads_val > 0 && brand.clickers != null
+      ? (brand.leads_val / brand.clickers) : 0 ; 
+
+      row.getCell(25).value = conversion;
+      sc(row.getCell(25), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "0.00%" });
+
+        
+
+      // C24 : volume_val
+      row.getCell(26).value = brand.volume_val ?? null;
+      sc(row.getCell(26), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+
       
-          // C25 : Agence
-      row.getCell(25).value = tagName;
-      sc(row.getCell(25), { fg: COLOR.black,   bg: rowBg });
     }
   }
 
@@ -369,21 +380,21 @@ export async function exportAdvertiserXLS(
   totalRow.getCell(1).value = "TOTAL — " + globalRowIdx + " brands / " + (advertisers || []).length + " advertisers";
   sc(totalRow.getCell(1), { fg: COLOR.header_fg, bg: COLOR.header_bg, bold: true });
 
-  for (let c = 2; c <= 11; c++) blank(totalRow.getCell(c), COLOR.header_bg);
+  for (let c = 2; c <= 12; c++) blank(totalRow.getCell(c), COLOR.header_bg);
 
-  [12, 13, 15, 17, 22, 23, 24].forEach((c) => {
+  [13, 14, 16, 18, 23, 24, 26].forEach((c) => {
     const L = sheet.getColumn(c).letter;
     totalRow.getCell(c).value = { formula: "SUM(" + L + firstDataRow + ":" + L + lastDataRow + ")" };
     sc(totalRow.getCell(c), { fg: COLOR.header_fg, bg: COLOR.header_bg, bold: true, align: "center", fmt: "#,##0" });
   });
 
-  [[14, COLOR.success], [16, COLOR.warning], [18, COLOR.danger], [19, COLOR.warning]].forEach(([c, color]) => {
+  [[15, COLOR.success], [17, COLOR.warning], [19, COLOR.danger], [20, COLOR.warning], [25, COLOR.success]].forEach(([c, color]) => {
     const L = sheet.getColumn(c).letter;
     totalRow.getCell(c).value = { formula: "AVERAGE(" + L + firstDataRow + ":" + L + lastDataRow + ")" };
     sc(totalRow.getCell(c), { fg: color, bg: COLOR.header_bg, bold: true, align: "center", fmt: "0.00%" });
   });
 
-  [20, 21].forEach((c) => {
+  [21, 22].forEach((c) => {
     const L = sheet.getColumn(c).letter;
     totalRow.getCell(c).value = { formula: "SUM(" + L + firstDataRow + ":" + L + lastDataRow + ")" };
     sc(totalRow.getCell(c), { fg: COLOR.header_fg, bg: COLOR.header_bg, bold: true, align: "center", fmt: "#,##0.00" });

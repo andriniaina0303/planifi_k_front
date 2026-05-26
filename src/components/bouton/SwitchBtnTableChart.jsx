@@ -17,6 +17,7 @@ export const TabExtraContent = ({
   advertiser_id,   // utilisé dans AdvertiserDetail (ExportBase)
   database_id,     // utilisé dans DatabaseDetail (ExportAdvertiser)
   allbase,
+  tag_name
 }) => {
   const [exporting, setExporting] = useState(false);
 
@@ -113,6 +114,7 @@ export const TabExtraContent = ({
             await exportAdvertiserXLS(
               data.advertisers,
               agenceMapping,
+              tag_name,
               clsConfig,
               { id: data.database_id || database_id, name: dbName }
             );

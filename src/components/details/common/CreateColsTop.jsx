@@ -1,4 +1,4 @@
-import { Card, Table, Tag, Row, Col, Typography, Tooltip, Carousel,Space} from "antd";
+import { Grid, Card, Table, Tag, Row, Col, Typography, Tooltip, Carousel,Space} from "antd";
 import {
   FireOutlined,
   TrophyOutlined,
@@ -14,8 +14,8 @@ import { useMemo, useRef } from "react";
 import { decodeBase64 } from "../../../utils/utils";
 import { buildSegmentButton, buildListButton } from "../brands/CreateColumns";
 
+const { useBreakpoint } = Grid;
 const { Text } = Typography;
-
 /* 
  * Composant TopBrandsSlider
  * Affiche un carousel avec 3 tableaux :
@@ -26,6 +26,7 @@ const { Text } = Typography;
  */
 export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_value }) => {
   const carouselRef = useRef();
+  const screens = useBreakpoint();
 
   // Configuration des 3 vues
   const viewConfigs = [
@@ -116,25 +117,32 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
         </div>
       ),
     },
-    {
-      title: config.getInfo === "subject" ? "Subjects" : "Brands",
-      dataIndex: config.getInfo,
-      key: config.getInfo,
-      width: config.getInfo === "subject" ? 400 : "auto",
-      render: (text) => (
-        <Tooltip title={decodeBrandName(text)}>
-          <Text
-            style={{
-              fontSize: 12,
-              whiteSpace: "nowrap",
-              display: "block",
-            }}
-          >
-            {decodeBrandName(text)}
-          </Text>
-        </Tooltip>
-      ),
-    },
+{
+  title: config.getInfo === "subject" ? "Subjects" : "Brands",
+  dataIndex: config.getInfo,
+  key: config.getInfo,
+  width: config.getInfo === "subject" ? 500 : 100,
+
+  render: (text) => {
+    const isSmallScreen = screens.xs || screens.sm || screens.md;
+
+    return (
+      <Tooltip title={decodeBrandName(text)}>
+        <Text
+          ellipsis={isSmallScreen}
+          style={{
+            fontSize: 12,
+            whiteSpace: "nowrap",
+            display: "block",
+            maxWidth: isSmallScreen ? "100%" : "100%",
+          }}
+        >
+          {decodeBrandName(text)}
+        </Text>
+      </Tooltip>
+    );
+  },
+},
 
   ...(label_value === "database" ?[
       {

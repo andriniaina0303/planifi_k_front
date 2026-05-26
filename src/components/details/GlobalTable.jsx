@@ -547,9 +547,11 @@ export const GlobalTable = ({
     );
   }, [dataLabel, tagName]);
   console.log("tagMap: ", tagMap)
+  const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
+
   const cols = [
     {
-      title: "Advertiser",
+      title: `${titre}`,
       dataIndex: `${idKey}`,
       fixed: "left",
       width: 180,
