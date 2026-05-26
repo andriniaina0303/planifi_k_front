@@ -100,7 +100,8 @@ export async function exportAdvertiserXLS(
   advertisers,
   agenceMapping,
   clsConfig,
-  databaseInfo = {}
+  databaseInfo = {},
+  tagMapping,
 ) {
   // ── Nom de fichier depuis databaseInfo.name ───────────────────────────────
   const safeName = (databaseInfo.name || "database")
@@ -113,6 +114,10 @@ export async function exportAdvertiserXLS(
   // ── 1. Mapping agence O(1) ────────────────────────────────────────────────
   const agenceMap = Object.fromEntries(
     (agenceMapping || []).map((a) => [a.agence_id, a.agence_name])
+  );
+
+  const tagMap =  Object.fromEntries(
+    (tagMapping || []).map((tag) => [tag.tag_id, tag.tag_name])
   );
 
   // ── 2. Pré-chargement parallèle des segments ──────────────────────────────
@@ -152,6 +157,7 @@ export async function exportAdvertiserXLS(
     { label: "Clicks val",  width: 12, align: "center"  },  // C22
     { label: "Leads val",   width: 12, align: "center"  },  // C23
     { label: "Volume val",  width: 12, align: "center"  },  // C24
+    { label: "Tag",  width: 12, align: "center"  },  // C24
   ];
   const NB = COLS.length;
   COLS.forEach((col, i) => { sheet.getColumn(i + 1).width = col.width; });
@@ -202,7 +208,7 @@ export async function exportAdvertiserXLS(
       const dates      = (brand.date_schedule || []).join(", ");
       const listname   = (brand.ListName || []).join(", ");
       const agenceName = agenceMap[brand.agence_id] || (brand.agence_id != null ? String(brand.agence_id) : "–");
-
+      const tagName= tagMap[brand.tag_id] || (brand.tag_id != null ? String(brand.tag_id) : "–");
       // Segments depuis cache — aucun appel réseau
       const segments = (brand.segment_id || [])
         .map((segId) => segmentCache[`${databaseInfo.id}_${segId}`] || String(segId))
@@ -347,6 +353,10 @@ export async function exportAdvertiserXLS(
       // C24 : volume_val
       row.getCell(24).value = brand.volume_val ?? null;
       sc(row.getCell(24), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+      
+          // C25 : Agence
+      row.getCell(25).value = tagName;
+      sc(row.getCell(25), { fg: COLOR.black,   bg: rowBg });
     }
   }
 
