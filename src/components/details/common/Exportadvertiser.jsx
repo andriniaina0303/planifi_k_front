@@ -3,6 +3,7 @@ import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { get_segment_name } from "../../../api/advertiser";
 import { decodeBase64 } from "../../../utils/utils";
+import { pct } from "../../../utils/Helpers";
 
 // ─── Couleurs UI (identiques à ExportBase) ────────────────────────────────────
 const COLOR = {
@@ -155,7 +156,8 @@ export async function exportAdvertiserXLS(
     { label: "Clicks val",  width: 12, align: "center"  },  // C22
     { label: "Leads val",   width: 12, align: "center"  },  // C23
     { label: "Volume val",  width: 12, align: "center"  },  // C24
-    { label: "Tags",  width: 12, align: "center"  },  // C24
+    { label: "Tags",  width: 14, align: "center"  },  // C24
+    { label: "Taux de conv.",  width: 12, align: "center"  },  // C24
   ];
   const NB = COLS.length;
   COLS.forEach((col, i) => { sheet.getColumn(i + 1).width = col.width; });
@@ -211,7 +213,9 @@ export async function exportAdvertiserXLS(
       const segments = (brand.segment_id || [])
         .map((segId) => segmentCache[`${databaseInfo.id}_${segId}`] || String(segId))
         .join(", ");
-
+      
+      const taux_conv = (brand.leads_val / brand.clickers) * 100;
+        
       // Models : model + payvalue
       const models = (brand.models || [])
         .filter((m) => m.model && String(m.model).trim())
@@ -354,6 +358,9 @@ export async function exportAdvertiserXLS(
 
       row.getCell(25).value = tagName;
       sc(row.getCell(25), { fg: COLOR.black,   bg: rowBg });
+
+      row.getCell(26).value = models.toLowerCase().includes("cpl") ? pct(taux_conv) : 0;
+      sc(row.getCell(26), { fg: COLOR.black,   bg: rowBg })
     }
   }
 

@@ -546,7 +546,6 @@ export const GlobalTable = ({
       tagName.map((tag) => [tag.tag_id, tag.tag_name])
     );
   }, [dataLabel, tagName]);
-  console.log("tagMap: ", tagMap)
   const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
 
   const cols = [

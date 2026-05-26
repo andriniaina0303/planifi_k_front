@@ -121,7 +121,7 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
   title: config.getInfo === "subject" ? "Subjects" : "Brands",
   dataIndex: config.getInfo,
   key: config.getInfo,
-  width: config.getInfo === "subject" ? 400 : "auto",
+  width: config.getInfo === "subject" ? 500 : 100,
 
   render: (text) => {
     const isSmallScreen = screens.xs || screens.sm || screens.md;
@@ -134,7 +134,7 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
             fontSize: 12,
             whiteSpace: "nowrap",
             display: "block",
-            maxWidth: isSmallScreen ? 400 : "100%",
+            maxWidth: isSmallScreen ? "100%" : "100%",
           }}
         >
           {decodeBrandName(text)}
@@ -199,7 +199,6 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
         render: (segmentIds, record) => {
           // console.log("Contenu de record: ", record)
           const listNamesForBrand = record.ListName || [];
-          console.log("ListeName: ",listNamesForBrand)
           const segmentBtn =
             segmentIds?.length > 0
               ? buildSegmentButton(segmentIds, segmentNames, tokens)
