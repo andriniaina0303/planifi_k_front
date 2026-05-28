@@ -197,7 +197,7 @@ useEffect(() => {
       setTagMapping(tags);
 
       console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
-      await fetchReporting(DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
+      // await fetchReporting(DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
       
       console.log("✅ Init complete");
     } catch (error) {
@@ -282,7 +282,11 @@ useEffect(() => {
           }}
           bodyStyle={{ padding: 0 }}
         >
-          <ReportingTable data={filteredData} tagMapping={tagMapping} dataKey="advertiser" />
+          {filteredData.length > 0 ? (
+            <ReportingTable data={filteredData} tagMapping={tagMapping} dataKey="advertiser" />
+          ) : (
+            <div style={{ padding: 20, textAlign: "center" }}>Aucune donnée</div>          
+          )}
         </Card>
       </Row>
     </div>

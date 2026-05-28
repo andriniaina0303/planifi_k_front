@@ -68,18 +68,6 @@ const ReportingMenu = ({ onClose }) => {
               }}
             />
           </div>
-
-          <div style={isActive("/reporting/FranceMap") ? activeStyle : {}}>
-            <SubMenuItem
-              icon={FiMap }
-              label="FranceMap"
-              color="#6f91eee3"
-              onClick={() => {
-                navigate("/reporting/FranceMap");
-                onClose?.();
-              }}
-            />
-          </div>
         </div>
       )}
     </>

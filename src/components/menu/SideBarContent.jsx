@@ -47,24 +47,36 @@ const SidebarContent = ({ onClose }) => {
   const isActive = (path) => location.pathname.startsWith(path);
 
    // Infos utilisateur récupérées depuis l'API
-  const [user, seteUser] = useState({email:"", username:""});
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
 
+    return savedUser
+      ? JSON.parse(savedUser)
+      : { email: "", username: "" };
+  });
   useEffect(() => {
-     // Appel GET /auth/infos — le token est ajouté automatiquement par l'intercepteur
-     api
+    api
       .get("/auth/infos")
-      .then((res) =>{
-        seteUser({
+      .then((res) => {
+
+        const userData = {
           email: res.data.email || "",
           username: res.data.username || "",
-        });
+        };
+
+        // Mise à jour React
+        setUser(userData);
+
+        // Sauvegarde locale
+        localStorage.setItem("user", JSON.stringify(userData));
       })
       .catch((err) => {
-        console.error("Erreur lors de la récupération des infos utilisateur :", err);
-        
+        console.error(
+          "Erreur lors de la récupération des infos utilisateur :",
+          err
+        );
       });
-       
-    }, []); 
+  }, []);
      // Initiales pour l'avatar (ex: "Andre Kontiki" → "AK")
   const initials = user.username
     ? user.username

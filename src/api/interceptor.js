@@ -20,6 +20,7 @@ let inactivityTimer = null;
 export function logout() {
   localStorage.removeItem("access_token");
   localStorage.removeItem("refresh_token");
+  localStorage.removeItem("user");
   clearTimeout(inactivityTimer);
   window.location.href = "/login";
 }

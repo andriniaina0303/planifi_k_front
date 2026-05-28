@@ -228,11 +228,6 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
     ],
     [tagMapping]
   );
-
-  if (!data || data.length === 0) {
-    return <div style={{ padding: 20, textAlign: "center" }}>Aucune donnée</div>;
-  }
-
   return (
     <Table
       dataSource={data}
