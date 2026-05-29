@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { X, Search, MapPin } from 'lucide-react';
-import {type  DepartmentData } from '../App';
+import {type  DepartmentData } from '../MapApp';
 import { getColorByPersonCount, getBadgeStyle } from '../utils/colorutils';
 import { Modal, Input, Button, Checkbox, Space, Row, Col, Empty } from 'antd';
+import { getClicksForDepartment } from './function/funcClick';
 
 interface ListeDepartementsProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface ListeDepartementsProps {
   multiSelDept: DepartmentData[];
   setMultiSelDep: React.Dispatch<React.SetStateAction<DepartmentData[]>>;
   isRegionMode: boolean;
+  ClickData : Record<string, number>
 }
 
 // Mapping des départements vers leurs régions (même que dans FranceMap)
@@ -79,33 +81,40 @@ const DEPARTMENT_TO_REGION: Record<string, string> = {
 };
 
 // Données de clics simulées (les mêmes que dans FranceMap)
-const clickData: Record<string, number> = {
-  "75": 250,  // Paris
-  "92": 300,  // Hauts-de-Seine
-  "93": 150,  // Seine-Saint-Denis
-  "94": 180,  // Val-de-Marne
-  "973": 120, // Guyane
-  "69": 400,  // Rhône
-  "13": 350,  // Bouches-du-Rhône
-  "33": 280,  // Gironde
-};
-
-// Fonction pour obtenir les clics d'un département
-const getClicksForDepartment = (deptCode: string): number => {
-  return clickData[deptCode] || 0;
-};
+// const clickData: Record<string, number> = {
+//   "75": 250,  // Paris
+//   "92": 300,  // Hauts-de-Seine
+//   "93": 150,  // Seine-Saint-Denis
+//   "94": 180,  // Val-de-Marne
+//   "973": 120, // Guyane
+//   "69": 400,  // Rhône
+//   "13": 350,  // Bouches-du-Rhône
+//   "33": 280,  // Gironde
+// };
 
 
-const getClicksForRegion = (regionName: string): number => {
-  let totalClicks = 0;
+
+
+// const getClicksForRegion = (regionName: string): number => {
+//   let totalClicks = 0;
   
-  Object.entries(DEPARTMENT_TO_REGION).forEach(([deptCode, region]) => {
-    if (region === regionName) {
-      totalClicks += getClicksForDepartment(deptCode);
-    }
-  });
+//   Object.entries(DEPARTMENT_TO_REGION).forEach(([deptCode, region]) => {
+//     if (region === regionName) {
+//       totalClicks += getClicksForDepartment(ClickdeptCode);
+//     }
+//   });
   
-  return totalClicks;
+//   return totalClicks;
+// };
+
+// 🎯 Fonction pour calculer la largeur du modal de manière responsive
+const getModalWidth = () => {
+  if (typeof window === 'undefined') return 1000;
+  const screenWidth = window.innerWidth;
+  if (screenWidth < 576) return screenWidth - 32;   // Mobile: full width - 16px padding each side
+  if (screenWidth < 768) return screenWidth - 64;   // Tablet: full width - 32px padding each side
+  if (screenWidth < 1200) return Math.min(1000, screenWidth - 100); // Small desktop
+  return 1000; // Desktop
 };
 
 export default function ListeDepartements({
@@ -114,10 +123,19 @@ export default function ListeDepartements({
   allGeographies,
   multiSelDept,
   setMultiSelDep,
-  isRegionMode
+  isRegionMode,
+  ClickData
 }: ListeDepartementsProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredGeos, setFilteredGeos] = useState(allGeographies);
+  const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1000);
+
+  // 📱 Listener pour responsive
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
@@ -145,9 +163,10 @@ export default function ListeDepartements({
       ));
     } else {
       // Récupérer le nombre réel de clics depuis clickData
-      const clics = isRegionMode 
-        ? getClicksForRegion(nom)
-        : getClicksForDepartment(code);
+      const clics = getClicksForDepartment(ClickData,code)
+      // isRegionMode 
+      //   ? getClicksForRegion(nom)
+      //   : getClicksForDepartment(code);
       
       setMultiSelDep(prev => [...prev, { nom, code, personnes: clics }]);
     }
@@ -165,9 +184,10 @@ export default function ListeDepartements({
     const allItems: DepartmentData[] = filteredGeos.map(geo => {
       const nom = geo.properties.nom;
       const code = geo.properties.code || geo.properties.nom;
-      const clics = isRegionMode 
-        ? getClicksForRegion(nom)
-        : getClicksForDepartment(code);
+      const clics = getClicksForDepartment(ClickData,code)
+      // isRegionMode 
+      //   ? getClicksForRegion(nom)
+      //   : getClicksForDepartment(code);
       
       return {
         nom,
@@ -186,9 +206,10 @@ export default function ListeDepartements({
 
   // Calculer le total réel des clics
   const totalPersonnes = multiSelDept.reduce((sum, dept) => {
-    const clics = isRegionMode 
-      ? getClicksForRegion(dept.nom)
-      : getClicksForDepartment(dept.code);
+    const clics = getClicksForDepartment(ClickData,dept.code)
+    // isRegionMode 
+      // ? getClicksForRegion(dept.nom)
+      // : getClicksForDepartment(dept.code);
     return sum + clics;
   }, 0);
 
@@ -209,13 +230,24 @@ export default function ListeDepartements({
       }
       open={isOpen}
       onCancel={() => closeScreen(onClose)}
-      width={1000}
-      style={{ maxHeight: '90vh' }}
+      width={getModalWidth()}
+      style={{ 
+        maxHeight: 'calc(100vh - 200px)'
+      }}
+      bodyStyle={{
+        maxHeight: 'calc(100vh - 320px)',
+        overflowY: 'auto',
+        padding: screenWidth < 576 ? '12px' : '16px'
+      }}
+      headerStyle={{
+        padding: screenWidth < 576 ? '12px' : '16px'
+      }}
       footer={[
         <Button key="close" type="primary" onClick={() => closeScreen(onClose)}>
           Fermer
         </Button>
       ]}
+      wrapClassName="liste-departements-modal"
     >
       {/* Info sélection */}
       <div className="mb-4">
@@ -230,124 +262,147 @@ export default function ListeDepartements({
         <Space size="middle" style={{ width: '100%' }}>
           <Input
             placeholder={`Rechercher ${isRegionMode ? 'une région' : 'un département'}...`}
-            prefix={<Search style={{ width: '1rem', height: '1rem' }} />}
+            prefix={<Search size={16} />}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ minWidth: '300px' }}
+            style={{ 
+              width: '100%',
+              fontSize: screenWidth < 576 ? '14px' : '16px'
+            }}
+            size={screenWidth < 576 ? 'small' : 'middle'}
           />
-          <Button type="primary" onClick={selectAll} danger={false}>
-            Tout sélectionner
-          </Button>
-          <Button onClick={deselectAll} danger>
-            Tout désélectionner
-          </Button>
         </Space>
       </div>
 
-      {/* Légende des couleurs */}
-      <div className="mb-3 p-3 bg-light rounded-2">
-        <p className="fw-semibold small mb-2">Légende des couleurs :</p>
-        <div className="d-flex gap-3 flex-wrap">
-          <div className="d-flex align-items-center gap-2">
-            <div style={{ width: '1rem', height: '1rem', borderRadius: '50%', backgroundColor: '#fff', border: '1px solid #ccc' }}></div>
-            <span className="small text-muted">1-200 clics</span>
-          </div>
-          <div className="d-flex align-items-center gap-2">
-            <div style={{ width: '1rem', height: '1rem', borderRadius: '50%', backgroundColor: '#421010' }}></div>
-            <span className="small text-muted">201-500 clics</span>
-          </div>
-          <div className="d-flex align-items-center gap-2">
-            <div style={{ width: '1rem', height: '1rem', borderRadius: '50%', backgroundColor: '#dc3545' }}></div>
-            <span className="small text-muted">501+ clics</span>
-          </div>
-        </div>
+      {/* Selection buttons */}
+      <div className="mb-3 d-flex flex-wrap gap-2">
+        <Button 
+          size="small" 
+          onClick={selectAll}
+          style={{ fontSize: screenWidth < 576 ? '12px' : '14px' }}
+        >
+          Tout sélectionner
+        </Button>
+        <Button 
+          danger 
+          size="small" 
+          onClick={deselectAll}
+          style={{ fontSize: screenWidth < 576 ? '12px' : '14px' }}
+        >
+          Tout désélectionner
+        </Button>
       </div>
 
-      {/* List */}
-      <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
-        <Row gutter={[12, 12]}>
+      {/* Grid of departments/regions */}
+      <div>
+        <Row gutter={[8, 8]}>
           {filteredGeos.length > 0 ? (
-            filteredGeos
-              .sort((a, b) => a.properties.nom.localeCompare(b.properties.nom))
-              .map((geo, index) => {
-                const nom = geo.properties.nom;
-                const code = geo.properties.code || nom;
-                const selectedData = isSelected(nom, code);
-                const selected = !!selectedData;
-                
-                // Obtenir les clics réels depuis clickData
-                const clicsReels = isRegionMode 
-                  ? getClicksForRegion(nom)
-                  : getClicksForDepartment(code);
+            filteredGeos.map((geo, index) => {
+              const nom = geo.properties.nom;
+              const code = geo.properties.code || geo.properties.nom;
+              const selected = isSelected(nom, code);
+              
+              // Obtenir les clics réels depuis clickData
+              const clicsReels = getClicksForDepartment(ClickData,code)
+              // isRegionMode 
+              //   ? getClicksForRegion(nom)
+              //   : getClicksForDepartment(code);
 
-                return (
-                  <Col key={index} xs={24} sm={12} md={8} lg={6}>
-                    <div
-                      className={`d-flex align-items-center gap-2 p-3 border rounded-2 ${
-                        selected
-                          ? 'bg-success bg-opacity-10 border-success'
-                          : 'bg-white border-light'
-                      }`}
-                      style={{
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        borderWidth: selected ? '2px' : '1px',
-                        backgroundColor: selected ? 'rgba(0, 200, 83, 0.1)' : '#fff'
-                      }}
-                      onMouseOver={(e) => {
-                        if (!selected) e.currentTarget.style.backgroundColor = '#fff8e1';
-                      }}
-                      onMouseOut={(e) => {
-                        if (!selected) e.currentTarget.style.backgroundColor = '#fff';
-                      }}
-                    >
-                      {/* Checkbox */}
-                      <Checkbox
-                        checked={selected}
-                        onChange={() => handleCheckboxChange(nom, code)}
-                      />
+              // Responsive grid: mobile=24, tablet=12, desktop=8, xl=6
+              const colSpan = screenWidth < 576 
+                ? { xs: 24 } 
+                : screenWidth < 768 
+                ? { xs: 24, sm: 12 } 
+                : { xs: 24, sm: 12, md: 8, lg: 6 };
 
-                      {/* Nom et code */}
-                      <div style={{ flex: '1 1 auto' }}>
-                        {isRegionMode ? (
-                          <p className="fw-semibold mb-0 small">{nom}</p>
-                        ) : (
-                          <>
-                            <p className="fw-semibold mb-1 small">{nom}</p>
-                            <p className="text-muted mb-0 small">Code: {code}</p>
-                          </>
-                        )}
-                      </div>
+              return (
+                <Col key={index} {...colSpan}>
+                  <div
+                    className={`d-flex align-items-center gap-2 p-3 border rounded-2 ${
+                      selected
+                        ? 'bg-success bg-opacity-10 border-success'
+                        : 'bg-white border-light'
+                    }`}
+                    style={{
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      borderWidth: selected ? '2px' : '1px',
+                      backgroundColor: selected ? 'rgba(0, 200, 83, 0.1)' : '#fff',
+                      padding: screenWidth < 576 ? '8px 12px' : '12px'
+                    }}
+                    onMouseOver={(e) => {
+                      if (!selected) e.currentTarget.style.backgroundColor = '#fff8e1';
+                    }}
+                    onMouseOut={(e) => {
+                      if (!selected) e.currentTarget.style.backgroundColor = '#fff';
+                    }}
+                  >
+                    {/* Checkbox */}
+                    <Checkbox
+                      checked={selected ? true : false}
+                      onChange={() => handleCheckboxChange(nom, code)}
+                    />
 
-                      {/* Affichage du nombre de clics (lecture seule) */}
-                      {selected && clicsReels > 0 && (
-                        <div className="d-flex align-items-center gap-2">
-                          <div 
-                            style={{
-                              width: '1.5rem',
-                              height: '1.5rem',
-                              borderRadius: '50%',
-                              border: '2px solid white',
-                              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                              backgroundColor: getColorByPersonCount(clicsReels)
-                            }}
-                          ></div>
-                          <span className={`small px-2 py-1 rounded ${getBadgeStyle(clicsReels)}`}>
-                            {clicsReels} clic{clicsReels > 1 ? 's' : ''}
-                          </span>
-                        </div>
-                      )}
-                      
-                      {/* Message si aucun clic */}
-                      {selected && clicsReels === 0 && (
-                        <span className="small text-muted italic">
-                          Aucun clic
-                        </span>
+                    {/* Nom et code */}
+                    <div style={{ flex: '1 1 auto' }}>
+                      {isRegionMode ? (
+                        <p className="fw-semibold mb-0 small" style={{ fontSize: screenWidth < 576 ? '12px' : '14px' }}>
+                          {nom}
+                        </p>
+                      ) : (
+                        <>
+                          <p 
+                            className="fw-semibold mb-1 small" 
+                            style={{ fontSize: screenWidth < 576 ? '12px' : '14px' }}
+                          >
+                            {nom}
+                          </p>
+                          <p 
+                            className="text-muted mb-0 small" 
+                            style={{ fontSize: screenWidth < 576 ? '10px' : '12px' }}
+                          >
+                            Code: {code}
+                          </p>
+                        </>
                       )}
                     </div>
-                  </Col>
-                );
-              })
+
+                    {/* Affichage du nombre de clics (lecture seule) */}
+                    {selected && clicsReels > 0 && (
+                      <div className="d-flex align-items-center gap-2">
+                        <div 
+                          style={{
+                            width: '1.5rem',
+                            height: '1.5rem',
+                            borderRadius: '50%',
+                            border: '2px solid white',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                            backgroundColor: getColorByPersonCount(clicsReels),
+                            display: screenWidth < 576 ? 'none' : 'block' // Hide on mobile
+                          }}
+                        ></div>
+                        <span 
+                          className={`small px-2 py-1 rounded ${getBadgeStyle(clicsReels)}`}
+                          style={{ fontSize: screenWidth < 576 ? '10px' : '12px' }}
+                        >
+                          {clicsReels}
+                        </span>
+                      </div>
+                    )}
+                    
+                    {/* Message si aucun clic */}
+                    {selected && clicsReels === 0 && (
+                      <span 
+                        className="small text-muted italic"
+                        style={{ fontSize: screenWidth < 576 ? '10px' : '12px' }}
+                      >
+                        Aucun clic
+                      </span>
+                    )}
+                  </div>
+                </Col>
+              );
+            })
           ) : (
             <Col xs={24}>
               <Empty description="Aucun résultat trouvé" />
@@ -357,7 +412,10 @@ export default function ListeDepartements({
       </div>
 
       {/* Footer */}
-      <div className="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+      <div className="mt-4 pt-3 border-top d-flex justify-content-between align-items-center" style={{
+        flexWrap: screenWidth < 576 ? 'wrap' : 'nowrap',
+        gap: '12px'
+      }}>
         <div>
           <p className="small text-muted mb-1">
             <span className="fw-bold" style={{ color: '#FAC900' }}>{multiSelDept.length}</span> élément{multiSelDept.length > 1 ? 's' : ''} sélectionné{multiSelDept.length > 1 ? 's' : ''}
@@ -372,7 +430,6 @@ export default function ListeDepartements({
     </Modal>
   );
 }
-
 
 
 //  Departement par région 
@@ -480,12 +537,12 @@ export const departementToRegion: Record<string, string> = {
       "72": "Pays de la Loire",
       "85": "Pays de la Loire",
 
-      "04": "Provence-Alpes-Côte d’Azur",
-      "05": "Provence-Alpes-Côte d’Azur",
-      "06": "Provence-Alpes-Côte d’Azur",
-      "13": "Provence-Alpes-Côte d’Azur",
-      "83": "Provence-Alpes-Côte d’Azur",
-      "84": "Provence-Alpes-Côte d’Azur",
+      "04": "Provence-Alpes-Côte d'Azur",
+      "05": "Provence-Alpes-Côte d'Azur",
+      "06": "Provence-Alpes-Côte d'Azur",
+      "13": "Provence-Alpes-Côte d'Azur",
+      "83": "Provence-Alpes-Côte d'Azur",
+      "84": "Provence-Alpes-Côte d'Azur",
 
       // Guadeloupe
       "971": "Guadeloupe",
@@ -502,8 +559,3 @@ export const departementToRegion: Record<string, string> = {
       // Mayotte
       "976": "Mayotte",
 }
-
-
-
-
-

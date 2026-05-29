@@ -85,3 +85,324 @@
   background: #f5f5f5;
 }
 
+/* ════════════════════════════════════════════════════════════════════════════════
+   LISTE DEPARTEMENTS - STYLES RESPONSIFS
+   Styles pour adapter le modal ListeDepartements à tous les écrans
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+/* Styles de base du modal */
+.liste-departements-modal .ant-modal {
+  margin: 0 auto;
+}
+
+.liste-departements-modal .ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.liste-departements-modal .ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.liste-departements-modal .ant-modal-body {
+  background: #fafafa;
+}
+
+.liste-departements-modal .ant-modal-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 16px;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────── */
+/* MOBILE (< 576px) */
+/* ────────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 575px) {
+  /* Modal dimensions */
+  .liste-departements-modal .ant-modal {
+    width: calc(100vw - 32px) !important;
+    margin: 16px auto !important;
+    max-height: calc(100vh - 80px);
+  }
+
+  .liste-departements-modal .ant-modal-wrap {
+    padding: 0 16px;
+  }
+
+  /* Header */
+  .liste-departements-modal .ant-modal-header {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+
+  .liste-departements-modal .ant-modal-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Body */
+  .liste-departements-modal .ant-modal-body {
+    padding: 12px;
+    max-height: calc(100vh - 240px) !important;
+    overflow-y: auto;
+  }
+
+  /* Input/Search */
+  .liste-departements-modal .ant-input {
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+
+  .liste-departements-modal .ant-input::placeholder {
+    font-size: 12px;
+  }
+
+  /* Buttons */
+  .liste-departements-modal .ant-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+    height: auto;
+    border-radius: 6px;
+  }
+
+  .liste-departements-modal .ant-btn-sm {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  /* Grid - Full width on mobile */
+  .liste-departements-modal .ant-row {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .liste-departements-modal .ant-col {
+    padding: 0;
+  }
+
+  /* Items grid */
+  .liste-departements-modal [class*="col-xs-24"] {
+    width: 100%;
+  }
+
+  /* Card items */
+  .liste-departements-modal .ant-checkbox {
+    margin-right: 8px;
+  }
+
+  .liste-departements-modal .border.rounded-2 {
+    padding: 8px 12px !important;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  .liste-departements-modal .border.rounded-2 p {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+
+  .liste-departements-modal .border.rounded-2 .fw-semibold {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .liste-departements-modal .border.rounded-2 .text-muted {
+    font-size: 10px;
+  }
+
+  /* Hide visual elements on mobile */
+  .liste-departements-modal [style*="width: 1.5rem"] {
+    display: none !important;
+  }
+
+  /* Footer */
+  .liste-departements-modal .ant-modal-footer {
+    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .liste-departements-modal .border-top {
+    padding: 12px 0;
+  }
+
+  .liste-departements-modal .border-top p {
+    font-size: 12px;
+  }
+
+  /* Text alignment on mobile */
+  .liste-departements-modal .text-muted {
+    font-size: 11px;
+  }
+
+  .liste-departements-modal .small {
+    font-size: 12px;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────── */
+/* TABLET (576px - 767px) */
+/* ────────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .liste-departements-modal .ant-modal {
+    width: calc(100vw - 64px) !important;
+    margin: 32px auto !important;
+  }
+
+  .liste-departements-modal .ant-modal-wrap {
+    padding: 0 32px;
+  }
+
+  .liste-departements-modal .ant-modal-header {
+    padding: 14px 16px;
+  }
+
+  .liste-departements-modal .ant-modal-body {
+    padding: 14px;
+    max-height: calc(100vh - 280px) !important;
+    overflow-y: auto;
+  }
+
+  .liste-departements-modal .ant-modal-footer {
+    padding: 14px 16px;
+  }
+
+  /* Grid - 2 columns on tablet */
+  .liste-departements-modal .ant-col-sm-12 {
+    width: 50%;
+  }
+
+  .liste-departements-modal .ant-row {
+    gap: 10px;
+  }
+
+  .liste-departements-modal .border.rounded-2 {
+    padding: 10px 12px !important;
+  }
+
+  .liste-departements-modal .border.rounded-2 p {
+    font-size: 13px;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────── */
+/* SMALL DESKTOP (768px - 1199px) */
+/* ────────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .liste-departements-modal .ant-modal {
+    width: calc(100vw - 100px) !important;
+    max-height: calc(100vh - 200px);
+  }
+
+  .liste-departements-modal .ant-modal-body {
+    max-height: calc(100vh - 320px) !important;
+    overflow-y: auto;
+  }
+
+  /* Grid - 3 columns */
+  .liste-departements-modal .ant-col-md-8 {
+    width: 33.333%;
+  }
+
+  .liste-departements-modal .ant-row {
+    gap: 12px;
+  }
+
+  .liste-departements-modal .border.rounded-2 {
+    padding: 12px !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────── */
+/* LARGE DESKTOP (≥ 1200px) */
+/* ────────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 1200px) {
+  .liste-departements-modal .ant-modal {
+    width: 1000px !important;
+    max-height: calc(100vh - 200px);
+  }
+
+  .liste-departements-modal .ant-modal-body {
+    max-height: calc(100vh - 320px) !important;
+    overflow-y: auto;
+  }
+
+  /* Grid - 4 columns on large desktop */
+  .liste-departements-modal .ant-col-lg-6 {
+    width: 25%;
+  }
+
+  .liste-departements-modal .ant-row {
+    gap: 14px;
+  }
+
+  .liste-departements-modal .border.rounded-2 {
+    padding: 12px !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────── */
+/* INTERACTIONS & HOVER STATES */
+/* ────────────────────────────────────────────────────────────────────────────── */
+
+.liste-departements-modal .border.rounded-2 {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liste-departements-modal .border.rounded-2:hover:not(.bg-success) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #ffc900;
+}
+
+.liste-departements-modal .border.rounded-2.bg-success {
+  box-shadow: 0 2px 8px rgba(0, 200, 83, 0.15);
+  border-color: #00c853;
+}
+
+.liste-departements-modal .ant-checkbox-inner {
+  border-radius: 3px;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────── */
+/* SCROLLBAR STYLING */
+/* ────────────────────────────────────────────────────────────────────────────── */
+
+.liste-departements-modal .ant-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.liste-departements-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.liste-departements-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.liste-departements-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────── */
+/* ACCESSIBILITY */
+/* ────────────────────────────────────────────────────────────────────────────── */
+
+.liste-departements-modal .ant-btn:focus,
+.liste-departements-modal .ant-input:focus {
+  outline: 2px solid #1890ff;
+  outline-offset: 2px;
+}
+
+.liste-departements-modal .ant-checkbox-wrapper:focus-within {
+  outline: 2px solid #1890ff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

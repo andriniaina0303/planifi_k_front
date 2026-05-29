@@ -1,10 +1,10 @@
 // Fonction pour déterminer la couleur en fonction du nombre de personnes
 export function getColorByPersonCount(count: number): string {
-  if (count === 0) return "#9CA3AF"; // Gris si aucune personne
-  if (count >= 1 && count <= 200) return "#fff"; // blanc (1-200)
-  if (count >= 201 && count <= 500) return "#421010"; // marron (201-500)
+  if (count === 0) return ""; // Gris si aucune personne
+  if (count >= 1 && count <= 200) return "#f59e0b"; // jaune (1-200)
+  if (count >= 201 && count <= 500) return "#10b981"; // vert (201-500)
   if (count >= 501) return "#DC2626"; // Rouge (501+)
-  return "#9CA3AF"; // Gris par défaut
+  return ""; // Gris par défaut
 }
 
 // Fonction pour obtenir le label du range

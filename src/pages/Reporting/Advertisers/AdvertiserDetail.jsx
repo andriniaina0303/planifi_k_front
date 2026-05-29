@@ -94,7 +94,7 @@ import { FunnelViz } from "../../../components/details/common/FunnelViz.jsx";
 import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
 import { GlobalTable } from "../../../components/details/GlobalTable.jsx";
 import { DimSection } from "../../../components/details/common/DimSection.jsx";
-import App from "../../../FranceMap/App.js"
+import MapApp from "../../../FranceMap/MapApp.js"
 
 /* 
  * Configuration des classifications (A, B, C, D) pour les bases de données.
@@ -609,10 +609,10 @@ useEffect(() => {
                 </span>
               ),
               children: (
-                <div style={{ padding: "20px 4px 24px" }}>
+                <div style={{ padding: "20px 4px 16px", height:"600px"}}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
                   {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" /> */}
-                  <App/>
+                  <MapApp data={data.globales} />
                 </div>
               ),
             },

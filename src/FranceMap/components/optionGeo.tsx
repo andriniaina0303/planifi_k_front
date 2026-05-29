@@ -1,6 +1,6 @@
 import { Search, MapPinHouse, Map, MapPinned, ClipboardList } from 'lucide-react';
 import { useState } from 'react';
-import { type DepartmentData } from '../App';
+import { type DepartmentData } from '../MapApp';
 import { searchTowns, type TownMarker } from '../hooks/townMarkers';
 
 interface OptionProps {
@@ -73,13 +73,14 @@ const handleVilleClick = () => {
   setShowRegionDropdown(false);
 };
 
+const btnDisabled = true
 
  return (
     <div className="d-flex font-poppins align-items-center w-100">
       <div className="d-flex flex-column gap-3 w-100">       
         {/* Ligne 1: Boutons de sélection */}
-        <ul className="d-flex flex-wrap align-items-center gap-2 list-unstyled">
-          {/* Départements */}
+        {/* <ul className="d-flex flex-wrap align-items-center gap-2 list-unstyled">
+          Départements 
           <li className="position-relative">
             <div
               className={`d-flex align-items-center gap-2 px-3 py-2 rounded-pill cursor-pointer ${!isRegionMode && !isTownMode ? "btn btn-warning" : "btn btn-light text-dark"}`}
@@ -95,39 +96,42 @@ const handleVilleClick = () => {
             </div>
           </li>
 
-          {/* Régions */}
+          {/* Régions 
           <li className="position-relative">
             <div
-              className={`d-flex align-items-center gap-2 px-3 py-2 rounded-pill cursor-pointer ${isRegionMode ? "btn btn-warning" : "btn btn-light text-dark"}`}
+              className={`d-flex align-items-center gap-2 px-3 py-2 rounded-pill ${btnDisabled? "btn-secondary opacity-50" : isRegionMode ? "btn btn-warning" : "btn btn-light text-dark"}`}
               onClick={() => {
+                if (btnDisabled) return;
                 handleRegionClick();
                 console.log("Mode activer :", isRegionMode ? "Région" : "Département");
                 setShowRegionDropdown(!showRegionDropdown);
               }}
-              style={{ cursor: 'pointer', fontSize: '0.9rem' }}
+              style={{ cursor: btnDisabled? 'not-allowed':'pointer', fontSize: '0.9rem' }}
             >
               <Map style={{ width: '1rem', height: '1rem' }} />
               <span className="d-none d-sm-inline">Régions</span>
               <span className="d-sm-none">Rég.</span>
             </div>
           </li>
-
-          {/* Villes */}
+*/}
+          {/* Villes 
           <li 
-            className={`d-flex align-items-center gap-2 px-3 py-2 rounded-pill cursor-pointer ${
+            className={`d-flex align-items-center gap-2 px-3 py-2 rounded-pill ${
+              btnDisabled? "btn-secondary opacity-50" :
               !isRegionMode && isTownMode
                 ? "btn btn-warning" 
                 : "btn btn-light text-dark"}`}
             onClick={() => {
+              if (btnDisabled) return;
               handleVilleClick();
             }}
-            style={{ cursor: 'pointer', fontSize: '0.9rem' }}
+            style={{ cursor: btnDisabled? 'not-allowed':'pointer', fontSize: '0.9rem' }}
           >
             <MapPinHouse style={{ width: '1rem', height: '1rem' }} />
             <span className="d-none d-sm-inline">Villes</span>
             <span className="d-sm-none">Vil.</span>
           </li>
-        </ul>
+        </ul> */}
 
         {/* Ligne 2: Recherche et sélection multiple */}
         <div className="d-flex flex-lg-row gap-2 w-100">
@@ -155,7 +159,7 @@ const handleVilleClick = () => {
                   isRegionMode ? "Région..." :
                   "Département..."
                 }
-                className="form-control"
+                className="form-control custom-input"
                 style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
               />
               <button className="btn btn-warning" style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, whiteSpace: 'nowrap' }}>
@@ -163,6 +167,15 @@ const handleVilleClick = () => {
                 <span className="d-none d-sm-inline ms-1">Rechercher</span>
               </button>
             </div>
+              <style>
+    {`
+      .custom-input:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: orange !important;
+      }
+    `}
+  </style>
 
             {/* Dropdown résultats VILLES */}
             {isTownMode && showTownResults && (
@@ -192,7 +205,7 @@ const handleVilleClick = () => {
 
             {/* Dropdown résultats DEPT/RÉGION (existant dans la liste) */}
             {!isTownMode && showSearchResults && (
-              <div className="position-absolute top-100 start-0 end-0 mt-1 bg-white border border-gray-300 rounded shadow-lg" style={{ zIndex: 50, maxHeight: '300px', overflowY: 'auto' }}>
+              <div className="position-absolute top-100 start-0 end-0 mt-1 bg-white border border-gray-300 rounded shadow-lg" style={{ zIndex: 9999, maxHeight: '180px', overflowY: 'auto' }}>
                 {searchResults.length > 0 ? (
                   searchResults.map((result, index) => (
                     <button

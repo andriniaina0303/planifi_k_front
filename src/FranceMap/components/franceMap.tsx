@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { ComposableMap, Geographies, Geography, ZoomableGroup, Marker } from "react-simple-maps";
 import { X, CirclePlus, CircleMinus, RotateCcw, Crosshair, Thermometer } from 'lucide-react';
 import { getRandomPointInPolygon,adjustPointIfNearEdge } from "./function/points";
-import { type DepartmentData } from "../App";
+import { type DepartmentData } from "../MapApp";
 import { getColorByPersonCount } from '../utils/colorutils';
 import loadTemperatures from "../hooks/useTemperateAPI";
 import DonutsGraph from "./donutsGraph";
@@ -12,9 +12,11 @@ import Loading from "./Loading";
 import { useLoading } from "../hooks/useLoading";
 import { TOWN_MARKERS, getTownMarkersForRegion, getClicksForTown } from "../hooks/townMarkers";import {TownMarkers,TownMetroMarkers} from "./function/label_DOM";
 import { getTemperatureColor, calculateRegionTemperature, getTemperatureRange, generateLegendGradient } from "./function/funcTemp";
-import { getClicksForDepartment, getClicksForRegion, getClicksByRegion, getLabelsByRegion, DEPARTMENT_TO_REGION, regions,clickData } from "./function/funcClick";
+import { getClicksForDepartment, getClicksByRegion, getLabelsByRegion, DEPARTMENT_TO_REGION, regions } from "./function/funcClick";
 
 interface FranceMapProps {
+  clickData: Record<string, number>;
+  analyseDep: Record<string, any>;
   geoUrl: string;
   isRegionMode: boolean;
   isTownMode: boolean;
@@ -36,6 +38,8 @@ type ZoomPosition = {
 const TotalNLEnvoyer = 100000; // Valeur totale pour le graphique (exemple, à ajuster selon les données réelles)
 
 const FranceMap: React.FC<FranceMapProps> = ({
+  clickData,
+  analyseDep,
   geoUrl,
   isRegionMode,
   onGeographiesLoad,
@@ -48,8 +52,8 @@ const FranceMap: React.FC<FranceMapProps> = ({
   showHeatMap=false,
   showInfoPanel = true
 }) => {
-  
-  // Fonction pour parcourir clickData et retourner le nbr de clicks et les cles pour chaque dep
+
+// Fonction pour parcourir clickData et retourner le nbr de clicks et les cles pour chaque dep
 const Tclicks: number[] = Object.values(clickData);
 const Tcodes: string[] = Object.keys(clickData);
 
@@ -58,9 +62,9 @@ const regionClicks = React.useMemo<Record<string, number>>(() => {
   const result: Record<string, number> = {};
   const regions = new Set(Object.values(DEPARTMENT_TO_REGION));
   
-  regions.forEach((regionName) => {
-    result[regionName] = getClicksForRegion(regionName);
-  });
+  // regions.forEach((regionName) => {
+  //   result[regionName] = getClicksForRegion(regionName);
+  // });
   
   return result;
 }, []);
@@ -83,7 +87,7 @@ const [tempLoading, setTempLoading] = useState<boolean>(true);
   
   // Fonction pour le zoom de la carte 
   const [position, setPosition] = useState<ZoomPosition>({
-    coordinates: [2.2, 46.5],
+    coordinates: [2.8, 44.5],
     zoom: 1
   });
   
@@ -96,6 +100,7 @@ const [tempLoading, setTempLoading] = useState<boolean>(true);
   const [regionPoints, setRegionPoints] = useState<Record<string, [number, number]>>({});
   
   
+  // Passer en props les globale data
   
   
   // Mémoïser les données du graphique pour  les régions et les villes afin d'éviter les recalculs inutiles lors du rendu de la carte
@@ -139,9 +144,10 @@ const [tempLoading, setTempLoading] = useState<boolean>(true);
   useEffect(() => {
     if (multiSelDept.length > 0) {
       const updatedDepts = multiSelDept.map(dept => {
-        const clics = isRegionMode 
-          ? getClicksForRegion(dept.nom)
-          : getClicksForDepartment(dept.code);
+        const clics = getClicksForDepartment(clickData,dept.code);
+        // isRegionMode 
+        //   ? getClicksForRegion(dept.nom)
+        //   : getClicksForDepartment(dept.code);
         
         return {
           ...dept,
@@ -262,28 +268,13 @@ useEffect(() => {
   }
 
   function handleZoomOut() {
+    console.log(position.zoom);
     if (position.zoom <= 1) return;
     setPosition((pos) => ({ ...pos, zoom: pos.zoom / 2 }));
   }
 
   const renderMap = (terre: typeof regions[0], index: number) => (
     <div key={terre.name} className={`relative ${index === 0 ? "w-125 h-150" : ""}`}>
-      {index === 0 && (
-        <div className="position-absolute top-0 start-0 d-flex flex-column gap-2 p-2 rounded-4 shadow">
-          <CirclePlus
-            className="cursor-pointer rounded-circle p-1"
-            onClick={handleZoomIn}
-          />
-          <CircleMinus
-            className="cursor-pointer rounded-circle p-1"
-            onClick={handleZoomOut}
-          />
-          <RotateCcw
-            className="cursor-pointer rounded-circle p-1"
-            onClick={() => setPosition({ coordinates: [2.1, 46.5], zoom: 1 })}
-          />
-        </div>
-      )}
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{ scale: terre.scale, center: terre.center }}
@@ -331,7 +322,7 @@ useEffect(() => {
                     }
                   } else {
                     const deptCode = geo.properties.code;
-                    clicsCount = getClicksForDepartment(deptCode);
+                    clicsCount = getClicksForDepartment(clickData,deptCode);
                     shouldShowPoint = clicsCount > 0;
 
                     if (shouldShowPoint) {
@@ -413,10 +404,11 @@ useEffect(() => {
                               (isRegionMode ? d.nom : d.code) !== identifier
                             ));
                           } else {
-                            const clics = isRegionMode 
-                              ? getClicksForRegion(geo.properties.nom)
-                              : getClicksForDepartment(geo.properties.code);
-                            
+                            const clics = 
+                            getClicksForDepartment(clickData,geo.properties.code);
+                            //Modifier ici ========???????
+                            // isRegionMode 
+                            //   ? getClicksForRegion(geo.properties.nom)
                             setMultiSelDep(prev => [...prev, {
                               nom: geo.properties.nom,
                               code: geo.properties.code || geo.properties.nom,
@@ -429,7 +421,7 @@ useEffect(() => {
                       {point && shouldShowPoint && !isTownMode && (
                         <Marker coordinates={point as [number, number]}>
                           <circle 
-                            r={isRegionMode ? 4 : 2} 
+                            r={isRegionMode ? 4 : 1} 
                             fill={getColorByPersonCount(clicsCount)} 
                             className="shadow-amber-300/50 z-50"
                           />
@@ -482,7 +474,7 @@ useEffect(() => {
                   }
                 } else {
                   const deptCode = geo.properties.code;
-                  clicsCount = getClicksForDepartment(deptCode);
+                  clicsCount = getClicksForDepartment(clickData,deptCode);
                   shouldShowPoint = clicsCount > 0;
 
                   if (shouldShowPoint) {
@@ -564,9 +556,10 @@ useEffect(() => {
                             (isRegionMode ? d.nom : d.code) !== identifier
                           ));
                         } else {
-                          const clics = isRegionMode 
-                            ? getClicksForRegion(geo.properties.nom)
-                            : getClicksForDepartment(geo.properties.code);
+                          const clics = getClicksForDepartment(clickData,geo.properties.code);
+                          // isRegionMode 
+                          //   ? getClicksForRegion(geo.properties.nom)
+                          //   : getClicksForDepartment(geo.properties.code);
                           
                           setMultiSelDep(prev => [...prev, {
                             nom: geo.properties.nom,
@@ -668,7 +661,7 @@ useEffect(() => {
   return (
     <>
 
-          {isLoading && (
+      {isLoading && (
         <Loading
           message={loadingMessage}
           progress={loadingProgress}
@@ -677,8 +670,31 @@ useEffect(() => {
         />
       )}
       <div className="position-relative d-flex justify-content-start align-items-start w-100 mx-auto">
+        
         <div className="position-relative w-100 mt-4">
           {/* CARTE PRINCIPALE */}
+          <div 
+          className="position-absolute d-flex flex-column gap-2  rounded-4 shadow"
+          style={{
+            zIndex: 999,
+            top : "20%",
+            right: "30%"
+            // background: "white"
+          }}
+        >
+          <CirclePlus
+            className="cursor-pointer rounded-circle p-1"
+            onClick={handleZoomIn}
+          />
+          <CircleMinus
+            className="cursor-pointer rounded-circle p-1"
+            onClick={handleZoomOut}
+          />
+          <RotateCcw
+            className="cursor-pointer rounded-circle p-1"
+            onClick={() => setPosition({ coordinates: [2.8, 44.5], zoom: 1 })}
+          />
+        </div>
           <div
             ref={mapRef}
             className="position-relative mx-auto"
@@ -691,7 +707,7 @@ useEffect(() => {
           <div
             className="position-absolute"
             style={{
-              top: "5%",
+              top: "1%",
               left: "5%",
               width: "180px"
             }}
@@ -703,8 +719,8 @@ useEffect(() => {
           <div
             className="position-absolute"
             style={{
-              top: "35%",
-              left: "0%",
+              top: "20%",
+              left: "5%",
               width: "180px"
             }}
           >
@@ -715,7 +731,7 @@ useEffect(() => {
           <div
             className="position-absolute"
             style={{
-              bottom: "5%",
+              top: "35%",
               left: "10%",
               width: "220px"
             }}
@@ -727,8 +743,8 @@ useEffect(() => {
           <div
             className="position-absolute"
             style={{
-              top: "35%",
-              right: "0%",
+              top: "15%",
+              right: "10%",
               width: "180px"
             }}
           >
@@ -739,7 +755,7 @@ useEffect(() => {
           <div
             className="position-absolute"
             style={{
-              bottom: "10%",
+              top: "35%",
               right: "10%",
               width: "160px"
             }}
@@ -769,7 +785,13 @@ useEffect(() => {
             <div className="fw-bold">
               {codeHovered} - {hoveredDept}
             </div>
-
+            {codeHovered && clickData[codeHovered] !== undefined && (
+                <div className="small mt-1 d-flex flex-column gap-1">
+                  <span>🖱️ Clickers : {analyseDep[codeHovered].taux_clickers}</span>
+                  <span>📬 Openers : {analyseDep[codeHovered].taux_openers}</span>
+                  <span>🚫 Unsubs : {analyseDep[codeHovered].taux_unsubs}</span>
+                </div>
+            )}
             {hoveredTemp !== undefined && !tempLoading && (
               <div className="small mt-1 d-flex align-items-center gap-1">
                 {hoveredTemp ? (
@@ -888,9 +910,10 @@ useEffect(() => {
                   <p className="text-sm fw-bold mb-1">📍 Total des clics :</p>
                   <p className="fs-4 fw-bold">
                     {multiSelDept.reduce((total, dept) => {
-                      const clics = isRegionMode
-                        ? getClicksForRegion(dept.nom)
-                        : getClicksForDepartment(dept.code);
+                      const clics = getClicksForDepartment(clickData,dept.code);
+                      // isRegionMode
+                      //   ? getClicksForRegion(dept.nom)
+                      //   : getClicksForDepartment(dept.code);
                       return total + clics;
                     }, 0)}
                   </p>
@@ -907,9 +930,10 @@ useEffect(() => {
                 >
                   {multiSelDept.map((dept) => {
                     const { nom, code } = dept;
-                    const personnes = isRegionMode
-                      ? getClicksForRegion(nom)
-                      : getClicksForDepartment(code);
+                    const personnes = getClicksForDepartment(clickData,code);
+                    // isRegionMode
+                    //   ? getClicksForRegion(nom)
+                    //   : getClicksForDepartment(code);
                     const color = getColorByPersonCount(personnes);
 
                     return (

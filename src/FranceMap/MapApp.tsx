@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect,useMemo } from 'react'
 import FranceMap from './components/franceMap'
 // import './App.css'
 import ListeDepartements from './components/listeDepartements'
 import Option from './components/optionGeo'
 import { ALL_TOWNS_LIST } from './hooks/townMarkers'
-import { X } from 'lucide-react'
 import { Modal } from 'antd'
-
+import { DataClicks } from './components/function/funcClick'
 
 // structure pour stocker nom, code ET nombre de personnes
 export type DepartmentData = {
@@ -14,12 +13,33 @@ export type DepartmentData = {
   code: string;
   personnes: number;
 };
-function App() {
+function MapApp({data}:any) {
   // État pour gérer l'URL du GeoJSON
   const [geoUrl, setGeoUrl] = useState<string>(
     "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-avec-outre-mer.geojson"
   );
+  // Stocker la valeur de data 
+const [globalData, setGlobalData] = useState(
+  typeof data === 'object' && data !== null && Object.keys(data).length > 0 ? data : null
+);
+console.log("globalData:", globalData)
+console.log("analyse_dep:", globalData?.analyse_dep)
 
+  //Importations des clicks depuis GlobalData
+const clickData = useMemo(
+  () => globalData ? DataClicks(globalData) : {},
+  [globalData]
+);
+console.log("ClickData: ", clickData)
+const analyseDep = useMemo(
+  () => globalData?.analyse_dep ?? {},
+  [globalData]
+);
+useEffect(() => {
+  if (typeof data === 'object' && data !== null && Object.keys(data).length > 0) {
+    setGlobalData(data);
+  }
+}, [data]);
   // États pour la recherche
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Array<{ nom: string; code: string }>>([]);
@@ -153,10 +173,10 @@ const handleOpenRegionList = () => {
 
   return (
     <>
-      <div className='d-flex flex-column' style={{ overflow: 'auto' }}>
+      <div className='d-flex flex-column' >
         {/* <NavBar/> */}
-        <div className='bg-light rounded-3 w-100 pt-4 p-4 mt-2'>
-          <div className='d-flex flex-column h-100 gap-5'>
+        <div className=' rounded-3 w-100 pt-2 p-4 mt-2'>
+          <div className='d-flex flex-column h-80 gap-0'>
             {/* Div contenant la carte et les option géo */}
             <div className='d-flex flex-column w-100'>
               {/* Passer tous les props à Option */}
@@ -181,6 +201,8 @@ const handleOpenRegionList = () => {
               <section className='d-flex align-items-center justify-content-center' style={{ overflow: 'visible' }}> 
                 {/* Passer tous les props à FranceMap */}
                   <FranceMap
+                    clickData = {clickData}
+                    analyseDep = {analyseDep}
                     geoUrl={geoUrl}
                     isRegionMode={isRegionMode}
                     onGeographiesLoad={handleGeographiesLoad}
@@ -206,6 +228,7 @@ const handleOpenRegionList = () => {
               multiSelDept={multiSelDept}
               setMultiSelDep={setMultiSelDep}
               isRegionMode={false}
+              ClickData={clickData}
             />
             }
 
@@ -217,6 +240,7 @@ const handleOpenRegionList = () => {
               multiSelDept={multiSelDept}
               setMultiSelDep={setMultiSelDep}
               isRegionMode={true}
+              ClickData={clickData}
             />
             }
 
@@ -285,7 +309,7 @@ const handleOpenRegionList = () => {
   )
 }
 
-export default App
+export default MapApp
 
 
 

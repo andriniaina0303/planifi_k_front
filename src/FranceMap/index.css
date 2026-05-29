@@ -165,3 +165,8 @@ h1 {
 .opacity-50 {
   opacity: 0.5;
 }
+.form-control.custom-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: orange !important;
+}

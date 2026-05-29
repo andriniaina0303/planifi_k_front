@@ -1,3 +1,13 @@
+// Nouveau type pour clickData
+
+type ClickStats = {
+  clickers: number,       // ← ajoute ça
+  taux_clickers:number,
+  taux_openers:number,
+  taux_unsubs:number,
+}
+
+
 // Mapping des départements vers leurs régions
 const DEPARTMENT_TO_REGION: Record<string, string> = {
   // Île-de-France
@@ -66,8 +76,8 @@ const DEPARTMENT_TO_REGION: Record<string, string> = {
 const regions = [
   {
     name: "France Métropolitaine",
-    scale: 2000,    
-    center: [2.5, 41.5] as [number, number],
+    scale: 1500,    
+    center: [2.8, 44.5] as [number, number],
     width: 600,     
     height: 550,     
     filter: (code: string) => !['971', '972', '973', '974', '976'].includes(code)
@@ -90,7 +100,7 @@ const regions = [
   },
   {
     name: "Guyane",
-    scale: 300,
+    scale: 250,
     center: [-53.0, 4.0] as [number, number],
     width: 50,
     height: 50,
@@ -115,21 +125,33 @@ const regions = [
 ];
 
 // Données de clics simulées (à remplacer par les vraies données)
-const clickData: Record<string, number> = {
-  "75": 250,  // Paris
-  "92": 300,  // Hauts-de-Seine
-  "93": 150,  // Seine-Saint-Denis
-  "94": 180,  // Val-de-Marne
-  "973": 120, // Guyane
-  "69": 400,  // Rhône
-  "13": 350,  // Bouches-du-Rhône
-  "33": 280,  // Gironde
+// const clickData: Record<string, number> = {
+//   "75": 250,  // Paris
+//   "92": 300,  // Hauts-de-Seine
+//   "93": 150,  // Seine-Saint-Denis
+//   "94": 180,  // Val-de-Marne
+//   "973": 120, // Guyane 
+//   "69": 400,  // Rhône   
+//   "13": 350,  // Bouches-du-Rhône
+//   "33": 280,  // Gironde
+// };
+
+export const DataClicks = (global: any): Record<string, number> => {
+  const analyseDep: Record<string, ClickStats> = global.analyse_dep;
+
+  return Object.fromEntries(
+    Object.entries(analyseDep).map(([code, data]) => [
+      code,
+      data.clickers    ])
+  );
 };
 
 
 
+
+
 // Fonction pour obtenir les clics d'un département
-const getClicksForDepartment = (deptCode: string): number => {
+const getClicksForDepartment = (clickData:Record<string, number>, deptCode: string): number => {
   return clickData[deptCode] || 0;
 };
 
@@ -146,14 +168,14 @@ const getLabelsByRegion = (TclicksRegion: Record<string, number>): string[] => {
 
 
 // Fonction pour obtenir les clics totaux d'une région
-const getClicksForRegion = (regionName: string): number => {
-  return Object.entries(DEPARTMENT_TO_REGION).reduce(
-    (sum, [deptCode, region]) =>
-      region === regionName
-        ? sum + getClicksForDepartment(deptCode)
-        : sum,
-    0
-  );
-};
+// const getClicksForRegion = (regionName: string): number => {
+//   return Object.entries(DEPARTMENT_TO_REGION).reduce(
+//     (sum, [deptCode, region]) =>
+//       region === regionName
+//         ? sum + getClicksForDepartment(deptCode)
+//         : sum,
+//     0
+//   );
+// };
 
-export { getClicksForDepartment, getClicksForRegion, getClicksByRegion, getLabelsByRegion,clickData, DEPARTMENT_TO_REGION, regions };
+export { getClicksForDepartment, getClicksByRegion, getLabelsByRegion, DEPARTMENT_TO_REGION, regions };
