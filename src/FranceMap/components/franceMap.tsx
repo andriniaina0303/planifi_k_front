@@ -87,7 +87,7 @@ const [tempLoading, setTempLoading] = useState<boolean>(true);
   
   // Fonction pour le zoom de la carte 
   const [position, setPosition] = useState<ZoomPosition>({
-    coordinates: [2.8, 44.5],
+    coordinates: [2.8, 43.8],
     zoom: 1
   });
   
@@ -192,13 +192,13 @@ useEffect(() => {
       
       // 1. Charger la carte
       updateMessage("Chargement de la carte...");
-      updateProgress(20);
       
       const response = await fetch(geoUrl);
       if (!response.ok) throw new Error('Erreur réseau carte');
       const data = await response.json();
       
       if (!isMounted) return;
+      updateProgress(20);
       
       if (onGeographiesLoad && data.features) {
         onGeographiesLoad(data.features);
@@ -692,7 +692,7 @@ useEffect(() => {
           />
           <RotateCcw
             className="cursor-pointer rounded-circle p-1"
-            onClick={() => setPosition({ coordinates: [2.8, 44.5], zoom: 1 })}
+            onClick={() => setPosition({ coordinates: [2.8, 43.8], zoom: 1 })}
           />
         </div>
           <div

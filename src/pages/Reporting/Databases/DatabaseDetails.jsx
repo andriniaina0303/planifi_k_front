@@ -63,6 +63,7 @@ import {
   HeartOutlined,
   MehOutlined,
   DislikeOutlined,
+  EnvironmentOutlined
 } from "@ant-design/icons";
 import { Chart, registerables } from "chart.js";
 import ReportingDetailCharts from "../../../components/chart/ReportingDetailsChart.jsx";
@@ -94,6 +95,7 @@ import { FunnelViz } from "../../../components/details/common/FunnelViz.jsx";
 import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
 import { GlobalTable } from "../../../components/details/GlobalTable.jsx";
 import { DimSection } from "../../../components/details/common/DimSection.jsx";
+import MapApp from "../../../FranceMap/MapApp.js"
 
 
 /* 
@@ -621,6 +623,21 @@ const fetchAllSegments = async () => {
                       <Empty description="Aucune dimension disponible" />
                     );
                   })()}
+                </div>
+              ),
+            },
+            {
+              key: "Departement",
+              label: (
+                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <EnvironmentOutlined  /> Analyse par Département
+                </span>
+              ),
+              children: (
+                <div style={{ padding: "20px 4px 16px", height:"600px"}}>
+                  {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
+                  {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" /> */}
+                  <MapApp data={data.globales} />
                 </div>
               ),
             },
