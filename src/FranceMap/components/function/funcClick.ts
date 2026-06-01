@@ -76,8 +76,8 @@ const DEPARTMENT_TO_REGION: Record<string, string> = {
 const regions = [
   {
     name: "France Métropolitaine",
-    scale: 1500,    
-    center: [2.8, 44.5] as [number, number],
+    scale: 1450,    
+    center: [2.8, 43.8] as [number, number],
     width: 600,     
     height: 550,     
     filter: (code: string) => !['971', '972', '973', '974', '976'].includes(code)

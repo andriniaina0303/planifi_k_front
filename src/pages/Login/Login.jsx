@@ -458,8 +458,8 @@ export default function LoginPage() {
               </div>
 
               <div className="left-headline">
-                Gérez vos projets<br />
-                avec <span>intelligence</span>
+                Automatisez vos campagnes <br />
+             et exploitez <span>pleinement vos données</span>
               </div>
 
               <p className="left-desc">

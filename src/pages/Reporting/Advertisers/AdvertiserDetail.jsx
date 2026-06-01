@@ -609,7 +609,7 @@ useEffect(() => {
                 </span>
               ),
               children: (
-                <div style={{ padding: "20px 4px 16px", height:"600px"}}>
+                <div style={{ padding: "20px 4px 16px", height:"650px"}}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
                   {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" /> */}
                   <MapApp data={data.globales} />

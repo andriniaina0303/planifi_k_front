@@ -87,7 +87,7 @@ const [tempLoading, setTempLoading] = useState<boolean>(true);
   
   // Fonction pour le zoom de la carte 
   const [position, setPosition] = useState<ZoomPosition>({
-    coordinates: [2.8, 44.5],
+    coordinates: [2.8, 43.8],
     zoom: 1
   });
   
@@ -692,7 +692,7 @@ useEffect(() => {
           />
           <RotateCcw
             className="cursor-pointer rounded-circle p-1"
-            onClick={() => setPosition({ coordinates: [2.8, 44.5], zoom: 1 })}
+            onClick={() => setPosition({ coordinates: [2.8, 43.8], zoom: 1 })}
           />
         </div>
           <div
