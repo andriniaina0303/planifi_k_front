@@ -192,13 +192,13 @@ useEffect(() => {
       
       // 1. Charger la carte
       updateMessage("Chargement de la carte...");
-      updateProgress(20);
       
       const response = await fetch(geoUrl);
       if (!response.ok) throw new Error('Erreur réseau carte');
       const data = await response.json();
       
       if (!isMounted) return;
+      updateProgress(20);
       
       if (onGeographiesLoad && data.features) {
         onGeographiesLoad(data.features);

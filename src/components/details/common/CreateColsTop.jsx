@@ -91,32 +91,32 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
   };
 
   // Couleur de rang
-  const getRankColor = (index) => {
-    if (index === 0) return tokens.warning; // Or
-    if (index === 1) return "#c0c0c0"; // Argent
-    if (index === 2) return "#cd7f32"; // Bronze
-    return tokens.primary;
-  };
+  // const getRankColor = (index) => {
+  //   if (index === 0) return tokens.warning; // Or
+  //   if (index === 1) return "#c0c0c0"; // Argent
+  //   if (index === 2) return "#cd7f32"; // Bronze
+  //   return tokens.primary;
+  // };
 
   // Générer les colonnes pour chaque vue
   const generateColumns = (config) => [
-    {
-      title: "Rang",
-      dataIndex: "rank",
-      key: "rank",
-      width: 50,
-      align: "center",
-      render: (_, __, index) => (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-          {index < 3 && (
-            <TrophyOutlined style={{ color: getRankColor(index), fontSize: 14 }} />
-          )}
-          <Text strong style={{ fontSize: 12, color: getRankColor(index) }}>
-            #{index + 1}
-          </Text>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Rang",
+    //   dataIndex: "rank",
+    //   key: "rank",
+    //   width: 50,
+    //   align: "center",
+    //   render: (_, __, index) => (
+    //     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+    //       {index < 3 && (
+    //         <TrophyOutlined style={{ color: getRankColor(index), fontSize: 14 }} />
+    //       )}
+    //       <Text strong style={{ fontSize: 12, color: getRankColor(index) }}>
+    //         #{index + 1}
+    //       </Text>
+    //     </div>
+    //   ),
+    // },
 {
   title: config.getInfo === "subject" ? "Subjects" : "Brands",
   dataIndex: config.getInfo,
@@ -158,6 +158,7 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
           </Text>
         ),
       },
+      
       {
         title: "Brands",
         dataIndex: "name",
@@ -309,6 +310,32 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
           }}
         >
           {fmt(value)} ({pct(record.taux_unsubs)})
+        </Text>
+      ),
+    },
+    {
+      title: "ecpm",
+      dataIndex: "ecpm",
+      key: "ecpm",
+      width: 60,
+      align: "right",
+      sorter: (a, b) => (a.ecpm || 0) - (b.ecpm || 0),
+      render: (value) => (
+        <Text style={{ fontSize: 11, color: "#6b7280" }}>
+          {fmt(value)}
+        </Text>
+      ),
+    },
+    {
+      title: "ca",
+      dataIndex: "ca",
+      key: "ca",
+      width: 60,
+      align: "right",
+      sorter: (a, b) => (a.ca || 0) - (b.ca || 0),
+      render: (value) => (
+        <Text style={{ fontSize: 11, color: "#6b7280" }}>
+          {fmt(value)}
         </Text>
       ),
     },

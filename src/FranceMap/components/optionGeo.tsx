@@ -2,7 +2,11 @@ import { Search, MapPinHouse, Map, MapPinned, ClipboardList } from 'lucide-react
 import { useState } from 'react';
 import { type DepartmentData } from '../MapApp';
 import { searchTowns, type TownMarker } from '../hooks/townMarkers';
+import {QuestionCircleOutlined}  from '@ant-design/icons';
+import { Popover,Progress, Typography } from 'antd';
 
+
+const { Title, Text, Paragraph } = Typography;
 interface OptionProps {
   onViewChange: (url: string,mode: 'departement' | 'region' | 'ville') => void;
   onSearch: (query: string) => void;
@@ -245,6 +249,104 @@ const btnDisabled = true
               <ClipboardList style={{ width: '1.25rem', height: '1.25rem' }} />
               Liste des {isTownMode ? 'Villes' : isRegionMode ? 'Régions' : 'Départements'}
             </button>
+          </div>
+          <div className='d-flex'>
+            <Popover
+              content={
+                <div style={{ width: 220, padding: 4, maxHeight: '300px', overflowY: 'auto'}}>
+                  <div style={{ marginBottom: 10 }}>
+                    <Text strong style={{ fontSize: 13 }}>Légende des points</Text>
+                    <Paragraph style={{ fontSize: 11, color: "#6b7280", margin: "4px 0 0" }}>
+                      Densité de clickers par zone géographique.
+                    </Paragraph>
+                  </div>
+
+                  {[
+                    {
+                      dot: "#f59e0b",
+                      label: "Jaune",
+                      range: "1 – 200",
+                      desc: "Zones à faible activité",
+                      percent: 20,
+                      bg: "#fffbeb",
+                      border: "#fde68a",
+                      badgeBg: "#fef3c7",
+                      textColor: "#92400e",
+                      barColor: "#f59e0b",
+                    },
+                    {
+                      dot: "#22c55e",
+                      label: "Vert",
+                      range: "201 – 500",
+                      desc: "Zones à activité modérée",
+                      percent: 55,
+                      bg: "#f0fdf4",
+                      border: "#86efac",
+                      badgeBg: "#dcfce7",
+                      textColor: "#166534",
+                      barColor: "#22c55e",
+                    },
+                    {
+                      dot: "#ef4444",
+                      label: "Rouge",
+                      range: "> 500",
+                      desc: "Zones les plus denses",
+                      percent: 100,
+                      bg: "#fff1f2",
+                      border: "#fca5a5",
+                      badgeBg: "#fee2e2",
+                      textColor: "#991b1b",
+                      barColor: "#ef4444",
+                    },
+                    {
+                      dot: "#d1d5db",
+                      label: "Aucun point",
+                      range: "0",
+                      desc: "Aucun clicker dans ce département",
+                      percent: 0,
+                      bg: "#f9fafb",
+                      border: "#f3f4f6",
+                      badgeBg: "#f3f4f6",
+                      textColor: "#6b7280",
+                      barColor: "#9ca3af",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: 8,
+                        marginBottom: 6,
+                        background: item.bg,
+                        border: `1px solid ${item.border}`,
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                        <Text style={{ fontSize: 11, fontWeight: 600, color: item.textColor }}>
+                          <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: item.dot, marginRight: 5, verticalAlign: "middle" }} />
+                          {item.label}
+                        </Text>
+                        <span style={{ fontSize: 11, fontWeight: 700, background: item.badgeBg, color: item.textColor, padding: "1px 7px", borderRadius: 12 }}>
+                          {item.range}
+                        </span>
+                      </div>
+                      <Progress
+                        percent={item.percent}
+                        showInfo={false}
+                        strokeColor={item.barColor}
+                        trailColor="#e5e7eb"
+                        size="small"
+                        style={{ marginBottom: 3 }}
+                      />
+                      <Text style={{ fontSize: 9, color: "#9ca3af" }}>{item.desc}</Text>
+                    </div>
+                  ))}
+                </div>
+              }>
+              <button className="btn btn-warning d-flex gap-2 align-items-center">
+                <QuestionCircleOutlined style={{fontSize: "22px"}}/>
+              </button>
+            </Popover>
           </div>
         </div>
       </div>
