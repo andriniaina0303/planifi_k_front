@@ -35,11 +35,15 @@ const analyseDep = useMemo(
   () => globalData?.analyse_dep ?? {},
   [globalData]
 );
+
+  // Etat pour le mode HeatMap 
+  const  [isHeatMap, setIsHeatMap] = useState(false);
+  
 useEffect(() => {
   if (typeof data === 'object' && data !== null && Object.keys(data).length > 0) {
     setGlobalData(data);
   }
-}, [data]);
+}, [data,isHeatMap]);
   // États pour la recherche
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Array<{ nom: string; code: string }>>([]);
@@ -48,6 +52,9 @@ useEffect(() => {
   
   // États pour la sélection (remontés depuis FranceMap) - avec nombre de personnes
   const [multiSelDept, setMultiSelDep] = useState<DepartmentData[]>([]);
+
+  // Nouvelle état pour mettre en valeur le départemment séléctionné dans l'input  
+  const [highlightedDept, setHighlightedDept] = useState<string | null>(null);
 
   // Variable de département vide en mode ville (utilisée dans FranceMap)
   const ClearAllDep:DepartmentData[] = [];
@@ -121,25 +128,32 @@ console.log('🟢 App rendu avec viewMode:', viewMode, 'isRegionMode:', isRegion
   // Fonction pour sélectionner un résultat de recherche
 
   const handleSelectSearchResult = (nom: string, code: string) => {
+  const identifier = isRegionMode ? nom : code;
+  
+  setHighlightedDept(identifier);  // ← mettre en valeur ce département
+  
+  setMultiSelDep(prev => {
+    const isAlreadySelected = prev.some(
+      dept => (isRegionMode ? dept.nom : dept.code) === identifier
+    );
+    if (!isAlreadySelected) {
+      return [...prev, { nom, code, personnes: 0 }];
+    }
+    return prev;
+  });
 
-      setMultiSelDep(prev => {
-        const identifier = isRegionMode ? nom : code;
-        const isAlreadySelected = prev.some(
-          dept => (isRegionMode ? dept.nom : dept.code) === identifier
-        );
-        
-        if (!isAlreadySelected) {
-          return [...prev, { nom, code, personnes: 0 }]; // Initialiser à 0
-        }
-        return prev;
-      });
+  // ← NE PAS vider searchQuery ici, l'utilisateur efface manuellement
+  setSearchResults([]);
+  setShowSearchResults(false);
+};
 
-    
-    // Réinitialiser la recherche
-    setSearchQuery("");
-    setSearchResults([]);
-    setShowSearchResults(false);
-  };
+const handleResetMap = () => {
+  setHighlightedDept(null);
+  setMultiSelDep([]);
+  setSearchQuery("");
+  setSearchResults([]);
+  setShowSearchResults(false);
+};
 
 
 
@@ -194,6 +208,8 @@ const handleOpenRegionList = () => {
                   isTownMode={isTownMode}
                   onOpenVilleList={() => setShowVilleList(true)}
                   onToggleTown={handleToggleTown}
+                  hasSelection={highlightedDept !== null}
+                  onClearSelection={handleResetMap}
                 />
               </div>
 
@@ -212,8 +228,10 @@ const handleOpenRegionList = () => {
                     selectedTownCodes={selectedTownCodes} 
                     onToggleTown={handleToggleTown}      
                     onClearTowns={handleClearTowns} 
-                    showHeatMap={false}
+                    showHeatMap={isHeatMap}
                     showInfoPanel={false}
+                    highlightedDept={highlightedDept}
+                    onResetMap={handleResetMap}
                   />
               </section>
             </div>

@@ -197,7 +197,7 @@ useEffect(() => {
       setTagMapping(tags);
 
       console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
-      // await fetchReporting(DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
+      // await fetchReporting();
       
       console.log("✅ Init complete");
     } catch (error) {
@@ -216,7 +216,7 @@ useEffect(() => {
     // Refetch l'API uniquement si les dates changent
     if (filters.scheduleStart && filters.scheduleEnd) {
       fetchReporting(filters.scheduleStart, filters.scheduleEnd);
-    }
+      }
   }, [filters.scheduleStart, filters.scheduleEnd]);
 
   if (loading) {

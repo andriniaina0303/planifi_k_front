@@ -59,6 +59,7 @@ if (startDate && endDate) {
 
   // ── URL FINALE ──
   const url = `${config.REACT_APP_ENDPOINT_ALL_ADVERTISERS}?${params.toString()}`;
+  // const url = config.REACT_APP_ENDPOINT_ALL_ADVERTISERS;
   console.log("🔗 API URL:", url);
 
   const response = await api.get(url, {

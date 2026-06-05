@@ -1,4 +1,4 @@
-import { Search, MapPinHouse, Map, MapPinned, ClipboardList } from 'lucide-react';
+import { Search, MapPinHouse, Map, MapPinned, ClipboardList, X } from 'lucide-react';
 import { useState } from 'react';
 import { type DepartmentData } from '../MapApp';
 import { searchTowns, type TownMarker } from '../hooks/townMarkers';
@@ -25,6 +25,8 @@ interface OptionProps {
   onOpenRegionList: () => void;
   onOpenVilleList: () => void;  // Fonction pour ouvrir la liste des villes
   onToggleTown: (code: string) => void; // callback pour toggle ville
+  hasSelection?: boolean;
+  onClearSelection?: () => void;
 
 }
 
@@ -43,6 +45,8 @@ export default function Option({
   onOpenVilleList,
   isTownMode,
   onToggleTown,
+  hasSelection = false,
+  onClearSelection, 
 }: OptionProps) {
 
   // Etats pour la recherche de villes
@@ -142,14 +146,13 @@ const btnDisabled = true
 
           {/* Barre de recherche */}
           <div className="position-relative d-flex" style={{ flex: '1 1 auto' }}>
-            <div className="d-flex w-100 h-70" >
+            <div className="d-flex w-100 h-70 position-relative">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => {
                   if (isTownMode) {
-                    // Recherche locale dans la liste de villes
-                    onSearch(e.target.value); // pour garder searchQuery à jour
+                    onSearch(e.target.value);
                     const results = searchTowns(e.target.value);
                     setTownSearchResults(results);
                     setShowTownResults(results.length > 0 && e.target.value.trim() !== "");
@@ -164,12 +167,29 @@ const btnDisabled = true
                   "Département..."
                 }
                 className="form-control custom-input"
-                style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+                style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0, paddingRight: searchQuery ? '2rem' : undefined }}
               />
-              <button className="btn btn-warning" style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, whiteSpace: 'nowrap' }}>
-                <Search style={{ width: '1rem', height: '1rem' }} />
-                <span className="d-none d-sm-inline ms-1">Rechercher</span>
-              </button>
+              {/* Bouton effacer manuel */}
+              {hasSelection ? (
+                <button
+                  className="btn btn-danger"
+                  style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, whiteSpace: 'nowrap' }}
+                  onClick={() => {
+                    onSearch("");
+                    setTownSearchResults([]);
+                    setShowTownResults(false);
+                    onClearSelection?.();
+                  }}
+                >
+                  <X style={{ width: '1rem', height: '1rem' }} />
+                  <span className="d-none d-sm-inline ms-1">Effacer</span>
+                </button>
+              ) : (
+                <button className="btn btn-warning" style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, whiteSpace: 'nowrap' }}>
+                  <Search style={{ width: '1rem', height: '1rem' }} />
+                  <span className="d-none d-sm-inline ms-1">Rechercher</span>
+                </button>
+              )}
             </div>
               <style>
     {`
@@ -263,11 +283,23 @@ const btnDisabled = true
 
                   {[
                     {
-                      dot: "#f59e0b",
-                      label: "Jaune",
+                      dot: "#ef4444",
+                      label: "Rouge",
                       range: "1 – 200",
                       desc: "Zones à faible activité",
                       percent: 20,
+                      bg: "#fff1f2",
+                      border: "#fca5a5",
+                      badgeBg: "#fee2e2",
+                      textColor: "#991b1b",
+                      barColor: "#ef4444",
+                    },
+                    {
+                      dot: "#f59e0b",
+                      label: "Jaune",
+                      range: "201 – 500",
+                      desc: "Zones à activité modérée",
+                      percent: 55,
                       bg: "#fffbeb",
                       border: "#fde68a",
                       badgeBg: "#fef3c7",
@@ -276,27 +308,15 @@ const btnDisabled = true
                     },
                     {
                       dot: "#22c55e",
-                      label: "Vert",
-                      range: "201 – 500",
-                      desc: "Zones à activité modérée",
-                      percent: 55,
+                      label: "Rouge",
+                      range: "> 500",
+                      desc: "Zones les plus denses",
+                      percent: 100,
                       bg: "#f0fdf4",
                       border: "#86efac",
                       badgeBg: "#dcfce7",
                       textColor: "#166534",
                       barColor: "#22c55e",
-                    },
-                    {
-                      dot: "#ef4444",
-                      label: "Rouge",
-                      range: "> 500",
-                      desc: "Zones les plus denses",
-                      percent: 100,
-                      bg: "#fff1f2",
-                      border: "#fca5a5",
-                      badgeBg: "#fee2e2",
-                      textColor: "#991b1b",
-                      barColor: "#ef4444",
                     },
                     {
                       dot: "#d1d5db",

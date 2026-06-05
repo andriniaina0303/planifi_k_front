@@ -86,10 +86,10 @@ export default function App() {
           }
         >
           Page d'accueil
-          <Route index element={<h2>Bienvenue sur Planifik 🚀</h2>} />
+          {/* <Route index element={<h2>Bienvenue sur Planifik 🚀</h2>} /> */}
 
           {/* ── MODULE REPORTING ── */}
-          <Route path="reporting/advertisers" element={<Advertisers />} />
+          <Route index path="reporting/advertisers" element={<Advertisers />} />
           
           {/* Affiche les détails spécifiques d'un annonceur */}
           {/* :advertiser_id est un paramètre dynamique extrait de l'URL */}

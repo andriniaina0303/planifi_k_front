@@ -13,6 +13,7 @@ import { useLoading } from "../hooks/useLoading";
 import { TOWN_MARKERS, getTownMarkersForRegion, getClicksForTown } from "../hooks/townMarkers";import {TownMarkers,TownMetroMarkers} from "./function/label_DOM";
 import { getTemperatureColor, calculateRegionTemperature, getTemperatureRange, generateLegendGradient } from "./function/funcTemp";
 import { getClicksForDepartment, getClicksByRegion, getLabelsByRegion, DEPARTMENT_TO_REGION, regions } from "./function/funcClick";
+import { zoomToDepartment } from "./function/specDepZoom";
 
 interface FranceMapProps {
   clickData: Record<string, number>;
@@ -28,9 +29,11 @@ interface FranceMapProps {
   onClearTowns: () => void;  // ← Effacer les villes sélectionnées (reçu depuis App)
   showHeatMap?: boolean ; // ← pour activer ou désactiver la heatmap de température
   showInfoPanel?: boolean;
+  highlightedDept?: string | null;
+  onResetMap?: () => void;
 }
 
-type ZoomPosition = {
+export type ZoomPosition = {
   coordinates: [number, number],
   zoom: number
 }
@@ -50,7 +53,9 @@ const FranceMap: React.FC<FranceMapProps> = ({
   onToggleTown,
   onClearTowns,
   showHeatMap=false,
-  showInfoPanel = true
+  showInfoPanel = true,
+  highlightedDept = null,
+  onResetMap
 }) => {
 
 // Fonction pour parcourir clickData et retourner le nbr de clicks et les cles pour chaque dep
@@ -98,7 +103,7 @@ const [tempLoading, setTempLoading] = useState<boolean>(true);
   // État pour stocker les points générés par département et région
   const [departmentPoints, setDepartmentPoints] = useState<Record<string, [number, number]>>({});
   const [regionPoints, setRegionPoints] = useState<Record<string, [number, number]>>({});
-  
+  const [loadedGeographies, setLoadedGeographies] = useState<any[]>([]);
   
   // Passer en props les globale data
   
@@ -165,6 +170,11 @@ const [tempLoading, setTempLoading] = useState<boolean>(true);
     }
   }, [isRegionMode]);
 
+  useEffect(() => {
+  if (!highlightedDept || isRegionMode) return;
+  zoomToDepartment(highlightedDept, loadedGeographies,setPosition);
+}, [highlightedDept, loadedGeographies]);
+
   // Hook pour gérer le chargement
     const {
     isLoading,
@@ -202,6 +212,7 @@ useEffect(() => {
       
       if (onGeographiesLoad && data.features) {
         onGeographiesLoad(data.features);
+        setLoadedGeographies(data.features);  // 
       }
       
       updateProgress(40);
@@ -272,6 +283,7 @@ useEffect(() => {
     if (position.zoom <= 1) return;
     setPosition((pos) => ({ ...pos, zoom: pos.zoom / 2 }));
   }
+
 
   const renderMap = (terre: typeof regions[0], index: number) => (
     <div key={terre.name} className={`relative ${index === 0 ? "w-125 h-150" : ""}`}>
@@ -350,7 +362,13 @@ useEffect(() => {
                     (isRegionMode ? dept.nom : dept.code) === 
                     (isRegionMode ? geo.properties.nom : geo.properties.code)
                   );
-
+                  // Departement à traiter spécialement 
+                  const allowedDep = ["75","92","93","94"]
+                  const showMarkerForDept = allowedDep.includes(
+                    geo.properties.code
+                  );
+                  const identifier = isRegionMode ? geo.properties.nom : geo.properties.code;
+                  const isDimmed = highlightedDept !== null && identifier !== highlightedDept && !isSelected;
                   return (
                     <g key={geo.rsmKey}>
                       <Geography
@@ -372,7 +390,17 @@ useEffect(() => {
                         }}
                         style={{
                           default: {
-                            fill: isSelected ? "#008000" : isHovered ? "#FFF0BC" : showHeatMap ? getTemperatureColor(getTemperature(geo.properties.code, geo.properties.nom), minTemp, maxTemp) : "#e1e1ef",
+                          fill: isSelected
+                            ? "#008000"
+                            : isHovered
+                            ? "#FFF0BC"
+                            : showHeatMap
+                            ? getTemperatureColor(getTemperature(geo.properties.code, geo.properties.nom), minTemp, maxTemp)
+                            : isDimmed
+                            ? "#c8c8d8"   // ← grisé pour les autres départements
+                            : highlightedDept === identifier
+                            ? "#FFD700"   // ← doré pour le département mis en valeur
+                            : "#e1e1ef",
                             stroke: "#C1BFB1",
                             strokeWidth: 0.5,
                             outline: "none",
@@ -418,10 +446,9 @@ useEffect(() => {
                         }}
                         className={`${isTownMode ? "cursor-pointer " : "cursor-default"}`}
                       />
-                      {point && shouldShowPoint && !isTownMode && (
-                        <Marker coordinates={point as [number, number]}>
+                      {point && shouldShowPoint && !isTownMode && (highlightedDept === null || identifier === highlightedDept) && (                        <Marker coordinates={point as [number, number]}>
                           <circle 
-                            r={isRegionMode ? 4 : 1} 
+                            r={showMarkerForDept ? 1 : 3} 
                             fill={getColorByPersonCount(clicsCount)} 
                             className="shadow-amber-300/50 z-50"
                           />
@@ -573,7 +600,7 @@ useEffect(() => {
                     {point && shouldShowPoint  && !isTownMode && (
                       <Marker coordinates={point as [number, number]}>
                         <circle 
-                          r={isRegionMode ? 1 : 0.5} 
+                          r={isRegionMode ? 1 : 2 } 
                           fill={getColorByPersonCount(clicsCount)} 
                           className="shadow-glow"
                         />
@@ -692,7 +719,10 @@ useEffect(() => {
           />
           <RotateCcw
             className="cursor-pointer rounded-circle p-1"
-            onClick={() => setPosition({ coordinates: [2.8, 43.8], zoom: 1 })}
+            onClick={() => {
+              setPosition({ coordinates: [2.8, 43.8], zoom: 1 });
+              onResetMap?.();
+            }}
           />
         </div>
           <div

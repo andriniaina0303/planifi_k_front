@@ -335,7 +335,7 @@ export async function exportGlobalTableXLS(
       // C24 : Taux de transformation
       const conversion =
          brand.leads_val > 0 && brand.clickers != null
-            ? (brand.leads_val / brand.clickers)
+            ? (brand.leads_val / brand.clickers)*100
             : 0;
 
       row.getCell(24).value = conversion;

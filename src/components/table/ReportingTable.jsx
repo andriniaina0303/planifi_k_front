@@ -87,7 +87,7 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
         }) => (
           <div style={{ padding: 8 }}>
             <Input
-              placeholder="Search advertiser"
+              placeholder={`Search ${dataKey}`}
               value={selectedKeys[0]}
               onChange={(e) => {
                 const value = e.target.value;
