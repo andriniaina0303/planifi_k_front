@@ -458,10 +458,9 @@ export default function LoginPage() {
               </div>
 
               <div className="left-headline">
-                Automatisez vos campagnes<br />
-                et exploitez <span>pleinement vos données</span>
-              </div> 
-
+                Automatisez vos campagnes <br />
+             et exploitez <span>pleinement vos données</span>
+              </div>
 
               <p className="left-desc">
                 Suivi, analyse et planification automatiques de vos campagnes d'emailing.
