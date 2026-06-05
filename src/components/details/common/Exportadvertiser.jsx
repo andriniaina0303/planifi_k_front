@@ -118,7 +118,7 @@ export async function exportAdvertiserXLS(
     (agenceMapping || []).map((a) => [a.agence_id, a.agence_name])
   );
 
-  const tagMap = Object.fromEntries((tag_name || []).map((tag) =>[tag.tag_id,tag.tag_name]))
+  const tagMap = tag_name
 
   // ── 2. Pré-chargement parallèle des segments ──────────────────────────────
   const segmentCache = await buildSegmentCache(advertisers, databaseInfo.id);

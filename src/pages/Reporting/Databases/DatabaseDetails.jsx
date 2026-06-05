@@ -96,6 +96,7 @@ import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
 import { GlobalTable } from "../../../components/details/GlobalTable.jsx";
 import { DimSection } from "../../../components/details/common/DimSection.jsx";
 import MapApp from "../../../FranceMap/MapApp.js"
+import { useTagStore } from "../../../utils/storedTags.js";
 
 
 /* 
@@ -295,7 +296,10 @@ const DatabaseDetail = ({ _mockData }) => {
   // Etat pour stocker les mapping agences, tags et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
   const [advertiserMapping, setAdvertiserMapping] = useState({});
-  const [tagMapping, setTagMapping] = useState({});
+  // Mapping des tags 
+  const { setTagMapping } = useTagStore();
+  // État pour les mappings de tags
+  const tagMapping = useTagStore((state) => state.tagMap);
 
   // Etat de tout les segments de la base 
   const [allsegmentNames,setAllSegmentNames] = useState({})
@@ -319,10 +323,8 @@ useEffect(() => {
   try {
     const [agences,tags] = await Promise.all([
       getMappingData('agences', 'agences'),
-      getMappingData('tags','tags'),
     ]);
     setAgenceMapping(agences);
-    setTagMapping(tags)
   } catch (e) {
     console.error(e);
   }
@@ -523,7 +525,7 @@ const fetchAllSegments = async () => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  <GlobalOverview segmentNames = {allsegmentNames} open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} label_value="database" />
+                  <GlobalOverview segmentNames = {allsegmentNames} open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} label_value="database" tagMapping={tagMapping}/>
                 </div>
               ),
             },

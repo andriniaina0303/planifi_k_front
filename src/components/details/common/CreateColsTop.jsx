@@ -24,7 +24,7 @@ const { Text } = Typography;
  * 3. Top 10 objets par Open Rate
  * Les titres et sous-titres sont dynamiques selon l'onglet.
  */
-export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_value }) => {
+export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_value, tagMapping }) => {
   const carouselRef = useRef();
   const screens = useBreakpoint();
 
@@ -99,7 +99,10 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
   // };
 
   // Générer les colonnes pour chaque vue
-  const generateColumns = (config) => [
+  const generateColumns = (config,tagMapping) =>{
+
+    return (
+    [
     // {
     //   title: "Rang",
     //   dataIndex: "rank",
@@ -142,6 +145,22 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
       </Tooltip>
     );
   },
+},
+
+{
+  title: "Tags",
+  dataIndex: "tag_id",
+  key: "tag_id",
+  align: "middle",
+  width:80,
+  render: (tagId)=>
+    {
+      return (
+        <Text>
+          {tagMapping[tagId] || "Unknown"}
+        </Text>
+      )
+    } 
 },
 
   ...(label_value === "database" ?[
@@ -339,7 +358,7 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
         </Text>
       ),
     },
-  ];
+  ])}
 
   // Préparer les données de la table
 const getTableData = (brands) =>
@@ -427,7 +446,7 @@ const getTableData = (brands) =>
             {/* ── TABLE ── */}
             {viewData.brands.length > 0 ? (
               <Table
-                columns={generateColumns(viewData)}
+                columns={generateColumns(viewData,tagMapping)}
                 dataSource={getTableData(viewData.brands)}
                 pagination={false}
                 size="small"

@@ -537,15 +537,7 @@ export const GlobalTable = ({
   }, [bases, f]);
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
-  const tagMap = useMemo(() => {
-    if (dataLabel !== "database" || !Array.isArray(tagName)) {
-      return {};
-    }
-
-    return Object.fromEntries(
-      tagName.map((tag) => [tag.tag_id, tag.tag_name])
-    );
-  }, [dataLabel, tagName]);
+  const tagMap = tagName
   const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
 
   const cols = [

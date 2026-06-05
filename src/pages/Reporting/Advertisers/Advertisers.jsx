@@ -22,6 +22,9 @@ import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-desi
 import ChartSwitcher from "../../../components/chart/ChartSwitcher";
 import TopTagsEcpm from "../../../components/chart/TopTagsEcpm";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
+import { useTagStore } from "../../../utils/storedTags";
+
+
 
 /**
  * Composant Advertisers
@@ -29,8 +32,14 @@ import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/Fil
  * 
  * @component
  * @returns {JSX.Element} Dashboard complet avec KPIs, filtres, graphiques et tableau
- */
+*/
 const Advertisers = () => {
+
+
+  const { setTagMapping } = useTagStore();
+
+
+
   // État des annonceurs chargés depuis l'API
   const [listeAdvertiser, setListeAdvertisers] = useState([]);
 
@@ -41,8 +50,7 @@ const Advertisers = () => {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
   // État pour les mappings de tags
-  const [tagMapping, setTagMapping] = useState({});
-
+  const tagMapping = useTagStore((state) => state.tagMap);
   /**
    * Convertit un objet dayjs en string au format YYYY-MM-DD
    * @param {dayjs.Dayjs} dayjsDate - Date au format dayjs
@@ -198,7 +206,6 @@ useEffect(() => {
 
       console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
       // await fetchReporting();
-      
       console.log("✅ Init complete");
     } catch (error) {
       console.error("❌ Erreur lors de l'initialisation :", error);

@@ -21,6 +21,8 @@ import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-desi
 import ChartSwitcher from "../../../components/chart/ChartSwitcher";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
 import {TopDBEcpm} from "../../../components/chart/TopDBEcpm"
+import { useTagStore } from "../../../utils/storedTags";
+
 
 /**
  * Composant Advertisers
@@ -39,7 +41,11 @@ const Databases = () => {
   // État des filtres actifs — initialise avec les valeurs par défaut (90 derniers jours)
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-
+  // Mapping des tags 
+  const { setTagMapping } = useTagStore();
+  // État pour les mappings de tags
+  const tagMapping = useTagStore((state) => state.tagMap);
+  
   /**
    * Convertit un objet dayjs en string au format YYYY-MM-DD
    * @param {dayjs.Dayjs} dayjsDate - Date au format dayjs

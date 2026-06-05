@@ -69,9 +69,9 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
 
 
     // Créer le map à partir du array
-  const tagMapFromAPI = Object.fromEntries(
-    tagMapping.map(t => [t.tag_id, t.tag_name])
-  );
+  const tagMapFromAPI= tagMapping
+
+
   // Définition des colonnes
   const columns = useMemo(
     () => [
@@ -125,7 +125,7 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
           </div>
         ),
       },
-      ...(tagMapping?.length > 0 ? 
+      ...(Object.keys(tagMapping).length > 0 ? 
       [
         {
           title: "Tag",
@@ -168,6 +168,8 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
           },
           render: (tag_id) => {
             const tagName = tagMapFromAPI[tag_id];
+            console.log("tag_id =", tag_id);
+            console.log("tagName =", tagMapFromAPI[tag_id]);
             return (
               <Tag
                 color="cyan"
@@ -236,7 +238,7 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
       onRow={(record) => ({
         onClick: () =>
         navigate(`${record[dataKey + "_id"]}`,
-          {state: {record: record}}
+          {state: {record: record,tagMapping:tagMapping}}
         ),
           style: { cursor: "pointer" },
       })}

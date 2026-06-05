@@ -33,15 +33,18 @@ const TopTagsEcpm = ({ data, tagMapping = [] }) => {
    * Calcule le top 10 des tags par eCPM
   */
 const topTags = useMemo(() => {
-const tagsPerf = Object.entries(tagMapping).map(([id, name]) => {
+const tagsPerf = Object.entries(tagMapping).map(([id, tagName]) => {
   const tagId = Number(id);
-  const items = data.filter((a) => Number(a.tag_id) === tagId);
-  const ecpm = items.length > 0 ? items[0].globales.ecpm : 0;
-    return {
-      name: name.tag_name,
-      eCPM: ecpm,
-    };
-  });
+
+  const items = data.filter(
+    (a) => Number(a.tag_id) === tagId
+  );
+
+  return {
+    name: tagName,
+    eCPM: items[0]?.globales?.ecpm ?? 0,
+  };
+});
   
   return tagsPerf
     .filter((t) => t.eCPM > 0)

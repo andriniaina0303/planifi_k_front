@@ -95,6 +95,7 @@ import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
 import { GlobalTable } from "../../../components/details/GlobalTable.jsx";
 import { DimSection } from "../../../components/details/common/DimSection.jsx";
 import MapApp from "../../../FranceMap/MapApp.js"
+import { useTagStore } from "../../../utils/storedTags.js";
 
 /* 
  * Configuration des classifications (A, B, C, D) pour les bases de données.
@@ -282,6 +283,9 @@ const KpiDashboard = ({ g }) => {
 const AdvertiserDetail = ({ _mockData }) => {
   const { advertiser_id } = useParams();
   const navigate = useNavigate();
+  const tagMapping = useTagStore(
+  (state) => state.tagMap
+);
   
   // État de la page
   const [data, setData] = useState(_mockData || null);           // Données complètes du rapport
@@ -490,7 +494,15 @@ useEffect(() => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" />
+                  <GlobalOverview 
+                    open={openPopover} 
+                    setOpen={setOpenPopover} 
+                    data={data} 
+                    mappingData={databaseMapping} 
+                    styles={styles} 
+                    label_value="advertiser" 
+                    tagMapping={tagMapping}
+                  />
                 </div>
               ),
             },
