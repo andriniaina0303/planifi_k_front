@@ -168,8 +168,6 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
           },
           render: (tag_id) => {
             const tagName = tagMapFromAPI[tag_id];
-            console.log("tag_id =", tag_id);
-            console.log("tagName =", tagMapFromAPI[tag_id]);
             return (
               <Tag
                 color="cyan"
@@ -250,6 +248,10 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
           row: ({ children, ...props }) => {
             // Extrais l'index de la clé (ex: "4892_0" → index 0)
             const rowKey = props["data-row-key"];
+
+            if (!rowKey) {
+              return <tr {...props}>{children}</tr>;
+            }
             const index = parseInt(rowKey.split("_").pop());
             const record = data[index];  // ← Accès direct par index
             

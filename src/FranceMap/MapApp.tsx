@@ -13,7 +13,19 @@ export type DepartmentData = {
   code: string;
   personnes: number;
 };
-function MapApp({data}:any) {
+export type DataMapping = Record <number,string>
+
+// Typage des données reçu depuis l'API
+
+type AnalyseDep = {
+  clickers : number,
+  tx_clck : number,
+  tx_opn : number,
+  tx_usb : number,
+  tag_id:number
+}
+
+function MapApp({data,tagMapping}:any) {
   // État pour gérer l'URL du GeoJSON
   const [geoUrl, setGeoUrl] = useState<string>(
     "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-avec-outre-mer.geojson"
@@ -31,10 +43,12 @@ const clickData = useMemo(
   [globalData]
 );
 console.log("ClickData: ", clickData)
-const analyseDep = useMemo(
+const analyseDep = useMemo<Record<string, AnalyseDep>>(
   () => globalData?.analyse_dep ?? {},
   [globalData]
 );
+
+
 
   // Etat pour le mode HeatMap 
   const  [isHeatMap, setIsHeatMap] = useState(false);
@@ -65,6 +79,10 @@ useEffect(() => {
   const [showRegionList, setShowRegionList] = useState(false);
   const [selectedTownCodes, setSelectedTownCodes] = useState<string[]>([]);
   const [showVilleList, setShowVilleList] = useState(false);
+
+
+  // Variable pour stocké la valeur du tag à filtrer
+  const [selectedTags,setSelectedTags] = useState<number>(0)
 
   // ← NOUVEAU : toggle ville (peut être appelé depuis App ET FranceMap)
   const handleToggleTown = (code: string) => {
@@ -185,6 +203,15 @@ const handleOpenRegionList = () => {
   setShowRegionList(true);
 };
 
+
+const departments = useMemo(
+  () => Object.entries(analyseDep)
+  .filter(([_, infos]) => infos.tag_id === selectedTags)
+  .map(([deptCode]) => deptCode),
+  [globalData]
+);
+
+console.log(departments);
   return (
     <>
       <div className='d-flex flex-column' >
@@ -210,6 +237,8 @@ const handleOpenRegionList = () => {
                   onToggleTown={handleToggleTown}
                   hasSelection={highlightedDept !== null}
                   onClearSelection={handleResetMap}
+                  tagMapping = {tagMapping}
+                  setSelectedTags = {setSelectedTags}
                 />
               </div>
 
@@ -232,6 +261,7 @@ const handleOpenRegionList = () => {
                     showInfoPanel={false}
                     highlightedDept={highlightedDept}
                     onResetMap={handleResetMap}
+                    tagsDepList={departments}
                   />
               </section>
             </div>

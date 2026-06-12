@@ -22,7 +22,7 @@ import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-desi
 import ChartSwitcher from "../../../components/chart/ChartSwitcher";
 import TopTagsEcpm from "../../../components/chart/TopTagsEcpm";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
-import { useTagStore } from "../../../utils/storedTags";
+import { useTagStore, useCountryStore} from "../../../utils/storedZustand";
 
 
 
@@ -37,8 +37,7 @@ const Advertisers = () => {
 
 
   const { setTagMapping } = useTagStore();
-
-
+  const {setCountries} = useCountryStore();
 
   // État des annonceurs chargés depuis l'API
   const [listeAdvertiser, setListeAdvertisers] = useState([]);
@@ -51,6 +50,9 @@ const Advertisers = () => {
 
   // État pour les mappings de tags
   const tagMapping = useTagStore((state) => state.tagMap);
+
+  // Etats pour stocké la liste des country 
+  const countryList = useCountryStore((state) => state.countries)
   /**
    * Convertit un objet dayjs en string au format YYYY-MM-DD
    * @param {dayjs.Dayjs} dayjsDate - Date au format dayjs
@@ -66,13 +68,13 @@ const Advertisers = () => {
    * @param {dayjs.Dayjs} startDate - Date de début (dayjs object)
    * @param {dayjs.Dayjs} endDate - Date de fin (dayjs object)
    */
-  const fetchReporting = async (startDate = null, endDate = null) => {
+  const fetchReporting = async (startDate = null, endDate = null, country = null) => {
     try {
       setLoading(true);
 
 
 
-      const res = await get_liste_advertisers(startDate, endDate);
+      const res = await get_liste_advertisers(startDate, endDate, country);
 
       console.log("✅ Fetched advertisers!!!");
       console.log("Response data:", res);
@@ -201,8 +203,11 @@ useEffect(() => {
       console.log("🔄 Init starting...");
       
       const tags = await getMappingData('tags', 'tags');
+      const countries = await getMappingData('country','country');
+      console.log("Countries fetched:", countries.length, "countries.");
       console.log("✅ Tags loaded:", tags.length, "items");
       setTagMapping(tags);
+      setCountries(countries);
 
       console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
       // await fetchReporting();
@@ -221,10 +226,10 @@ useEffect(() => {
    */
   useEffect(() => {
     // Refetch l'API uniquement si les dates changent
-    if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchReporting(filters.scheduleStart, filters.scheduleEnd);
+    if (filters.scheduleStart && filters.scheduleEnd && filters.country) {
+      fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.country);
       }
-  }, [filters.scheduleStart, filters.scheduleEnd]);
+  }, [filters.scheduleStart, filters.scheduleEnd, filters.country]);
 
   if (loading) {
     return (
@@ -234,7 +239,6 @@ useEffect(() => {
       </div>
     );
   }
-
   return (
     <div
       style={{
@@ -263,6 +267,7 @@ useEffect(() => {
         filters={filters}
         setFilters={setFilters}
         listes={listeAdvertiser}
+        countries = {countryList}
         idList="advertiser_id"
         keyList="advertiser_name"
       />

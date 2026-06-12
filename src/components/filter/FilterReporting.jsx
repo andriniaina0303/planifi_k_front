@@ -58,6 +58,7 @@ const getDefaultDateRange = () => [
 
 const DEFAULT_FILTERS = {
   all_fields: "ALL",
+  country : "FR",
   taux_clickers: "ALL",
   taux_openers: "ALL",
   taux_unsubs: "ALL",
@@ -79,13 +80,13 @@ const DEFAULT_FILTERS = {
  * @param {Array} props.listeAdvertiser - Liste complète des annonceurs disponibles
  * @returns {JSX.Element} Barre de filtres avec sélecteurs
  */
-const FilterReporting = ({labelFilter, filters, setFilters, listes, idList, keyList }) => {
+const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = [], idList, keyList }) => {
   // ── État local pour les dates en attente de validation ──
   const [pendingDates, setPendingDates] = useState({
     scheduleStart: filters.scheduleStart,
     scheduleEnd: filters.scheduleEnd,
   });
-
+  // console.log("Countrie reçus depuis Advertisers reporting: ", countries)
   // ── Déterminer si les dates ont changé ──
   const hasDateChanged = useMemo(() => {
     return (
@@ -202,6 +203,28 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, idList, keyL
             </Select>
           </div>
         </Col>
+
+        {/* ================= Filtre Country  ================= */}
+        { countries.length >0 && 
+          <Col span={2.4}>
+            <div style={styles.filterCol}>
+              <span style={styles.filterLabel}>Country</span>
+              <Select
+                value={filters.country}
+                onChange={(value) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    country: value,
+                  }))
+                }
+                options={countries.map((country) => ({
+                  value: country.code,
+                  label: country.name,
+                }))}
+              />
+            </div>
+          </Col>
+        }
 
         {/* ================= FILTRE eCPM ================= */}
         <Col span={2.4}>

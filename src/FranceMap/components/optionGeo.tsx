@@ -1,9 +1,10 @@
 import { Search, MapPinHouse, Map, MapPinned, ClipboardList, X } from 'lucide-react';
 import { useState } from 'react';
-import { type DepartmentData } from '../MapApp';
+import { type DepartmentData, type DataMapping } from '../MapApp';
 import { searchTowns, type TownMarker } from '../hooks/townMarkers';
 import {QuestionCircleOutlined}  from '@ant-design/icons';
 import { Popover,Progress, Typography } from 'antd';
+import { FilterOpt } from './filterOptions';
 
 
 const { Title, Text, Paragraph } = Typography;
@@ -27,7 +28,8 @@ interface OptionProps {
   onToggleTown: (code: string) => void; // callback pour toggle ville
   hasSelection?: boolean;
   onClearSelection?: () => void;
-
+  tagMapping?: DataMapping;
+  setSelectedTags?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 
@@ -47,6 +49,8 @@ export default function Option({
   onToggleTown,
   hasSelection = false,
   onClearSelection, 
+  tagMapping,
+  setSelectedTags
 }: OptionProps) {
 
   // Etats pour la recherche de villes
@@ -82,7 +86,15 @@ const handleVilleClick = () => {
 };
 
 const btnDisabled = true
-
+// console.log("Valeur de tagMappign reçu dans optionGeo: ",tagMapping)
+if(tagMapping){
+  return (
+    <div>
+      {/* <FilterOpt tagMapping={tagMapping}/> */}
+      <FilterOpt tagMapping={tagMapping} setSelectedTags={setSelectedTags}/>
+    </div>
+  )
+}
  return (
     <div className="d-flex font-poppins align-items-center w-100">
       <div className="d-flex flex-column gap-3 w-100">       
