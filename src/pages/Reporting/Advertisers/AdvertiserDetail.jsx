@@ -95,7 +95,7 @@ import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
 import { GlobalTable } from "../../../components/details/GlobalTable.jsx";
 import { DimSection } from "../../../components/details/common/DimSection.jsx";
 import MapApp from "../../../FranceMap/MapApp.js"
-import { useTagStore } from "../../../utils/storedTags.js";
+import { useTagStore } from "../../../utils/storedZustand.js";
 
 /* 
  * Configuration des classifications (A, B, C, D) pour les bases de données.

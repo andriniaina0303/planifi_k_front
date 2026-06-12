@@ -96,7 +96,7 @@ import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
 import { GlobalTable } from "../../../components/details/GlobalTable.jsx";
 import { DimSection } from "../../../components/details/common/DimSection.jsx";
 import MapApp from "../../../FranceMap/MapApp.js"
-import { useTagStore } from "../../../utils/storedTags.js";
+import { useTagStore } from "../../../utils/storedZustand.js";
 
 
 /* 
@@ -321,9 +321,9 @@ useEffect(() => {
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
   const fetchMappings = useCallback(async () => {
   try {
-    const [agences,tags] = await Promise.all([
+    const agences = await Promise.all(
       getMappingData('agences', 'agences'),
-    ]);
+    );
     setAgenceMapping(agences);
   } catch (e) {
     console.error(e);
@@ -639,7 +639,7 @@ const fetchAllSegments = async () => {
                 <div style={{ padding: "20px 4px 16px", height:"600px"}}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
                   {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" /> */}
-                  <MapApp data={data.globales} />
+                  <MapApp data={data.globales} tagMapping={tagMapping}  />
                 </div>
               ),
             },

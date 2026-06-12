@@ -157,10 +157,11 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
     {
       return (
         <Text
-          ellipsis = {{tooltip:true}}
-          style={{ 
-            whiteSpace: 'nowrap' 
-          }}>
+          ellipsis = {{tooltip:true}}  
+          style={{
+            whiteSpace: 'nowrap'
+          }}
+        >
           {tagMapping[tagId] || "Unknown"}
         </Text>
       )

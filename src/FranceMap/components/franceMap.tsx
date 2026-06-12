@@ -31,6 +31,7 @@ interface FranceMapProps {
   showInfoPanel?: boolean;
   highlightedDept?: string | null;
   onResetMap?: () => void;
+  tagsDepList? : string []; 
 }
 
 export type ZoomPosition = {
@@ -55,7 +56,8 @@ const FranceMap: React.FC<FranceMapProps> = ({
   showHeatMap=false,
   showInfoPanel = true,
   highlightedDept = null,
-  onResetMap
+  onResetMap,
+  tagsDepList=[]
 }) => {
 
 // Fonction pour parcourir clickData et retourner le nbr de clicks et les cles pour chaque dep
@@ -367,8 +369,17 @@ useEffect(() => {
                   const showMarkerForDept = allowedDep.includes(
                     geo.properties.code
                   );
+                  let showMarkerByTags = false
+                  if (tagsDepList && tagsDepList.length>0){
+                      showMarkerByTags = tagsDepList.includes(
+                      geo.properties.code
+                    ); 
+                  }
                   const identifier = isRegionMode ? geo.properties.nom : geo.properties.code;
                   const isDimmed = highlightedDept !== null && identifier !== highlightedDept && !isSelected;
+                  const makePoints = shouldShowPoint && !isTownMode && (highlightedDept === null || identifier === highlightedDept)
+                  console.log(`Valeur de makePoints pour le département ${geo.properties.code} : `,makePoints)
+                  console.log(`Valeur de tagDeptList : `,tagsDepList)
                   return (
                     <g key={geo.rsmKey}>
                       <Geography
@@ -446,14 +457,26 @@ useEffect(() => {
                         }}
                         className={`${isTownMode ? "cursor-pointer " : "cursor-default"}`}
                       />
-                      {point && shouldShowPoint && !isTownMode && (highlightedDept === null || identifier === highlightedDept) && (                        <Marker coordinates={point as [number, number]}>
-                          <circle 
-                            r={showMarkerForDept ? 1 : 3} 
-                            fill={getColorByPersonCount(clicsCount)} 
-                            className="shadow-amber-300/50 z-50"
-                          />
-                        </Marker>
-                      )}
+
+                      {point && (
+                        makePoints && tagsDepList?.length===0  ? (                        
+                          <Marker coordinates={point as [number, number]}>
+                            <circle 
+                              r={showMarkerForDept ? 1 : 3} 
+                              fill={getColorByPersonCount(clicsCount)} 
+                              className="shadow-amber-300/50 z-50"
+                            />
+                          </Marker>
+                        ): tagsDepList?.length>0 && showMarkerByTags ? (
+                          <Marker coordinates={point as [number, number]}>
+                            <circle 
+                              r={showMarkerByTags && showMarkerForDept ? 1: showMarkerByTags && !showMarkerForDept?3:0} 
+                              fill={getColorByPersonCount(clicsCount)} 
+                              className="shadow-amber-300/50 z-50"
+                            />
+                          </Marker>
+                        ):null)
+                      }
                     </g>
                   );
                 })
@@ -684,7 +707,7 @@ useEffect(() => {
     )} */}
   </div>
   );
-
+console.log("Contenu de tagDeptList dans franceMap.tsx : ",tagsDepList)
   return (
     <>
 

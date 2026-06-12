@@ -204,7 +204,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
     dataIndex: "agence_id",
     fixed: "left",
     width:120,
-    render: (agence_id) => (
+    render: (id) => (
         <button
           style={{
             background: tokens.info,
@@ -219,7 +219,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
           }}
         >
           <Text ellipsis={{tooltip:true}}>
-            {agencyName[agence_id]?.agence_name || `ID: ${agence_id}`}
+            {`${id} : ${agencyName[id]?.agence_name}` || `ID: ${id}`}
           </Text>
         </button>
     ),

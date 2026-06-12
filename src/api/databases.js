@@ -31,7 +31,7 @@ const CACHE_TTL = 1000 * 60 * 60;
  *   4. Sauvegarde les données en cache avec timestamp
  *   5. En cas d'erreur : retourne le cache expiré (fallback)
  */
-export async function get_all_databases(startDate = null, endDate = null) {
+export async function get_all_databases(startDate = null, endDate = null, country = null) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
 
@@ -50,7 +50,10 @@ export async function get_all_databases(startDate = null, endDate = null) {
   // ── VALEURS PAR DÉFAUT ──
   // Convertir les objets dayjs en Date avant d'appeler formatDate
   let finalStartDate, finalEndDate;
-
+if(country){
+  console.log("Filtre par country initialisé...")
+  console.log("Country séléctionné : ",country)
+}
 if (startDate && endDate) {
   console.log("📅 Raw startDate:", startDate);
   console.log("📅 startDate.toDate():", startDate.toDate());
@@ -70,6 +73,9 @@ if (startDate && endDate) {
 
   params.append("date_start", finalStartDate);
   params.append("date_end", finalEndDate);
+  if (country && country != null) {
+    params.append("country", country)
+  }
 
   // ── URL FINALE ──
   const url = `${config.REACT_APP_ENDPOINT_ALL_DATABASES}?${params.toString()}`;

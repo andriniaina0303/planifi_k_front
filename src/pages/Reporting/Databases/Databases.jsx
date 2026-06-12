@@ -13,6 +13,7 @@
  */
 import React, { useEffect, useMemo, useState } from "react";
 import { get_all_databases} from "../../../api/databases";
+import { getMappingData } from "../../../api/advertiser";
 import "../../../assets/css/advertisers.css";
 import { Card, Row, Col } from "antd";
 import KpiCardReporting from "../../../components/Kpi/KpiCardReporting";
@@ -21,7 +22,7 @@ import { MailOutlined, EyeOutlined, LinkOutlined, StopOutlined } from "@ant-desi
 import ChartSwitcher from "../../../components/chart/ChartSwitcher";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
 import {TopDBEcpm} from "../../../components/chart/TopDBEcpm"
-import { useTagStore } from "../../../utils/storedTags";
+import { useTagStore, useCountryStore} from "../../../utils/storedZustand";
 
 
 /**
@@ -45,6 +46,9 @@ const Databases = () => {
   const { setTagMapping } = useTagStore();
   // État pour les mappings de tags
   const tagMapping = useTagStore((state) => state.tagMap);
+
+  // Etat pour la liste des country
+  const countryList = useCountryStore((state) => state.countries)
   
   /**
    * Convertit un objet dayjs en string au format YYYY-MM-DD
@@ -61,13 +65,13 @@ const Databases = () => {
    * @param {dayjs.Dayjs} startDate - Date de début (dayjs object)
    * @param {dayjs.Dayjs} endDate - Date de fin (dayjs object)
    */
-  const fetchReporting = async (startDate = null, endDate = null) => {
+  const fetchReporting = async (startDate = null, endDate = null, country = null) => {
     try {
       setLoading(true);
 
 
 
-      const res = await get_all_databases(startDate, endDate);
+      const res = await get_all_databases(startDate, endDate, country);
 
       // console.log("✅ Fetched databases!!!");
       // console.log("Response data:", res);
@@ -95,8 +99,8 @@ const Databases = () => {
     let d = [...listeDatabases];
 
     // Filtrer par annonceur spécifique si sélectionné
-    if (filters.all_fields !== "ALL") {
-      d = d.filter((a) => a.database_name === filters.all_fields);
+    if (Array.isArray(filters.all_fields) && filters.all_fields.length > 0) {
+      d = d.filter((a) => filters.all_fields.includes(a.database_name));
     }
 
     // Filtrer par taux de clic
@@ -206,10 +210,10 @@ useEffect(() => {
    */
   useEffect(() => {
     // Refetch l'API uniquement si les dates changent
-    if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchReporting(filters.scheduleStart, filters.scheduleEnd);
+    if (filters.scheduleStart && filters.scheduleEnd && filters.country) {
+      fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.country);
     }
-  }, [filters.scheduleStart, filters.scheduleEnd]);
+  }, [filters.scheduleStart, filters.scheduleEnd, filters.country]);
 
   if (loading) {
     return (
@@ -246,6 +250,7 @@ useEffect(() => {
         filters={filters}
         setFilters={setFilters}
         listes={listeDatabases}
+        countries = {countryList}
         idList="database_id"
         keyList="database_name"
       />
@@ -255,9 +260,9 @@ useEffect(() => {
         <Col flex="auto">
           <ChartSwitcher data={filteredData} keyFields="database_name" />
         </Col>
-        <Col flex="none">
+        {/* <Col flex="none">
           <TopDBEcpm data={filteredData} />
-        </Col>
+        </Col> */}
       </Row>
 
 

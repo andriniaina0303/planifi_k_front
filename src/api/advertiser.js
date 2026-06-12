@@ -17,7 +17,7 @@ const USE_MOCK = false;
  *   - En mode MOCK : retourne les données du fichier all_advertiser.json
  *   - En mode PROD : appel GET /reporting/all_advertisers avec timeout 120s
  */
-export async function get_liste_advertisers(startDate = null, endDate = null) {
+export async function get_liste_advertisers(startDate = null, endDate = null, country = null) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
 
@@ -36,7 +36,10 @@ export async function get_liste_advertisers(startDate = null, endDate = null) {
   // ── VALEURS PAR DÉFAUT ──
   // Convertir les objets dayjs en Date avant d'appeler formatDate
   let finalStartDate, finalEndDate;
-
+if(country){
+  console.log("Filtre par country initialisé...")
+  console.log("Country séléctionné : ",country)
+}
 if (startDate && endDate) {
   console.log("📅 Raw startDate:", startDate);
   console.log("📅 startDate.toDate():", startDate.toDate());
@@ -56,6 +59,9 @@ if (startDate && endDate) {
 
   params.append("date_start", finalStartDate);
   params.append("date_end", finalEndDate);
+    if (country && country != null) {
+    params.append("country", country)
+  }
 
   // ── URL FINALE ──
   const url = `${config.REACT_APP_ENDPOINT_ALL_ADVERTISERS}?${params.toString()}`;
