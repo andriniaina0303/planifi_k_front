@@ -430,9 +430,9 @@ export const GlobalOverview = ({ segmentNames, open, setOpen, data, mappingData,
   console.log("TagMapping reçu depuis GlobalOverview: ",tagMapping)
 
   const [ShowBackTop,setShowBackTop] = useState(false)
-  // console.log("MappingData:", mappingData);
+  console.log("MappingData:", mappingData);
   const dataMapped = Object.fromEntries(mappingData.map((db) => [db[idKey], db[nameKey]]));
-  // console.log("DataMapped:", dataMapped);
+  console.log("DataMapped:", dataMapped);
   const recommendations = useMemo(() => {
     return buildRecommendations(data,key_value);
   }, [data]);

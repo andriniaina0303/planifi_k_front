@@ -64,7 +64,9 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db[idKey], db[nameKey]]));
-  const brandCols = createBrandCols(segmentNames,base,listNames,agencyName)
+  const agenceMap = Object.fromEntries(
+      agencyName.map((ag) => [ag.agence_id, ag.agence_name])
+    );  const brandCols = createBrandCols(segmentNames,base,listNames,agenceMap)
   // Etat pour filtrer dans dimensions brands 
   const [brandSort, setBrandSort] = useState("asc");
   // Etat pour gérer les segements appliquer à la base
@@ -612,61 +614,76 @@ export const GlobalTable = ({
       dataIndex: "sends",
       sorter: (a, b) => a.sends - b.sends,
       render: fmt,
-      align: "right",
+      align: "center",
     },
     {
-      title: "Openers",
-      dataIndex: "openers",
+      title: "Openers ",
+      dataIndex: "openers", // Gardé pour le tri principal
       sorter: (a, b) => a.openers - b.openers,
-      render: fmt,
-      align: "right",
-    },
-    {
-      title: "Open %",
-      dataIndex: "taux_openers",
-      sorter: (a, b) => a.taux_openers - b.taux_openers,
-      render: (v) => (
-        <Text style={{ color: tokens.success, fontWeight: 600, fontSize: 12 }}>
-          {pct(v)}
-        </Text>
+      align: "center",
+      render: (_, record) => (
+        <div style={{ 
+          display: "flex", 
+          justifyContent: "space-between", 
+          alignItems: "center",
+          gap: "8px",
+          width: "100%"
+        }}>
+          {/* Affichage du nombre brut (Openers) */}
+          <span>{fmt(record.openers)}</span>
+          
+          {/* Affichage du pourcentage (Open %) */}
+          <Text style={{ color: tokens.success, fontWeight: 600, fontSize: 12 }}>
+            ({pct(record.taux_openers)})
+          </Text>
+        </div>
       ),
-      align: "right",
     },
     {
       title: "Clickers",
       dataIndex: "clickers",
       sorter: (a, b) => a.clickers - b.clickers,
-      render: fmt,
-      align: "right",
-    },
-    {
-      title: "CTR %",
-      dataIndex: "taux_clickers",
-      sorter: (a, b) => a.taux_clickers - b.taux_clickers,
-      render: (v) => (
-        <Text style={{ color: tokens.warning, fontWeight: 600, fontSize: 12 }}>
-          {pct(v)}
-        </Text>
+      align: "center",
+      render: (_, record) => (
+        <div style={{ 
+          display: "flex", 
+          justifyContent: "space-between", 
+          alignItems: "center",
+          gap: "12px",
+          width: "100%"
+        }}>
+          {/* Affichage du nombre brut (Openers) */}
+          <span>{fmt(record.clickers)}</span>
+          
+          {/* Affichage du pourcentage (Open %) */}
+          <Text style={{ color: tokens.warning, fontWeight: 600, fontSize: 12 }}>
+            ({pct(record.taux_clickers)})
+          </Text>
+        </div>
       ),
-      align: "right",
     },
     {
       title: "Unsubs",
       dataIndex: "unsubs",
       sorter: (a, b) => a.unsubs - b.unsubs,
-      render: fmt,
-      align: "right",
-    },
-    {
-      title: "Unsub %",
-      dataIndex: "taux_unsubs",
-      sorter: (a, b) => a.taux_unsubs - b.taux_unsubs,
-      render: (v) => (
-        <Text style={{ color: tokens.danger, fontWeight: 600, fontSize: 12 }}>
-          {pct(v)}
-        </Text>
+      align: "center",
+      render: (_, record) => (
+        <div style={{ 
+          display: "flex", 
+          justifyContent: "space-between", 
+          alignItems: "center",
+          gap: "8px",
+          width: "100%"
+        }}>
+          {/* Affichage du nombre brut (Openers) */}
+          <span>{fmt(record.unsubs)}</span>
+          
+          {/* Affichage du pourcentage (Open %) */}
+          <Text style={{ color: tokens.danger, fontWeight: 600, fontSize: 12 }}>
+            ({pct(record.taux_unsubs)})
+          </Text>
+        </div>
       ),
-      align: "right",
     },
     {
       title: "CA",

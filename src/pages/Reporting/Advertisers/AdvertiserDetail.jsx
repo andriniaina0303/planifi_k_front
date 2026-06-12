@@ -350,6 +350,8 @@ useEffect(() => {
     if (!_mockData) fetchd();
   }, [advertiser_id, _mockData, fetchMappings]);
 
+
+
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
     return (

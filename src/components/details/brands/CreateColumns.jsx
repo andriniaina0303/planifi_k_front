@@ -219,7 +219,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
           }}
         >
           <Text ellipsis={{tooltip:true}}>
-            {`${id} : ${agencyName[id]?.agence_name}` || `ID: ${id}`}
+            {agencyName[id] || `ID: ${id}`}
           </Text>
         </button>
     ),
