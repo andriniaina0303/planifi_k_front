@@ -485,7 +485,7 @@ export const GlobalTable = ({
   const [selectedBase, setSelectedBase] = useState(null); // ← ajout
   const [loadingSegments, setLoadingSegments] = useState(false);
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
-
+  // console.log("Contenu de AgencyName reçu dans GlobalTable: ",agencyName)
   const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database'
   useEffect(() => {
     if (!selectedBase) return; // ← Si pas de base sélectionnée, on sort

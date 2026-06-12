@@ -321,9 +321,9 @@ useEffect(() => {
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
   const fetchMappings = useCallback(async () => {
   try {
-    const agences = await Promise.all(
-      getMappingData('agences', 'agences'),
-    );
+    const agences = await getMappingData('agences', 'agences')
+    
+    console.log("Nom d'agence fetcher: ", agences)
     setAgenceMapping(agences);
   } catch (e) {
     console.error(e);
@@ -379,7 +379,6 @@ const fetchAllSegments = async () => {
     if (!_mockData) fetchd();
   }, [database_id, _mockData, fetchMappings]);
 // console.log("Contenu de allSegments: ",allsegmentNames)
-
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
     return (
