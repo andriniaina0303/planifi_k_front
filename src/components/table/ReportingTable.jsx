@@ -61,7 +61,6 @@ const AnalyseTooltip = ({ analyse }) => (
 );
 
 const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
-  console.log("Data reçue dans ReportingTable:", data);
   const navigate = useNavigate();
 
   // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)

@@ -57,7 +57,7 @@ const getDefaultDateRange = () => [
  */
 
 const DEFAULT_FILTERS = {
-  all_fields: "ALL",
+  all_fields: [],   // [] = "ALL" (aucune sélection = tout afficher)
   country : "FR",
   taux_clickers: "ALL",
   taux_openers: "ALL",
@@ -86,7 +86,17 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = 
     scheduleStart: filters.scheduleStart,
     scheduleEnd: filters.scheduleEnd,
   });
-  // console.log("Countrie reçus depuis Advertisers reporting: ", countries)
+
+  // ── État local pour la sélection multiple en attente (avant Search) ──
+  const [pendingSelection, setPendingSelection] = useState(filters.all_fields ?? []);
+
+  // ── Déterminer si la sélection a changé (bouton Search visible) ──
+  const hasSelectionChanged = useMemo(() => {
+    const applied = filters.all_fields ?? [];
+    if (pendingSelection.length !== applied.length) return true;
+    return pendingSelection.some((v, i) => v !== applied[i]);
+  }, [pendingSelection, filters.all_fields]);
+
   // ── Déterminer si les dates ont changé ──
   const hasDateChanged = useMemo(() => {
     return (
@@ -104,6 +114,7 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = 
       scheduleStart: DEFAULT_FILTERS.scheduleStart,
       scheduleEnd: DEFAULT_FILTERS.scheduleEnd,
     });
+    setPendingSelection([]);
   };
 
   /**
@@ -176,31 +187,32 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = 
           </div>
         </Col>
 
-        {/* ================= FILTRE {labelFilter} ================= */}
-        <Col span={2.4}>
+        {/* ================= FILTRE {labelFilter} — MULTI-SÉLECTION ================= */}
+        <Col flex="auto">
           <div style={styles.filterCol}>
             <span style={styles.filterLabel}>{labelFilter}</span>
             <Select
+              mode="multiple"
+              allowClear
               showSearch
-              key={filters.all_fields}
-              value={filters.all_fields}
-              onChange={(v) =>
-                setFilters({
-                  ...filters,
-                  all_fields: v || "ALL",
-                })
+              placeholder={`All ${labelFilter}`}
+              value={pendingSelection}
+              onChange={(v) => setPendingSelection(v)}
+              style={{ width: "100%", minWidth: 180 }}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
               }
-              style={{ width: "100%" }}
-            >
-              <Option value="ALL">All {labelFilter}</Option>
-              {/* Affiche dynamiquement tous les annonceurs disponibles */}
-              {listes &&
-                listes.map((a) => (
-                  <Option key={a[idList]} value={a[keyList]}>
-                    {a[keyList]}
-                  </Option>
-                ))}
-            </Select>
+              options={
+                listes
+                  ? listes.map((a) => ({
+                      key: a[idList],
+                      value: a[keyList],
+                      label: a[keyList],
+                    }))
+                  : []
+              }
+            />
           </div>
         </Col>
 
@@ -225,92 +237,6 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = 
             </div>
           </Col>
         }
-
-        {/* ================= FILTRE eCPM ================= */}
-        <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>eCPM</span>
-            <Select
-              value={filters.taux_ecpm}
-              onChange={(v) => setFilters({ ...filters, taux_ecpm: v })}
-              style={{ width: "100%" }}
-            >
-              <Option value="ALL">All</Option>
-              <Option value="🟢">🟢 Good</Option>
-              <Option value="🟡">🟡 Medium</Option>
-              <Option value="🔴">🔴 Low</Option>
-            </Select>
-          </div>
-        </Col>
-
-        {/* ================= FILTRE CA ================= */}
-        <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>CA</span>
-            <Select
-              value={filters.taux_ca}
-              onChange={(v) => setFilters({ ...filters, taux_ca: v })}
-              style={{ width: "100%" }}
-            >
-              <Option value="ALL">All</Option>
-              <Option value="🟢">🟢 Good</Option>
-              <Option value="🟡">🟡 Medium</Option>
-              <Option value="🔴">🔴 Low</Option>
-            </Select>
-          </div>
-        </Col>
-
-        {/* ================= FILTRE CLICK RATE ================= */}
-        <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>Click Rate</span>
-            <Select
-              value={filters.taux_clickers}
-              onChange={(v) => setFilters({ ...filters, taux_clickers: v })}
-              style={{ width: "100%" }}
-            >
-              <Option value="ALL">All clickers</Option>
-              <Option value="🟢">🟢 Good</Option>
-              <Option value="🟡">🟡 Medium</Option>
-              <Option value="🔴">🔴 Low</Option>
-            </Select>
-          </div>
-        </Col>
-
-        {/* ================= FILTRE OPEN RATE ================= */}
-        <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>Open Rate</span>
-            <Select
-              value={filters.taux_openers}
-              onChange={(v) => setFilters({ ...filters, taux_openers: v })}
-              style={{ width: "100%" }}
-            >
-              <Option value="ALL">All openers</Option>
-              <Option value="🟢">🟢 Bon</Option>
-              <Option value="🟡">🟡 Moyen</Option>
-              <Option value="🔴">🔴 Faible</Option>
-            </Select>
-          </div>
-        </Col>
-
-        {/* ================= FILTRE UNSUB RATE ================= */}
-        <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>Unsub Rate</span>
-            <Select
-              value={filters.taux_unsubs}
-              onChange={(v) => setFilters({ ...filters, taux_unsubs: v })}
-              style={{ width: "100%" }}
-            >
-              <Option value="ALL">All unsub</Option>
-              <Option value="🟢">🟢 Good</Option>
-              <Option value="🟡">🟡 Medium</Option>
-              <Option value="🔴">🔴 Low</Option>
-            </Select>
-          </div>
-        </Col>
-
         {/* ================= BOUTON RESET (TOUJOURS VISIBLE) ================= */}
         <Col span={2.4}>
           <div style={styles.filterCol}>
@@ -327,8 +253,74 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = 
           </div>
         </Col>
 
+        {/* ================= BOUTON SEARCH (APPARAÎT SI SÉLECTION MODIFIÉE) ================= */}
+        {/* {hasSelectionChanged || hasDateChanged && (
+          <Col span={2.4}>
+            <div style={styles.filterCol}>
+              <span style={styles.filterLabel}>&nbsp;</span>
+              <Button
+                type="primary"
+                icon={<FilterOutlined />}
+                style={{ width: "100%", background: "#1890ff", borderColor: "#1890ff" }}
+                onClick={() =>
+                  setFilters({ ...filters, all_fields: pendingSelection })
+                }
+                title={`Appliquer la sélection de ${labelFilter}`}
+              >
+                Search
+              </Button>
+            </div>
+          </Col>
+        )} */}
+
+          {(hasSelectionChanged || hasDateChanged) && (
+          <Col span={2.4}>
+            <div style={styles.filterCol}>
+              <span style={styles.filterLabel}>&nbsp;</span>
+              <div style={{ display: "flex", gap: 6 }}>
+                <Button
+                  type="primary"
+                  icon={<FilterOutlined />}
+                  style={{
+                    flex: 1,
+                    background: hasSelectionChanged ? "#1890ff" : "#1890ff",
+                    borderColor: hasSelectionChanged ? "#1890ff" : "#1890ff",
+                  }}
+                  onClick={() =>
+                    setFilters({
+                      ...filters,
+                      // applique la sélection si elle a changé, sinon garde l'ancienne
+                      all_fields: hasSelectionChanged ? pendingSelection : filters.all_fields,
+                      // applique les dates si elles ont changé, sinon garde les anciennes
+                      ...(hasDateChanged && {
+                        scheduleStart: pendingDates.scheduleStart,
+                        scheduleEnd: pendingDates.scheduleEnd,
+                      }),
+                    })
+                  }
+                  title={hasSelectionChanged ? `Appliquer la sélection de ${labelFilter}` : "Appliquer la plage de dates"}
+                >
+                  {hasSelectionChanged ? "Search" : "Filter"}
+                </Button>
+
+                {/* Bouton ✕ uniquement si date seule (pas de sélection en cours) */}
+                {hasDateChanged && !hasSelectionChanged && (
+                  <Button
+                    type="default"
+                    style={{ flex: 1 }}
+                    onClick={handleCancelDateFilter}
+                    title="Annuler les modifications de date"
+                  >
+                    ✕
+                  </Button>
+                )}
+              </div>
+            </div>
+          </Col>
+        )}
+
         {/* ================= BOUTON FILTER (APPARAÎT SI DATES MODIFIÉES) ================= */}
-        {hasDateChanged && (
+        {/* {hasDateChanged && (
           <Col span={2.4}>
             <div style={styles.filterCol}>
               <span style={styles.filterLabel}>&nbsp;</span>
@@ -353,7 +345,7 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = 
               </div>
             </div>
           </Col>
-        )}
+        )} */}
       </Row>
     </Card>
   );

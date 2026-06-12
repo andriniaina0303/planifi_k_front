@@ -427,12 +427,9 @@ export const GlobalOverview = ({ segmentNames, open, setOpen, data, mappingData,
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(mappingData);
   const key_value = label_value === "database" ? "advertisers" : "bases";
   const health = getHealthScore(g);
-  console.log("TagMapping reçu depuis GlobalOverview: ",tagMapping)
 
   const [ShowBackTop,setShowBackTop] = useState(false)
-  console.log("MappingData:", mappingData);
   const dataMapped = Object.fromEntries(mappingData.map((db) => [db[idKey], db[nameKey]]));
-  console.log("DataMapped:", dataMapped);
   const recommendations = useMemo(() => {
     return buildRecommendations(data,key_value);
   }, [data]);

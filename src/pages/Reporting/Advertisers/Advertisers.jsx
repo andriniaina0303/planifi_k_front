@@ -108,10 +108,9 @@ const Advertisers = () => {
   //   }
   // }));
     // Filtrer par annonceur spécifique si sélectionné
-    if (filters.all_fields !== "ALL") {
-      d = d.filter((a) => a.advertiser_name === filters.all_fields);
+    if (Array.isArray(filters.all_fields) && filters.all_fields.length > 0) {
+      d = d.filter((a) => filters.all_fields.includes(a.advertiser_name));
     }
-
     // Filtrer par taux de clic
     if (filters.taux_clickers !== "ALL") {
       d = d.filter((a) =>

@@ -378,8 +378,8 @@ useEffect(() => {
                   const identifier = isRegionMode ? geo.properties.nom : geo.properties.code;
                   const isDimmed = highlightedDept !== null && identifier !== highlightedDept && !isSelected;
                   const makePoints = shouldShowPoint && !isTownMode && (highlightedDept === null || identifier === highlightedDept)
-                  console.log(`Valeur de makePoints pour le département ${geo.properties.code} : `,makePoints)
-                  console.log(`Valeur de tagDeptList : `,tagsDepList)
+                  // console.log(`Valeur de makePoints pour le département ${geo.properties.code} : `,makePoints)
+                  // console.log(`Valeur de tagDeptList : `,tagsDepList)
                   return (
                     <g key={geo.rsmKey}>
                       <Geography
@@ -707,7 +707,7 @@ useEffect(() => {
     )} */}
   </div>
   );
-console.log("Contenu de tagDeptList dans franceMap.tsx : ",tagsDepList)
+// console.log("Contenu de tagDeptList dans franceMap.tsx : ",tagsDepList)
   return (
     <>
 

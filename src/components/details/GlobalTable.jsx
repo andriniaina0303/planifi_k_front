@@ -579,7 +579,6 @@ export const GlobalTable = ({
     {
       title: "Classe",
       dataIndex: "classification",
-      width: 110,
       render: (v) => {
         const c = clsConfig[v] || clsConfig.C;
         return (
@@ -591,7 +590,6 @@ export const GlobalTable = ({
     },
     {
       title: "Health",
-      width: 80,
       render: (_, r) => {
         const s = getHealthScore(r);
         return (
@@ -626,14 +624,14 @@ export const GlobalTable = ({
           display: "flex", 
           justifyContent: "space-between", 
           alignItems: "center",
-          gap: "8px",
+          gap: "2px",
           width: "100%"
         }}>
           {/* Affichage du nombre brut (Openers) */}
           <span>{fmt(record.openers)}</span>
           
           {/* Affichage du pourcentage (Open %) */}
-          <Text style={{ color: tokens.success, fontWeight: 600, fontSize: 12 }}>
+          <Text style={{ color: tokens.success, fontWeight: 600, fontSize: 10 }}>
             ({pct(record.taux_openers)})
           </Text>
         </div>
@@ -649,14 +647,14 @@ export const GlobalTable = ({
           display: "flex", 
           justifyContent: "space-between", 
           alignItems: "center",
-          gap: "12px",
+          gap: "2px",
           width: "100%"
         }}>
           {/* Affichage du nombre brut (Openers) */}
           <span>{fmt(record.clickers)}</span>
           
           {/* Affichage du pourcentage (Open %) */}
-          <Text style={{ color: tokens.warning, fontWeight: 600, fontSize: 12 }}>
+          <Text style={{ color: tokens.warning, fontWeight: 600, fontSize: 10 }}>
             ({pct(record.taux_clickers)})
           </Text>
         </div>
@@ -672,14 +670,14 @@ export const GlobalTable = ({
           display: "flex", 
           justifyContent: "space-between", 
           alignItems: "center",
-          gap: "8px",
+          gap: "2px",
           width: "100%"
         }}>
           {/* Affichage du nombre brut (Openers) */}
           <span>{fmt(record.unsubs)}</span>
           
           {/* Affichage du pourcentage (Open %) */}
-          <Text style={{ color: tokens.danger, fontWeight: 600, fontSize: 12 }}>
+          <Text style={{ color: tokens.danger, fontWeight: 600, fontSize: 10 }}>
             ({pct(record.taux_unsubs)})
           </Text>
         </div>
