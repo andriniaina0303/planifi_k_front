@@ -89,12 +89,20 @@ if (startDate && endDate) {
 }
 
 
-export async function get_databases_detail(database_id) {
+export async function get_databases_detail(database_id,date_start,date_end) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
     return new Promise((resolve) => { setTimeout(() => resolve(mockDataDetail), 300); });
   }
-  const response = await api.get(config.REACT_APP_ENDPOINT_DATABASE_DETAIL + database_id, { timeout: 120000 });
+  if (!date_start || !date_end){
+    console.log("PathParams missing!!!")
+    return null;
+  }
+  const params = new URLSearchParams({
+    date_start,
+    date_end
+  })
+  const response = await api.get(`${config.REACT_APP_ENDPOINT_DATABASE_DETAIL}${database_id}?${params.toString()}`, { timeout: 120000 });
   return response.data;
 }
 

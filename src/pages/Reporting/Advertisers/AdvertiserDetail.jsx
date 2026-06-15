@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams,useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import {
   Button,
@@ -282,6 +282,14 @@ const KpiDashboard = ({ g }) => {
  */
 const AdvertiserDetail = ({ _mockData }) => {
   const { advertiser_id } = useParams();
+
+  const [searchParams] = useSearchParams();
+
+  // On extrait les variables directement depuis l'URL
+  const tagIdParam = searchParams.get("tag_id");
+  const startDateParam = searchParams.get("date_start");
+  const endDateParam = searchParams.get("date_end");
+
   const navigate = useNavigate();
   const tagMapping = useTagStore(
   (state) => state.tagMap
@@ -334,7 +342,7 @@ useEffect(() => {
   const fetchd = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await get_advertisers_detail(advertiser_id);
+      const res = await get_advertisers_detail(advertiser_id,tagIdParam,startDateParam,endDateParam);
       console.log(res);
       setData(res);
     } catch (e) {

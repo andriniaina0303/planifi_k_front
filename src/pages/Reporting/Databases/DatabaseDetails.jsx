@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import {
   Button,
@@ -284,6 +284,14 @@ const KpiDashboard = ({ g }) => {
  */
 const DatabaseDetail = ({ _mockData }) => {
   const { database_id } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const startDateParam = searchParams.get("date_start");
+  const endDateParam = searchParams.get("date_end");
+
+  console.log("Start_date: ",startDateParam)
+  console.log("End_date: ",endDateParam)
+
   const navigate = useNavigate();
   
   // État de la page
@@ -334,7 +342,7 @@ useEffect(() => {
   const fetchd = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await get_databases_detail(database_id);
+      const res = await get_databases_detail(database_id,startDateParam,endDateParam);
       console.log(res);
       setData(res);
       const advMapping = res.advertisers.map((adv) => ({

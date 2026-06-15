@@ -649,6 +649,7 @@ export const GlobalTable = ({
       {
         title: "Tags",
         dataIndex:"tags",
+        fixed:"left",
         render: (_, record) => {
           const tagId = record.tag_id;
           return (
@@ -663,6 +664,7 @@ export const GlobalTable = ({
     {
       title: "Classe",
       dataIndex: "classification",
+      fixed:"left",
       render: (v) => {
         const c = clsConfig[v] || clsConfig.C;
         return (
@@ -675,6 +677,7 @@ export const GlobalTable = ({
     {
       title: "Health",
       dataIndex:"healthGauge",
+      fixed:"left",
       render: (_, r) => {
         const s = getHealthScore(r);
         return (
@@ -793,7 +796,7 @@ export const GlobalTable = ({
   // Colonne encore désorganisé
   const Precols = mergeColumns(baseCols, brandCols);
 
-  const orderCols = [`${idKey}`,"tags","classification","healthGauge","name","subject","date_schedule","segment_id","agence_id","models"]
+  const orderCols = [`${idKey}`,"tags","classification","healthGauge","name","models","subject","date_schedule","segment_id","agence_id"]
   // Colonne final à utilisé 
 
   const cols = reorderColumns(Precols,orderCols)

@@ -76,12 +76,21 @@ if (startDate && endDate) {
 }
 
 
-export async function get_advertisers_detail(adv_id) {
+export async function get_advertisers_detail(adv_id,tag_id, date_start, date_end) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
     return new Promise((resolve) => { setTimeout(() => resolve(mockDataDetail), 300); });
   }
-  const response = await api.get(config.REACT_APP_ENDPOINT_ADVERTISER_DETAIL + adv_id, { timeout: 120000 });
+  if (!tag_id || !date_start || !date_end){
+    console.log("PathParams missing!!!")
+    return null;
+  }
+  const params = new URLSearchParams({
+    tag_id,
+    date_start,
+    date_end
+  })
+  const response = await api.get(`${config.REACT_APP_ENDPOINT_ADVERTISER_DETAIL}${adv_id}?${params.toString()}`, { timeout: 120000 });
   return response.data;
 }
 
