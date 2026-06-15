@@ -228,6 +228,7 @@ export const createBrandCols = (segmentNames,listNames,agencyName) => [
     title: "Models",
     dataIndex: "models",
     align: "left",
+    width: 80,
     render: (models) => {
       if (!Array.isArray(models)) return "-";
 
@@ -252,21 +253,21 @@ export const createBrandCols = (segmentNames,listNames,agencyName) => [
   {
     title: "Lead val.",
     dataIndex: "leads_val",
-    fixed: "center",
+    align: "center",
     sorter: (a, b) => a.sends - b.sends,
     render: fmt,
   },
   {
     title: "Click val.",
     dataIndex: "clicks_val",
-    fixed: "center",
+    align: "center",
     sorter: (a, b) => a.sends - b.sends,
     render: fmt,
   },
   {
     title: "Vol val.",
     dataIndex: "volume_val",
-    fixed: "center",
+    align: "center",
     sorter: (a, b) => a.sends - b.sends,
     render: fmt,
   },
