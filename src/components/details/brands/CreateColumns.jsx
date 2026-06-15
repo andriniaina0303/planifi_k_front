@@ -113,15 +113,15 @@ export const buildListButton = (listNamesForBrand, tokens) => {
 
 
 
-export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
+export const createBrandCols = (segmentNames,listNames,agencyName) => [
   {
     title: "Brand",
     dataIndex: "name",
-    fixed: "left",
-    width: 140,
+    align: "left",
+    width:180,
     render: (_, v) => (
       <>
-        <Text strong style={{ fontSize: 12 }}>
+        <Text strong style={{display: "flex", fontSize: 12 }}>
           {decodeBase64(v.name)}
         </Text>
         <Tooltip title={v.creativities}>    
@@ -149,7 +149,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
   {
     title: "Subject",
     dataIndex: "subject",
-    fixed: "left",
+    align: "left",
     width: 300,
     render: (v) => (
       <Text ellipsis = {{tooltip:true}} strong style={{ width:500, fontSize: 12 }}>
@@ -160,10 +160,10 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
   {
     title: <Text  strong>Date Sched.</Text>,
     dataIndex: "date_schedule",
-    fixed: "left",
-    width:80,
+    align: "left",
+    width:90,
     render: (v) => (
-      <Text ellipsis = {{tooltip:true}} strong style={{ width:500, fontSize: 12 }}>
+      <Text ellipsis = {{tooltip:true}} strong style={{ fontSize: 12 }}>
         {v}<br />
       </Text>
     ),
@@ -171,8 +171,8 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
 {
   title: "Segment",
   dataIndex: "segment_id",
-  width:190,
-  fixed: "left",
+  align: "left",
+  width: 210,
   render: (segmentIds, record) => {
     const listNamesForBrand = listNames[record.name] || [];
     const segmentBtn =
@@ -202,7 +202,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
  {
     title: "Nom Agence",
     dataIndex: "agence_id",
-    fixed: "left",
+    align: "left",
     width:120,
     render: (id) => (
         <button
@@ -232,7 +232,7 @@ export const createBrandCols = (segmentNames,base,listNames,agencyName) => [
       if (!Array.isArray(models)) return "-";
 
       return (
-        <Text ellipsis={{ tooltip: true }} strong style={{ width: 500, fontSize: 12 }}>
+        <Text ellipsis={{ tooltip: true }} strong style={{ fontSize: 12 }}>
           {models.map(m => `${m.model}(${usd(m.payvalue)})`).join(", ")}
         </Text>
       );

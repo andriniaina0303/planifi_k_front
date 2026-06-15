@@ -1,5 +1,6 @@
 import 
 {   Card, 
+    Select,
     Table, 
     Progress, 
     Popover, 
@@ -16,8 +17,20 @@ import
     Collapse,
     Button
  } from "antd";
-import {LinkOutlined, DatabaseOutlined, EyeOutlined, MailOutlined, DollarOutlined, StopOutlined, FireOutlined, DashboardOutlined, PieChartOutlined} from "@ant-design/icons";
-import { useState, useMemo, useEffect } from "react";
+import 
+{
+  LinkOutlined, 
+  DatabaseOutlined, 
+  EyeOutlined, 
+  MailOutlined, 
+  DollarOutlined, 
+  StopOutlined, 
+  FireOutlined, 
+  DashboardOutlined, 
+  PieChartOutlined,
+  SearchOutlined
+} from "@ant-design/icons";
+import React, { useState, useMemo, useEffect } from "react";
 import { AnalyseBadges } from "./common/AnalyseBadge";
 import { getHealthColor,getHealthScore } from "../../utils/healthKitFunc";
 import { HealthExplainer } from "../healthComponents/HealthKit";
@@ -30,6 +43,7 @@ import { DimSection } from "./common/DimSection";
 import { get_segment_name } from "../../api/advertiser";
 import { TabExtraContent } from "../bouton/SwitchBtnTableChart"; 
 import { createBrandCols } from "./brands/CreateColumns";
+import { mergeColumns, reorderColumns } from "./common/createMergedColumns";
 import { getDimensionCollapseItems, DimensionsCollapse} from "./brands/DimensionsCollaps";
 import { getKeyMapping } from "../../utils/getDataKeys";
 const { Text } = Typography;
@@ -64,9 +78,7 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db[idKey], db[nameKey]]));
-  const agenceMap = Object.fromEntries(
-      agencyName.map((ag) => [ag.agence_id, ag.agence_name])
-    );  const brandCols = createBrandCols(segmentNames,base,listNames,agenceMap)
+  const brandCols = createBrandCols(segmentNames,listNames,agencyName)
   // Etat pour filtrer dans dimensions brands 
   const [brandSort, setBrandSort] = useState("asc");
   // Etat pour gérer les segements appliquer à la base
@@ -479,6 +491,10 @@ export const GlobalTable = ({
   viewMode, 
   setViewMode, 
   dataLabel}) => {
+
+  // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
+  const [searchCols, setSearchCols] = React.useState("");
+
   const [f, setF] = useState({ minSends: null, cls: null });
   const [segmentNames, setSegmentNames] = useState({});
   const [listNames, setListNames] = useState([]);
@@ -531,29 +547,100 @@ export const GlobalTable = ({
     loadSegmentNames();
   }, [selectedBase]); // ← Dépendance: selectedBase, pas bases
 
-  const rows = useMemo(() => {
-    let d = bases.map((b) => ({ key: b[`${dataIndex}_id`], ...b }));
-    if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
-    if (f.cls) d = d.filter((r) => r.classification === f.cls);
-    return d;
-  }, [bases, f]);
+ const rows = useMemo(() => {
+  let d = bases.flatMap((b) => {
+    if (!b.brands || b.brands.length === 0) {
+      return [{ ...b, key: `${b[`${dataIndex}_id`]}` }];
+    }
+    return b.brands.map((brand, i) => ({
+      ...b,        // données advertiser (sends global, classification, ca, brands[], etc.)
+      ...brand,    // données brand (écrasent celles de l'advertiser si même clé)
+      key: `${b[`${dataIndex}_id`]}_${i}`,
+    }));
+  });
+
+  if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
+  if (f.cls) d = d.filter((r) => r.classification === f.cls);
+  return d;
+}, [bases, f]);
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
   const tagMap = tagName
+  const agenceMap = Object.fromEntries(
+    agencyName.map((ag) => [ag.agence_id, ag.agence_name])
+  );  
   const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
-
-  const cols = [
+  console.log("Contenu de base: ", bases)
+  const brandCols = createBrandCols(segmentNames,listNames,agenceMap)
+  const baseCols  = [
     {
       title: `${titre}`,
       dataIndex: `${idKey}`,
       fixed: "left",
-      width: 180,
-      render: (v) => (
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => {
+        // 1. On transforme notre dbMap en une liste d'options triées pour le Select
+        const selectOptions = Object.entries(dbMap).map(([id, label]) => ({
+          value: id,     // La clé brute (ID)
+          label: label,  // Le texte affiché
+        }));
+
+        return (
+          <div style={{ padding: 8, minWidth: 200 }}>
+            <Select
+              mode="multiple" // FORCE LA MULTI-SÉLECTION
+              allowClear
+              style={{ width: '100%', marginBottom: 8 }}
+              placeholder="Sélectionner les DB"
+              // selectedKeys est un tableau contenant les valeurs sélectionnées
+              value={selectedKeys}
+              // On passe directement le tableau de valeurs sélectionnées
+              onChange={(values) => {
+                setSelectedKeys(values ? values : []);
+              }}
+              options={selectOptions}
+              // Permet de chercher textuellement DANS la liste déroulante
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+            />
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <a onClick={() => confirm()} style={{ color: "#1677ff", fontWeight: 'bold' }}>
+                Filtrer
+              </a>
+              <a
+                onClick={() => {
+                  clearFilters();
+                  confirm({ closeDropdown: true });
+                }}
+              >
+                Reset
+              </a>
+            </div>
+          </div>
+        );
+      },
+      filterIcon: (filtered) => (
+        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+      ),
+
+      // 2. CORRECTION CRITIQUE DU ONFILTER POUR LE TABLEAU DE VALEURS
+      onFilter: (value, record) => {
+        // Dans le cas d'une multi-sélection locale, Ant Design exécute 'onFilter' 
+        // pour CHAQUE valeur sélectionnée dans le tableau.
+        // 'value' correspond ici à UNE SEULE des clés sélectionnées (ex: "1" ou "2").
         
+        const recordId = String(record[idKey]);
+        return recordId === String(value);
+      },
+
+      render: (v) => (
         <Text strong style={{ fontSize: 12 }}>
-          {
-            dbMap[v] || `DB #${v}`
-          }
+          {dbMap[v] || `DB #${v}`}
         </Text>
       ),
     },
@@ -561,19 +648,16 @@ export const GlobalTable = ({
     ...dataLabel === "database" ?[
       {
         title: "Tags",
-        width: 180,
+        dataIndex:"tags",
         render: (_, record) => {
-          const firstBrand = record.brands?.[0];
-
-          const tagId = firstBrand?.tag_id;
-
+          const tagId = record.tag_id;
           return (
             <Tag color="blue">
               {tagMap[tagId] || `Tag #${tagId}`}
             </Tag>
           );
         },
-      }
+      },
     ]:[],
 
     {
@@ -590,6 +674,7 @@ export const GlobalTable = ({
     },
     {
       title: "Health",
+      dataIndex:"healthGauge",
       render: (_, r) => {
         const s = getHealthScore(r);
         return (
@@ -704,6 +789,14 @@ export const GlobalTable = ({
     //   render: (a) => <AnalyseBadges analyses={a} compact />,
     // },
   ];
+
+  // Colonne encore désorganisé
+  const Precols = mergeColumns(baseCols, brandCols);
+
+  const orderCols = [`${idKey}`,"tags","classification","healthGauge","name","subject","date_schedule","segment_id","agence_id","models"]
+  // Colonne final à utilisé 
+
+  const cols = reorderColumns(Precols,orderCols)
   return (
     <>
     <Card size="large" style={styles.card}>
@@ -754,7 +847,7 @@ export const GlobalTable = ({
           styles={styles} 
           segmentNames={segmentNames}
           listNames={listNames}
-          agencyName={agencyName}
+          agencyName={agenceMap}
           idKey={idKey}
           nameKey={nameKey}
         />
