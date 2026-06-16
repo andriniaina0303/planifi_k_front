@@ -173,3 +173,33 @@ export async function get_database_name(database_id) {
   );
   return found?.database_name || ("DB #" + database_id);
 }
+
+
+export async function get_dep_tags(tag_id, database_id, date_start, date_end){
+  if(!(tag_id||database_id||date_start||date_end)){
+    console.log("Mandatory fields missing, please check all fields.")
+    return []
+  }
+  const params = new URLSearchParams({
+    tag_id,
+    database_id,
+    date_start,
+    date_end
+  })
+  try{
+    const resp = await api.get(
+      `${config.REACT_APP_ENDPOINT_BY_TAGS}?${params.toString()}`, { timeout: 120000 }
+    )
+
+    if (resp && resp!=null){
+      return resp.data
+    }
+    else{
+      console.warn("Tableau vide ou undefined retourner.")
+      return []
+    }
+  }
+  catch(error){
+    console.log("Erreur lors du fetch des departements via tags: ",error)
+  }
+}

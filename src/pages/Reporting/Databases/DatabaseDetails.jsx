@@ -646,7 +646,7 @@ const fetchAllSegments = async () => {
                 <div style={{ padding: "20px 4px 16px", height:"600px"}}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
                   {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" /> */}
-                  <MapApp data={data.globales} tagMapping={tagMapping}  />
+                  <MapApp data={data.globales} tagMapping={tagMapping} db_id={database_id} start_date={startDateParam} end_date={endDateParam} />
                 </div>
               ),
             },

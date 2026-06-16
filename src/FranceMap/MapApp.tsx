@@ -6,6 +6,8 @@ import Option from './components/optionGeo'
 import { ALL_TOWNS_LIST } from './hooks/townMarkers'
 import { Modal } from 'antd'
 import { DataClicks } from './components/function/funcClick'
+import { get_dep_tags } from '../api/databases'
+import { typeOf } from 'react-is'
 
 // structure pour stocker nom, code ET nombre de personnes
 export type DepartmentData = {
@@ -25,7 +27,7 @@ type AnalyseDep = {
   tag_id:number
 }
 
-function MapApp({data,tagMapping}:any) {
+function MapApp({data,tagMapping,db_id,start_date,end_date}:any) {
   // État pour gérer l'URL du GeoJSON
   const [geoUrl, setGeoUrl] = useState<string>(
     "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-avec-outre-mer.geojson"
@@ -72,6 +74,8 @@ useEffect(() => {
 
   // Variable de département vide en mode ville (utilisée dans FranceMap)
   const ClearAllDep:DepartmentData[] = [];
+  const [tagsDep,setTagsDep] = useState<string[]>([])
+  const [loadtags,setloadtags] = useState<boolean>(false)
 
   
   // États pour les modals de liste
@@ -83,6 +87,33 @@ useEffect(() => {
 
   // Variable pour stocké la valeur du tag à filtrer
   const [selectedTags,setSelectedTags] = useState<number>(0)
+
+
+  useEffect(() => {
+  if (selectedTags === 0) {
+    setTagsDep([]); // Optionnel : réinitialise si aucun tag n'est sélectionné
+    return; 
+  }
+
+  const fetchData = async () => {
+    try {
+      setloadtags(true); // 2. Activer le chargement au début du fetch
+      
+      const response = await get_dep_tags(selectedTags, db_id, start_date, end_date);
+      const tabDep = Object.keys(response).map(code => code.trim().padStart(2, '0'));
+      
+      setTagsDep(tabDep);
+    } catch (error) {
+      console.error("Erreur lors du fetch :", error);
+    } finally {
+      setloadtags(false); // 3. Désactiver le chargement à la fin (succès ou erreur)
+    }
+  };
+
+  fetchData();
+    
+}, [selectedTags, db_id, start_date, end_date]);
+
 
   // ← NOUVEAU : toggle ville (peut être appelé depuis App ET FranceMap)
   const handleToggleTown = (code: string) => {
@@ -204,14 +235,8 @@ const handleOpenRegionList = () => {
 };
 
 
-const departments = useMemo(
-  () => Object.entries(analyseDep)
-  .filter(([_, infos]) => infos.tag_id === selectedTags)
-  .map(([deptCode]) => deptCode),
-  [globalData]
-);
-
-console.log(departments);
+console.log("Departement enregistré: ", tagsDep)
+console.log("Valeur de selectedTags: ", selectedTags)
   return (
     <>
       <div className='d-flex flex-column' >
@@ -240,6 +265,11 @@ console.log(departments);
                   tagMapping = {tagMapping}
                   setSelectedTags = {setSelectedTags}
                 />
+                {loadtags && (
+                  <div className="text-center text-warning small my-2 animate-pulse">
+                    ⏳ Filtrage des départements par tag en cours...
+                  </div>
+                )}
               </div>
 
                     {/* div de la carte */}
@@ -261,7 +291,8 @@ console.log(departments);
                     showInfoPanel={false}
                     highlightedDept={highlightedDept}
                     onResetMap={handleResetMap}
-                    tagsDepList={departments}
+                    isTagFilterActive={selectedTags!==0}
+                    tagsDepList={tagsDep}
                   />
               </section>
             </div>

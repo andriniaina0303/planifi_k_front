@@ -31,6 +31,7 @@ interface FranceMapProps {
   showInfoPanel?: boolean;
   highlightedDept?: string | null;
   onResetMap?: () => void;
+  isTagFilterActive?: boolean;
   tagsDepList? : string []; 
 }
 
@@ -57,6 +58,7 @@ const FranceMap: React.FC<FranceMapProps> = ({
   showInfoPanel = true,
   highlightedDept = null,
   onResetMap,
+  isTagFilterActive = false,
   tagsDepList=[]
 }) => {
 
@@ -457,9 +459,9 @@ useEffect(() => {
                         }}
                         className={`${isTownMode ? "cursor-pointer " : "cursor-default"}`}
                       />
-
-                      {point && (
-                        makePoints && tagsDepList?.length===0  ? (                        
+                      {point && makePoints && (
+                        // Si aucun filtre par tag n'est actif, on affiche tous les points normalement
+                        !isTagFilterActive ? (
                           <Marker coordinates={point as [number, number]}>
                             <circle 
                               r={showMarkerForDept ? 1 : 3} 
@@ -467,16 +469,19 @@ useEffect(() => {
                               className="shadow-amber-300/50 z-50"
                             />
                           </Marker>
-                        ): tagsDepList?.length>0 && showMarkerByTags ? (
-                          <Marker coordinates={point as [number, number]}>
-                            <circle 
-                              r={showMarkerByTags && showMarkerForDept ? 1: showMarkerByTags && !showMarkerForDept?3:0} 
-                              fill={getColorByPersonCount(clicsCount)} 
-                              className="shadow-amber-300/50 z-50"
-                            />
-                          </Marker>
-                        ):null)
-                      }
+                        ) : (
+                          // Si un filtre est actif, on affiche LE point UNIQUEMENT si le département est dans la liste
+                          showMarkerByTags ? (
+                            <Marker coordinates={point as [number, number]}>
+                              <circle 
+                                r={showMarkerForDept ? 1 : 3} 
+                                fill={getColorByPersonCount(clicsCount)} 
+                                className="shadow-amber-300/50 z-50"
+                              />
+                            </Marker>
+                          ) : null
+                        )
+                      )}
                     </g>
                   );
                 })

@@ -503,6 +503,9 @@ export const GlobalTable = ({
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
   // console.log("Contenu de AgencyName reçu dans GlobalTable: ",agencyName)
   const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database'
+
+  // Variable pour stocké le tableau de DB/ADV 
+  const [filteredData, setFilteredData] = useState([])
   useEffect(() => {
     if (!selectedBase) return; // ← Si pas de base sélectionnée, on sort
 
@@ -563,6 +566,11 @@ export const GlobalTable = ({
   if (f.cls) d = d.filter((r) => r.classification === f.cls);
   return d;
 }, [bases, f]);
+
+//Définir toutes les rows comme valeur par défaut au premier rendu 
+  useEffect(() =>{
+    setFilteredData(rows)
+  },[rows])
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
   const tagMap = tagName
@@ -815,6 +823,14 @@ export const GlobalTable = ({
             showTotal: (t) => (
               <Text style={{ fontSize: 11, color: "#9ca3af" }}>{t} bases</Text>
             ),
+          }}
+          // ── AJOUT DE LA FONCTION ONCHANGE ──────────────────────────────────
+          onChange={(pagination, filters, sorter, extra) => {
+            // extra.currentDataSource contient le tableau EXACT après filtres, recherche et tris locaux.
+            setFilteredData(extra.currentDataSource);
+            
+            // Si tu veux débugger et voir ce qu'il y a dedans en temps réel :
+            console.log("Données actuellement visibles :", extra.currentDataSource);
           }}
           onRow={(record) => ({
           onClick: () => {

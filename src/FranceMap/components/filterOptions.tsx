@@ -21,9 +21,17 @@ export const FilterOpt = ({ tagMapping, setSelectedTags }: FilterOptProps)  =>
                 />
             )
         }
-        const onChange = (value: number) => {
-            setSelectedTags(value)
-            console.log(`selected ${value}`);
+        // On accepte 'number | undefined' car Ant Design envoie undefined au clic sur la croix
+        const onChange = (value: number | undefined) => {
+            if (value === undefined) {
+                // Clic sur le bouton 'x' (clear) -> on remet à 0 pour désactiver le filtre
+                setSelectedTags(0);
+                console.log("Sélection effacée, retour à 0");
+            } else {
+                // Sélection normale d'un tag
+                setSelectedTags(value);
+                console.log(`selected ${value}`);
+            }
         };
 
         const onSearch = (value: string) => {
