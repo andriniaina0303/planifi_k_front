@@ -505,8 +505,6 @@ export const GlobalTable = ({
   // Valeurs actuellement sélectionnées dans le filtre de la colonne "Databases".
   // Vide => aucun filtre actif => on exporte tout (comportement inchangé).
   const [selectedDbFilter, setSelectedDbFilter] = useState([]);
-  const [segmentNames, setSegmentNames] = useState({});
-  const [listNames, setListNames] = useState([]);
   const [loadingSegments, setLoadingSegments] = useState(false);
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
   const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database';

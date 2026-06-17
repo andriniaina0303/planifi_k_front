@@ -185,37 +185,22 @@ const Databases = () => {
     ];
   }, [filteredData]);
 
-  /**
-   * Les dates par défaut sont dans DEFAULT_FILTERS (90 derniers jours)
-   */
-useEffect(() => {
-  const init = async () => {
-    try {
-      console.log("🔄 Init starting...");
 
-      console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
-      await fetchReporting(DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
-
-      console.log("✅ Init complete");
-    } catch (error) {
-      console.error("❌ Erreur lors de l'initialisation :", error);
-    }
-  };
-
-  init();
-}, []);
 
   /**
    * Chaque fois que les dates du filtre changent, refetch les données API
    * Les autres filtres (advertiser, taux_clickers, etc) filtrent côté client
    */
+/**
+   * Unique Effect pour le chargement initial ET les changements de filtres
+   */
   useEffect(() => {
-    // Refetch l'API uniquement si les dates changent
-    if (filters.scheduleStart && filters.scheduleEnd && filters.country) {
+    // On s'assure d'avoir au moins les dates pour lancer le fetch
+    if (filters.scheduleStart && filters.scheduleEnd) {
+      // filters.country sera passé (qu'il soit null, 'ALL' ou une vraie valeur)
       fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.country);
-      
     }
-  }, [filters.scheduleStart, filters.scheduleEnd, filters.country]);
+  }, [filters.scheduleStart, filters.scheduleEnd, filters.country]); // 👈 Écoute sagement les changements
 
   if (loading) {
     return (

@@ -585,7 +585,7 @@ const listNamesMapping = useMemo(() => {
                     styles={styles} 
                     viewMode={viewMode} 
                     setViewMode={setViewMode} 
-                     onFilteredBasesChange={setFilteredAdvertisers}
+                    onFilteredBasesChange={setFilteredAdvertisers}
                     dataLabel = "database"
                     segmentNames={allsegmentNames}
                     listNames={listNamesMapping}
