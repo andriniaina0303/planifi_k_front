@@ -92,21 +92,7 @@ async function buildSegmentCache(bases) {
   return cache;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// exportGlobalTableXLS
-//
-// Même signature qu'avant SAUF :
-//   - suppression de buildSegmentCache / get_segment_name (0 appel API)
-//   - ajout du paramètre `segmentNames` : l'état déjà chargé dans GlobalTable
-//     format : { "segmentId": "nom du segment", ... }
-//
-// @param bases          data.bases depuis le store/parent
-// @param allbase        [{database_id, database_name}]
-// @param clsConfig      {A,B,C,D}
-// @param agenceMapping  [{agence_id, agence_name}]
-// @param advertiserInfo { id, name }
-// @param segmentNames   { [segmentId]: segmentName }  ← état de GlobalTable
-// ─────────────────────────────────────────────────────────────────────────────
+
 export async function exportGlobalTableXLS(
   bases,
   allbase,
@@ -202,6 +188,11 @@ export async function exportGlobalTableXLS(
     const cls         = clsConfig?.[base.classification] || clsConfig?.C || { color: "#6B7280", bg: "#F3F4F6", label: "?" };
     const clsFg       = cls.color.replace("#", "");
     const clsLabel    = cls.label;
+
+    // Index (dans globalRowIdx) avant d'ajouter les lignes de cette base,
+    // pour pouvoir fusionner la colonne "Database" sur toute la plage de
+    // lignes que cette base va occuper (une ligne par brand).
+    const baseStartIdx = globalRowIdx;
 
     for (const brand of (base.brands || [])) {
       const rowBg = getEcpmRowBg(brand.ecpm);
@@ -322,6 +313,13 @@ export async function exportGlobalTableXLS(
 
       row.getCell(25).value = brand.volume_val ?? null;
       sc(row.getCell(25), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+    }
+
+    // ── Fusionner la colonne "Database" sur toutes les lignes de cette base ──
+    if (globalRowIdx > baseStartIdx + 1) {
+      const firstRow = 4 + baseStartIdx;     // ligne 4 = première ligne de données
+      const lastRow  = 3 + globalRowIdx;
+      sheet.mergeCells(firstRow, 1, lastRow, 1);
     }
   }
 
