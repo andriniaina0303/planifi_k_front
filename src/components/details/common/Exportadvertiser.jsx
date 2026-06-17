@@ -198,6 +198,8 @@ export async function exportAdvertiserXLS(
     const clsFg       = cls.color.replace("#", "");
     const clsLabel    = cls.label;
 
+    const baseStartIdx = globalRowIdx;
+
     for (const brand of (adv.brands || [])) {
       const rowBg      = getEcpmRowBg(brand.ecpm);
       globalRowIdx++;
@@ -347,6 +349,12 @@ export async function exportAdvertiserXLS(
       // C26 : volume_val
       row.getCell(26).value = brand.volume_val ?? null;
       sc(row.getCell(26), { fg: COLOR.black,   bg: rowBg, align: "center", fmt: "#,##0" });
+    }
+     // ── Fusionner la colonne "Database" sur toutes les lignes de cette base ──
+    if (globalRowIdx > baseStartIdx + 1) {
+      const firstRow = 4 + baseStartIdx;     // ligne 4 = première ligne de données
+      const lastRow  = 3 + globalRowIdx;
+      sheet.mergeCells(firstRow, 1, lastRow, 1);
     }
   }
 

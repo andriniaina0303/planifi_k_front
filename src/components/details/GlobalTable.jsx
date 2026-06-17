@@ -492,57 +492,69 @@ export const GlobalTable = ({
   viewMode, 
   setViewMode, 
   dataLabel,
+  onFilteredBasesChange,
   segmentNames,
-  listNames,
-  onFilteredBasesChange
+  listNames
+  
 }) => {
 
-  const [f, setF] = useState({ minSends: null, cls: null });
-  const [selectedBase, setSelectedBase] = useState(null); 
   // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
   const [searchCols, setSearchCols] = React.useState("");
 
+  const [f, setF] = useState({ minSends: null, cls: null });
   // Valeurs actuellement sélectionnées dans le filtre de la colonne "Databases".
   // Vide => aucun filtre actif => on exporte tout (comportement inchangé).
   const [selectedDbFilter, setSelectedDbFilter] = useState([]);
+  const [selectedBase, setSelectedBase] = useState(null); // ← ajout
   const [loadingSegments, setLoadingSegments] = useState(false);
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
-  const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database';
+  // console.log("Contenu de AgencyName reçu dans GlobalTable: ",agencyName)
+  const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database'
 
-  const [filteredData, setFilteredData] = useState([]);
+  // Variable pour stocké le tableau de DB/ADV 
+  const [filteredData, setFilteredData] = useState([])
+ 
 
-  // Construction des lignes du tableau (useMemo)
-  const rows = useMemo(() => {
-    let d = bases.flatMap((b) => {
-      if (!b.brands || b.brands.length === 0) {
-        return [{ ...b, key: `${b[`${dataIndex}_id`]}` }];
-      }
-      return b.brands.map((brand, i) => ({
-        ...b,        
-        ...brand,    
-        key: `${b[`${dataIndex}_id`].id || b[`${dataIndex}_id`]}_${i}`,
-      }));
-    });
+ const rows = useMemo(() => {
+  let d = bases.flatMap((b) => {
+    if (!b.brands || b.brands.length === 0) {
+      return [{ ...b, key: `${b[`${dataIndex}_id`]}` }];
+    }
+    return b.brands.map((brand, i) => ({
+      ...b,        // données advertiser (sends global, classification, ca, brands[], etc.)
+      ...brand,    // données brand (écrasent celles de l'advertiser si même clé)
+      key: `${b[`${dataIndex}_id`]}_${i}`,
+    }));
+  });
 
-    if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
-    if (f.cls) d = d.filter((r) => r.classification === f.cls);
-    return d;
-  }, [bases, f, dataIndex]);
+  if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
+  if (f.cls) d = d.filter((r) => r.classification === f.cls);
+  return d;
+}, [bases, f]);
 
+  // ── Données filtrées pour l'export ───────────────────────────────────────
+  const filteredBases = useMemo(() => {
+    if (!selectedDbFilter || selectedDbFilter.length === 0) return bases;
+    const selectedSet = new Set(selectedDbFilter.map(String));
+    return bases.filter((b) => selectedSet.has(String(b[idKey])));
+  }, [bases, selectedDbFilter, idKey]);
+
+  // On informe le parent (qui détient le bouton "Export") du sous-ensemble
+  // actuellement filtré, pour qu'il l'utilise à la place de `bases` complet.
   useEffect(() => {
-    setFilteredData(rows);
-  }, [rows]);
-
-  useEffect(() => {
-    setFilteredData(rows);
-  }, [rows]);
+    if (typeof onFilteredBasesChange === "function") {
+      onFilteredBasesChange(filteredBases);
+    }
+  }, [filteredBases]);
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
-  const tagMap = tagName;
+  const tagMap = tagName
   const agenceMap = Object.fromEntries(
     agencyName.map((ag) => [ag.agence_id, ag.agence_name])
   );  
-  const titre = pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
+  const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
+  console.log("Contenu de base: ", bases)
+  const brandCols = createBrandCols(segmentNames,listNames,agenceMap)
   const baseCols  = [
     {
       title: `${titre}`,
@@ -763,13 +775,17 @@ export const GlobalTable = ({
     //   render: (a) => <AnalyseBadges analyses={a} compact />,
     // },
   ];
-  const Precols = mergeColumns(baseCols, createBrandCols(segmentNames, listNames, agenceMap));
-  const orderCols = [`${idKey}`, "tags", "classification", "healthGauge", "name", "models", "subject", "date_schedule", "segment_id", "agence_id"];
-  const cols = reorderColumns(Precols, orderCols);
 
+  // Colonne encore désorganisé
+  const Precols = mergeColumns(baseCols, brandCols);
+
+  const orderCols = [`${idKey}`,"tags","classification","healthGauge","name","models","subject","date_schedule","segment_id","agence_id"]
+  // Colonne final à utilisé 
+
+  const cols = reorderColumns(Precols,orderCols)
   return (
     <>
-      <Card size="large" style={styles.card}>
+    <Card size="large" style={styles.card}>
         <Table
           dataSource={rows}
           columns={cols}
@@ -779,7 +795,9 @@ export const GlobalTable = ({
             pageSize: 12,
             size: "small",
             showSizeChanger: true,
-            showTotal: (t) => <Text style={{ fontSize: 11, color: "#9ca3af" }}>{t} bases</Text>,
+            showTotal: (t) => (
+              <Text style={{ fontSize: 11, color: "#9ca3af" }}>{t} bases</Text>
+            ),
           }}
           onChange={(pagination, filters) => {
             // 'filters' contient les valeurs sélectionnées par colonne filtrable,
@@ -787,44 +805,51 @@ export const GlobalTable = ({
             setSelectedDbFilter(filters[idKey] || []);
           }}
           onRow={(record) => ({
-            onClick: () => {
-              setSelectedBase(record); // Enclenche l'ouverture immédiate
-            },
+          onClick: () => {
+            setSelectedBase(record);
+            // console.log("Selected base:", record);
+            console.log("loader: ",loadingSegments)
+            setLoadingSegments(true);
+          },
             style: { cursor: "pointer" },
           })}
         />
-      </Card>
-
-      <Modal
-        open={!!selectedBase}
-        onCancel={() => setSelectedBase(null)}
-        footer={null}
-        width="100%"
-        style={{ top: 40 }}
-        styles={{ content: { paddingRight: 50 } }}
-        destroyOnClose
-      >
-        {/* ── 2. PLUS DE BLOCAGE ICI : On ouvre directement la BaseCard ── */}
-        {selectedBase ? (
-          <BaseCard
-            base={selectedBase}
-            viewMode={viewMode} 
-            setViewMode={setViewMode}
-            allbase={allbase} 
-            clsConfig={clsConfig} 
-            styles={styles} 
-            segmentNames={segmentNames} // Les noms déjà récoltés s'afficheront tout seuls
-            listNames={listNames}
-            agencyName={agenceMap}
-            idKey={idKey}
-            nameKey={nameKey}
-          />
-        ) : null}
-      </Modal>
+    </Card>
+    <Modal
+      open={!!selectedBase}
+      onCancel={() => setSelectedBase(null)}
+      footer={null}
+      width="100%"
+      style={{ top: 40 }}
+      styles={{
+        content: {
+          paddingRight: 50, // ← Espace INTERNE pour éviter le X
+        }
+      }}
+      destroyOnClose
+    >
+      {selectedBase && !loadingSegments ? (
+        <BaseCard
+          base={selectedBase}
+          viewMode={viewMode} 
+          setViewMode={setViewMode}
+          allbase={allbase} 
+          clsConfig={clsConfig} 
+          styles={styles} 
+          segmentNames={segmentNames}
+          listNames={listNames}
+          agencyName={agenceMap}
+          idKey={idKey}
+          nameKey={nameKey}
+        />
+      ) : (
+        <div style={{ padding: '40px', textAlign: 'center' }}>
+          <Spin size="large" tip="Chargement des segments..." >
+            <div></div>
+          </Spin>
+        </div>
+      )}
+    </Modal>
     </>
   );
 };
-
-
-
-
