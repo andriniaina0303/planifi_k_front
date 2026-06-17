@@ -1,27 +1,29 @@
+
+
 import { useState } from "react";
 import { BarChartOutlined, DownloadOutlined, TableOutlined } from "@ant-design/icons";
 import { Button, Segmented } from "antd";
 import { exportGlobalTableXLS } from "../details/common/ExportBase";
 import { exportAdvertiserXLS } from "../details/common/ExportAdvertiser";
 import { get_advertiser_name } from "../../api/advertiser";
-import { get_database_name } from "../../api/databases"; // mapping database_id → database_name via /reporting/all_bases
-
+import { get_database_name } from "../../api/databases";
 
 export const TabExtraContent = ({
   mainTab,
   viewMode,
   setViewMode,
   data,
+  basesForExport,   
   clsConfig,
   agenceMapping,
-  advertiser_id,   // utilisé dans AdvertiserDetail (ExportBase)
-  database_id,     // utilisé dans DatabaseDetail (ExportAdvertiser)
+  advertiser_id,
+  database_id,
   allbase,
-  tag_name
+  tag_name,
+  segmentNames = {},  
 }) => {
   const [exporting, setExporting] = useState(false);
 
-  // ── Bouton style partagé ────────────────────────────────────────────────────
   const btnStyle = {
     marginTop: 10,
     marginRight: 10,
@@ -44,7 +46,7 @@ export const TabExtraContent = ({
     e.currentTarget.style.borderColor = "#1677ff";
   };
 
-  // ── Onglet dimensions → Segmented chart/table ──────────────────────────────
+  // ── Onglet dimensions → Segmented chart/table ─────────────────────────────
   if (mainTab?.toLowerCase().includes("dimensions")) {
     return (
       <Segmented
@@ -60,7 +62,7 @@ export const TabExtraContent = ({
     );
   }
 
-  // ── Onglet "bases" → ExportBase (AdvertiserDetail) ─────────────────────────
+  // ── Onglet "bases" → exportGlobalTableXLS (sans API segments) ────────────
   if (mainTab === "bases") {
     return (
       <Button
@@ -77,11 +79,12 @@ export const TabExtraContent = ({
           try {
             const advertiserName = await get_advertiser_name(advertiser_id);
             await exportGlobalTableXLS(
-              data.bases,
+              basesForExport ?? data.bases,
               allbase,
               clsConfig,
               agenceMapping,
-              { id: advertiser_id, name: advertiserName }
+              { id: advertiser_id, name: advertiserName },
+              segmentNames  
             );
           } finally {
             setExporting(false);
@@ -93,7 +96,7 @@ export const TabExtraContent = ({
     );
   }
 
-  // ── Onglet "advertisers" → ExportAdvertiser (DatabaseDetail) ───────────────
+  // ── Onglet "advertisers" → ExportAdvertiser (DatabaseDetail) ─────────────
   if (mainTab === "advertisers") {
     return (
       <Button
@@ -108,11 +111,9 @@ export const TabExtraContent = ({
           if (exporting) return;
           setExporting(true);
           try {
-            // data.database_id existe mais data.database_name n'est PAS retourné par /reporting/database/{id}
-            // → on résout le nom via /reporting/all_bases (avec cache dans get_database_name)
             const dbName = await get_database_name(data.database_id || database_id);
             await exportAdvertiserXLS(
-              data.advertisers,
+              basesForExport ?? data.advertisers,
               agenceMapping,
               tag_name,
               clsConfig,

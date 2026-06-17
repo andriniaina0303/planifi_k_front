@@ -296,6 +296,7 @@ const DatabaseDetail = ({ _mockData }) => {
   // Etat pour stocker les mapping agences, tags et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
   const [advertiserMapping, setAdvertiserMapping] = useState({});
+   const [filteredAdvertisers, setFilteredAdvertisers] = useState(_mockData?.advertisers || []);
   // Mapping des tags 
   const { setTagMapping } = useTagStore();
   // État pour les mappings de tags
@@ -505,6 +506,7 @@ const fetchAllSegments = async () => {
               viewMode={viewMode}
               setViewMode={setViewMode}
               data={data}
+              basesForExport={filteredAdvertisers}
               clsConfig={clsConfig}
               agenceMapping={agenceMapping}
               allbase={advertiserMapping}
@@ -559,6 +561,7 @@ const fetchAllSegments = async () => {
                     styles={styles} 
                     viewMode={viewMode} 
                     setViewMode={setViewMode} 
+                     onFilteredBasesChange={setFilteredAdvertisers}
                     dataLabel = "database"
                   />
                 </div>

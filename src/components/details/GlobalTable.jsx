@@ -1,3 +1,4 @@
+
 import 
 {   Card, 
     Select,
@@ -490,12 +491,18 @@ export const GlobalTable = ({
   styles, 
   viewMode, 
   setViewMode, 
-  dataLabel}) => {
+  dataLabel,
+  onFilteredBasesChange
+  ,
+}) => {
 
   // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
   const [searchCols, setSearchCols] = React.useState("");
 
   const [f, setF] = useState({ minSends: null, cls: null });
+  // Valeurs actuellement sélectionnées dans le filtre de la colonne "Databases".
+  // Vide => aucun filtre actif => on exporte tout (comportement inchangé).
+  const [selectedDbFilter, setSelectedDbFilter] = useState([]);
   const [segmentNames, setSegmentNames] = useState({});
   const [listNames, setListNames] = useState([]);
   const [selectedBase, setSelectedBase] = useState(null); // ← ajout
@@ -529,7 +536,7 @@ export const GlobalTable = ({
                 db_ID = database_id;
               }
               // console.log("DB_ID utilisé : ",db_ID)
-              const name = await get_segment_name(db_ID, segmentId);
+              const name = await get_segment_name(db_ID, segmentId); 
               if (name) {
                 newSegmentNames[key] = name;
               }
@@ -540,7 +547,7 @@ export const GlobalTable = ({
         }
       }
       setSegmentNames(newSegmentNames);
-      setListNames(newListNames); // ← Stocker les listes
+      setListNames(newListNames); 
       setLoadingSegments(false);
     };
 
@@ -563,6 +570,21 @@ export const GlobalTable = ({
   if (f.cls) d = d.filter((r) => r.classification === f.cls);
   return d;
 }, [bases, f]);
+
+  // ── Données filtrées pour l'export ───────────────────────────────────────
+  const filteredBases = useMemo(() => {
+    if (!selectedDbFilter || selectedDbFilter.length === 0) return bases;
+    const selectedSet = new Set(selectedDbFilter.map(String));
+    return bases.filter((b) => selectedSet.has(String(b[idKey])));
+  }, [bases, selectedDbFilter, idKey]);
+
+  // On informe le parent (qui détient le bouton "Export") du sous-ensemble
+  // actuellement filtré, pour qu'il l'utilise à la place de `bases` complet.
+  useEffect(() => {
+    if (typeof onFilteredBasesChange === "function") {
+      onFilteredBasesChange(filteredBases);
+    }
+  }, [filteredBases]);
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
   const tagMap = tagName
@@ -812,6 +834,11 @@ export const GlobalTable = ({
             showTotal: (t) => (
               <Text style={{ fontSize: 11, color: "#9ca3af" }}>{t} bases</Text>
             ),
+          }}
+          onChange={(pagination, filters) => {
+            // 'filters' contient les valeurs sélectionnées par colonne filtrable,
+            // ex: { [idKey]: ["123"] } ou { [idKey]: null } si reset/aucun filtre.
+            setSelectedDbFilter(filters[idKey] || []);
           }}
           onRow={(record) => ({
           onClick: () => {

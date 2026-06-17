@@ -297,6 +297,7 @@ const AdvertiserDetail = ({ _mockData }) => {
   // Etat pour stocker les mapping agences et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
   const [databaseMapping, setDatabaseMapping] = useState({});
+  const [filteredBases, setFilteredBases] = useState(_mockData?.bases || []);
 
 useEffect(() => {
   const handleScroll = (e) =>{
@@ -351,7 +352,7 @@ useEffect(() => {
   }, [advertiser_id, _mockData, fetchMappings]);
 
 
-
+  
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
     return (
@@ -478,6 +479,7 @@ useEffect(() => {
               viewMode={viewMode}
               setViewMode={setViewMode}
               data={data}
+              basesForExport={filteredBases}
               clsConfig={clsConfig}
               agenceMapping={agenceMapping}
               allbase={databaseMapping}
@@ -537,6 +539,7 @@ useEffect(() => {
                     styles={styles} 
                     viewMode={viewMode} 
                     setViewMode={setViewMode} 
+                    onFilteredBasesChange={setFilteredBases}
                   />
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />
