@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import {
   Button,
@@ -284,6 +284,14 @@ const KpiDashboard = ({ g }) => {
  */
 const DatabaseDetail = ({ _mockData }) => {
   const { database_id } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const startDateParam = searchParams.get("date_start");
+  const endDateParam = searchParams.get("date_end");
+
+  console.log("Start_date: ",startDateParam)
+  console.log("End_date: ",endDateParam)
+
   const navigate = useNavigate();
   
   // État de la page
@@ -335,7 +343,7 @@ useEffect(() => {
   const fetchd = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await get_databases_detail(database_id);
+      const res = await get_databases_detail(database_id,startDateParam,endDateParam);
       console.log(res);
       setData(res);
       const advMapping = res.advertisers.map((adv) => ({
@@ -641,7 +649,7 @@ const fetchAllSegments = async () => {
                 <div style={{ padding: "20px 4px 16px", height:"600px"}}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
                   {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" /> */}
-                  <MapApp data={data.globales} tagMapping={tagMapping}  />
+                  <MapApp data={data.globales} tagMapping={tagMapping} db_id={database_id} start_date={startDateParam} end_date={endDateParam} />
                 </div>
               ),
             },

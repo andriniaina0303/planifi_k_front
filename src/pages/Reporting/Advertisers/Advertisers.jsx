@@ -294,7 +294,13 @@ useEffect(() => {
           bodyStyle={{ padding: 0 }}
         >
           {filteredData.length > 0 ? (
-            <ReportingTable data={filteredData} tagMapping={tagMapping} dataKey="advertiser" />
+            <ReportingTable
+              data={filteredData} 
+              tagMapping={tagMapping} 
+              dataKey="advertiser" 
+              date_start={filters.scheduleStart} 
+              date_end={filters.scheduleEnd}
+            />
           ) : (
             <div style={{ padding: 20, textAlign: "center" }}>Aucune donnée</div>          
           )}

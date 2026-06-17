@@ -16,6 +16,7 @@ import React, { useMemo, useState } from "react";
 import { Table, Tag, Tooltip, Input, Dropdown } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../utils/Helpers";
 
 
 // Fonction pour déterminer la couleur du tag dans le tooltip
@@ -60,8 +61,10 @@ const AnalyseTooltip = ({ analyse }) => (
   </div>
 );
 
-const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
+const ReportingTable = ({ data, tagMapping = [], dataKey, date_start, date_end }) => {
   const navigate = useNavigate();
+  const fmt_date_st = formatDate(date_start)
+  const fmt_date_end = formatDate(date_end)
 
   // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
   const [searchAdvertiser, setSearchAdvertiser] = React.useState("");
@@ -233,11 +236,29 @@ const ReportingTable = ({ data, tagMapping = [], dataKey }) => {
       columns={columns}
       rowKey={(record, index) => `${record[dataKey + "_id"]}_${index}`}  // ← Combinaison unique
       onRow={(record) => ({
-        onClick: () =>
-        navigate(`${record[dataKey + "_id"]}`,
-          {state: {record: record,tagMapping:tagMapping}}
-        ),
-          style: { cursor: "pointer" },
+        onClick: () => {
+          // 1. Récupération du tag_id depuis l'objet de la ligne cliquée
+          const tagId = record.tag_id;
+
+          // 2. Construction dynamique des paramètres de l'URL
+          const queryParams = new URLSearchParams();
+          
+          if (tagId) queryParams.append("tag_id", tagId);
+          if (fmt_date_st) queryParams.append("date_start", fmt_date_st);
+          if (fmt_date_end) queryParams.append("date_end", fmt_date_end);
+
+          // 3. Assemblage de l'URL finale (ex: "4892?date_start=2026-01-01&date_end=2026-06-15&tag_id=14")
+          const queryString = queryParams.toString();
+          const targetUrl = queryString 
+            ? `${record[dataKey + "_id"]}?${queryString}` 
+            : `${record[dataKey + "_id"]}`;
+
+          // 4. Navigation vers la page de détails
+          navigate(targetUrl, {
+            state: { record: record, tagMapping: tagMapping }
+          });
+        },
+        style: { cursor: "pointer" },
       })}
       tableLayout="auto"
       bordered

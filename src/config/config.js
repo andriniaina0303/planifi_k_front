@@ -22,6 +22,7 @@ export const REACT_APP_ENDPOINT_DATABASE_DETAIL = REACT_APP_ENDPOINT + '/reporti
 
 // /** Récupère les segments disponibles pour filtrer/segmenter les données */
 export const REACT_APP_ENDPOINT_ALL_SEGMENT = REACT_APP_ENDPOINT + '/reporting/segment'
-
+//  Récupérer les départements par tags
+export const REACT_APP_ENDPOINT_BY_TAGS = REACT_APP_ENDPOINT + '/reporting/filter_by_tags'
 // Récupère les données de mapping comme tags, nom_agence, nom_DB 
 export const REACT_APP_ENDPOINT_ALL_MAPPING = REACT_APP_ENDPOINT + '/reporting/'

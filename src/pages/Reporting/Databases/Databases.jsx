@@ -277,7 +277,7 @@ useEffect(() => {
           }}
           bodyStyle={{ padding: 0 }}
         >
-          <ReportingTable data={filteredData} dataKey="database" />
+          <ReportingTable data={filteredData} dataKey="database" date_start={filters.scheduleStart} date_end={filters.scheduleEnd} />
         </Card>
       </Row>
     </div>

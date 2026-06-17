@@ -6,6 +6,9 @@ import Option from './components/optionGeo'
 import { ALL_TOWNS_LIST } from './hooks/townMarkers'
 import { Modal } from 'antd'
 import { DataClicks } from './components/function/funcClick'
+import { get_dep_tags } from '../api/databases'
+import { typeOf } from 'react-is'
+import { object } from 'prop-types'
 
 // structure pour stocker nom, code ET nombre de personnes
 export type DepartmentData = {
@@ -18,14 +21,14 @@ export type DataMapping = Record <number,string>
 // Typage des données reçu depuis l'API
 
 type AnalyseDep = {
+  sends:number,
   clickers : number,
   tx_clck : number,
   tx_opn : number,
   tx_usb : number,
-  tag_id:number
 }
 
-function MapApp({data,tagMapping}:any) {
+function MapApp({data,tagMapping,db_id,start_date,end_date}:any) {
   // État pour gérer l'URL du GeoJSON
   const [geoUrl, setGeoUrl] = useState<string>(
     "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-avec-outre-mer.geojson"
@@ -34,16 +37,19 @@ function MapApp({data,tagMapping}:any) {
 const [globalData, setGlobalData] = useState(
   typeof data === 'object' && data !== null && Object.keys(data).length > 0 ? data : null
 );
-console.log("globalData:", globalData)
-console.log("analyse_dep:", globalData?.analyse_dep)
+// Etast globale des clicks et AnalyseDep 
+const [clickData,setClickData] = useState<Record<string,number>>({})
+const [analyseDep,setAnalyseDep] = useState<Record<string,AnalyseDep>>({})
+
 
   //Importations des clicks depuis GlobalData
-const clickData = useMemo(
+const clickDataGlob = useMemo(
   () => globalData ? DataClicks(globalData) : {},
   [globalData]
 );
-console.log("ClickData: ", clickData)
-const analyseDep = useMemo<Record<string, AnalyseDep>>(
+
+
+const analyseDepGlob = useMemo<Record<string, AnalyseDep>>(
   () => globalData?.analyse_dep ?? {},
   [globalData]
 );
@@ -72,6 +78,8 @@ useEffect(() => {
 
   // Variable de département vide en mode ville (utilisée dans FranceMap)
   const ClearAllDep:DepartmentData[] = [];
+  const [tagsDep,setTagsDep] = useState<string[]>([])
+  const [loadtags,setloadtags] = useState<boolean>(false)
 
   
   // États pour les modals de liste
@@ -83,6 +91,52 @@ useEffect(() => {
 
   // Variable pour stocké la valeur du tag à filtrer
   const [selectedTags,setSelectedTags] = useState<number>(0)
+
+
+  useEffect(() => {
+  if (selectedTags === 0) {
+    setTagsDep([]); // Optionnel : réinitialise si aucun tag n'est sélectionné
+    setClickData(clickDataGlob)
+    setAnalyseDep(analyseDepGlob)
+    return; 
+  }
+
+  const fetchData = async () => {
+    try {
+      setloadtags(true); // 2. Activer le chargement au début du fetch
+      
+      const response = await get_dep_tags(selectedTags, db_id, start_date, end_date);
+      const tabDep = Object.keys(response).map(code => code.trim().padStart(2, '0'));
+      // 2. Extraire uniquement les clickers sous la structure { "code": nombre_de_clickers }
+      // 1. Définis le type de ton dictionnaire de clickers
+      // (Une clé string qui donne une valeur number)
+      const clickersParDep = Object.entries(response).reduce((acc: Record<string, number>, [code, kpi]: [string, any]) => {
+        const codeNormalise = code.trim().padStart(2, '0');
+        
+        acc[codeNormalise] = kpi.clickers || 0; //  Plus d'erreur ici !
+        
+        return acc;
+      }, {}); // On garde le même initialiseur
+      if (clickersParDep && clickersParDep !== null)
+      {
+        setClickData(clickersParDep)
+      }
+
+      // console.log("Objet des clickers filtrés :", clickersParDep);
+      // Résultat obtenu : { "46": 1, "17": 8, "03": 0 }
+      setAnalyseDep(response)
+      setTagsDep(tabDep);
+    } catch (error) {
+      console.error("Erreur lors du fetch :", error);
+    } finally {
+      setloadtags(false); // 3. Désactiver le chargement à la fin (succès ou erreur)
+    }
+  };
+
+  fetchData();
+    
+}, [selectedTags, db_id, start_date, end_date]);
+
 
   // ← NOUVEAU : toggle ville (peut être appelé depuis App ET FranceMap)
   const handleToggleTown = (code: string) => {
@@ -204,14 +258,8 @@ const handleOpenRegionList = () => {
 };
 
 
-const departments = useMemo(
-  () => Object.entries(analyseDep)
-  .filter(([_, infos]) => infos.tag_id === selectedTags)
-  .map(([deptCode]) => deptCode),
-  [globalData]
-);
-
-console.log(departments);
+console.log("Departement enregistré: ", tagsDep)
+console.log("Valeur de selectedTags: ", selectedTags)
   return (
     <>
       <div className='d-flex flex-column' >
@@ -240,6 +288,11 @@ console.log(departments);
                   tagMapping = {tagMapping}
                   setSelectedTags = {setSelectedTags}
                 />
+                {loadtags && (
+                  <div className="text-center text-warning small my-2 animate-pulse">
+                    ⏳ Filtrage des départements par tag en cours...
+                  </div>
+                )}
               </div>
 
                     {/* div de la carte */}
@@ -261,7 +314,8 @@ console.log(departments);
                     showInfoPanel={false}
                     highlightedDept={highlightedDept}
                     onResetMap={handleResetMap}
-                    tagsDepList={departments}
+                    isTagFilterActive={selectedTags!==0}
+                    tagsDepList={tagsDep}
                   />
               </section>
             </div>

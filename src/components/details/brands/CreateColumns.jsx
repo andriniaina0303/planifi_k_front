@@ -117,7 +117,7 @@ export const createBrandCols = (segmentNames,listNames,agencyName) => [
   {
     title: "Brand",
     dataIndex: "name",
-    align: "left",
+    fixed: "left",
     width:180,
     render: (_, v) => (
       <>
@@ -227,7 +227,7 @@ export const createBrandCols = (segmentNames,listNames,agencyName) => [
   {
     title: "Models",
     dataIndex: "models",
-    align: "left",
+    fixed: "left",
     width: 80,
     render: (models) => {
       if (!Array.isArray(models)) return "-";
