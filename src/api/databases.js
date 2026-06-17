@@ -203,3 +203,34 @@ export async function get_dep_tags(tag_id, database_id, date_start, date_end){
     console.log("Erreur lors du fetch des departements via tags: ",error)
   }
 }
+
+export async function get_top_DB_tags(date_start,date_end,country){
+  if(!(date_start||date_end||country)){
+      console.log("Mandatory fields missing, please check all fields.")
+      return []
+    }
+    const startDate = formatDate(date_start)
+    const endDate = formatDate(date_end)
+    const params = new URLSearchParams ({
+      startDate,
+      endDate,
+      country
+    })
+
+  try{
+    const resp = await api.get(`${config.REACT_APP_ENDPOINT_ALL_MAPPING}top_base?${params.toString()}`,{timeout:120000})
+  
+    if (resp && resp!=null){
+      return resp.data
+    }
+    else{
+      console.warn("Tableau vide ou undefined retourner.")
+      return []
+    }
+  }
+  catch(error){
+    console.log("Erreur lors du fetch des departements via tags: ",error)
+  
+  }
+
+}

@@ -122,10 +122,10 @@ useEffect(() => {
         setClickData(clickersParDep)
       }
 
+      setTagsDep(tabDep);
       // console.log("Objet des clickers filtrés :", clickersParDep);
       // Résultat obtenu : { "46": 1, "17": 8, "03": 0 }
       setAnalyseDep(response)
-      setTagsDep(tabDep);
     } catch (error) {
       console.error("Erreur lors du fetch :", error);
     } finally {

@@ -317,7 +317,7 @@ const SegmentRecommendations = ({styles,recommendations }) => {
                 textTransform: "uppercase",
               }}
             >
-              À éviter / surveiller
+              Peu recommander
             </Text>
           </div>
           <div
@@ -403,7 +403,7 @@ const SyntheseText = ({ recommendations = [] }) => {
               </>
             )}
 
-            {" "}· éviter{" "}
+            {" "}· non suggérer{" "}
 
             <Tag color="red" style={{ fontSize: 10 }}>
               {rec.worstCtr.segment}
@@ -431,7 +431,7 @@ export const GlobalOverview = ({ segmentNames, open, setOpen, data, mappingData,
   const [ShowBackTop,setShowBackTop] = useState(false)
   const dataMapped = Object.fromEntries(mappingData.map((db) => [db[idKey], db[nameKey]]));
   const recommendations = useMemo(() => {
-    return buildRecommendations(data,key_value);
+    return buildRecommendations(g);
   }, [data]);
   
 useEffect(() =>{

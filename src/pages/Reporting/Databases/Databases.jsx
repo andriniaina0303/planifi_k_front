@@ -12,7 +12,7 @@
  * Par défaut, affiche les données des 90 derniers jours
  */
 import React, { useEffect, useMemo, useState } from "react";
-import { get_all_databases} from "../../../api/databases";
+import { get_all_databases,get_top_DB_tags} from "../../../api/databases";
 import { getMappingData } from "../../../api/advertiser";
 import "../../../assets/css/advertisers.css";
 import { Card, Row, Col } from "antd";
@@ -23,6 +23,8 @@ import ChartSwitcher from "../../../components/chart/ChartSwitcher";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
 import {TopDBEcpm} from "../../../components/chart/TopDBEcpm"
 import { useTagStore, useCountryStore} from "../../../utils/storedZustand";
+import TopDbsTags from "../../../components/chart/TopDBTags"
+
 
 
 /**
@@ -35,6 +37,7 @@ import { useTagStore, useCountryStore} from "../../../utils/storedZustand";
 const Databases = () => {
   // État des annonceurs chargés depuis l'API
   const [listeDatabases, setListeDatabases] = useState([]);
+  const[topdbTags,setTopdbTags] = useState([])
 
   // État de chargement
   const [loading, setLoading] = useState(true);
@@ -55,10 +58,6 @@ const Databases = () => {
    * @param {dayjs.Dayjs} dayjsDate - Date au format dayjs
    * @returns {string|null} Date au format YYYY-MM-DD ou null
    */
-  const formatDateToString = (dayjsDate) => {
-    if (!dayjsDate) return null;
-    return dayjsDate.format('YYYY-MM-DD');
-  };
 
   /**
    * Récupère la liste complète des annonceurs depuis l'API avec les paramètres de date
@@ -69,15 +68,17 @@ const Databases = () => {
     try {
       setLoading(true);
 
-
-
+      console.log("Date start : ", startDate)
+      console.log("Date end: ",endDate)
+      const db_tags = await get_top_DB_tags(startDate,endDate,country)
       const res = await get_all_databases(startDate, endDate, country);
 
       // console.log("✅ Fetched databases!!!");
       // console.log("Response data:", res);
       // console.log("Is array?", Array.isArray(res));
       // console.log("Length:", res?.length);
-
+      console.log("Top DB fetched : ", db_tags)
+      setTopdbTags(db_tags)
       setListeDatabases(Array.isArray(res) ? res : []);
 
     } catch (error) {
@@ -194,7 +195,7 @@ useEffect(() => {
 
       console.log("📅 Dates:", DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
       await fetchReporting(DEFAULT_FILTERS.scheduleStart, DEFAULT_FILTERS.scheduleEnd);
-      
+
       console.log("✅ Init complete");
     } catch (error) {
       console.error("❌ Erreur lors de l'initialisation :", error);
@@ -212,6 +213,7 @@ useEffect(() => {
     // Refetch l'API uniquement si les dates changent
     if (filters.scheduleStart && filters.scheduleEnd && filters.country) {
       fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.country);
+      
     }
   }, [filters.scheduleStart, filters.scheduleEnd, filters.country]);
 
@@ -260,9 +262,9 @@ useEffect(() => {
         <Col flex="auto">
           <ChartSwitcher data={filteredData} keyFields="database_name" />
         </Col>
-        {/* <Col flex="none">
-          <TopDBEcpm data={filteredData} />
-        </Col> */}
+        <Col flex="none">
+          <TopDbsTags data={topdbTags} tagNames = {tagMapping}/>
+        </Col>
       </Row>
 
 

@@ -67,7 +67,7 @@ import {
 } from "@ant-design/icons";
 import { Chart, registerables } from "chart.js";
 import ReportingDetailCharts from "../../../components/chart/ReportingDetailsChart.jsx"; 
-import { get_advertisers_detail, getMappingData, getMappingValue} from "../../../api/advertiser.js";
+import { get_advertisers_detail, getMappingData, getMappingValue, get_segment_name} from "../../../api/advertiser.js";
 import { useLocation } from "react-router-dom";
 import { TabExtraContent } from "../../../components/bouton/SwitchBtnTableChart.jsx";
 
@@ -306,6 +306,42 @@ const AdvertiserDetail = ({ _mockData }) => {
   const [agenceMapping, setAgenceMapping] = useState({});
   const [databaseMapping, setDatabaseMapping] = useState({});
 
+  // État pour stocker tous les segments indexés par leur ID
+  const [allsegmentNames, setAllSegmentNames] = useState({});
+
+  // Récupération des segments en filtrant par base de données (database_id)
+  const fetchSegmentsByDatabases = useCallback(async (bases) => {
+    if (!bases || bases.length === 0) return;
+
+    try {
+      // 1. Récupérer tous les database_id uniques de l'annonceur
+      const databaseIds = [
+        ...new Set(bases.map((base) => base.database_id).filter(Boolean))
+      ];
+
+      if (databaseIds.length === 0) return;
+
+      // 2. Lancer toutes les requêtes en parallèle (une par database_id)
+      // On suppose ici que get_segment_name prend l'ID de la base en paramètre (ex: get_segment_name(dbId))
+      const promises = databaseIds.map((dbId) => get_segment_name(dbId));
+      const results = await Promise.all(promises);
+
+      // 3. Fusionner les résultats de chaque base dans un seul dictionnaire
+      const segmentMap = {};
+      results.forEach((resSegments) => {
+        if (Array.isArray(resSegments)) {
+          resSegments.forEach((seg) => {
+            segmentMap[seg.id_segment] = seg.segment_name;
+          });
+        }
+      });
+
+      setAllSegmentNames(segmentMap);
+    } catch (error) {
+      console.error("❌ Erreur lors du fetch des segments par base:", error);
+    }
+  }, []);
+
 useEffect(() => {
   const handleScroll = (e) =>{
       // ignore scroll dans le popover
@@ -339,24 +375,51 @@ useEffect(() => {
 }, []);
 
   /* Appel API : récupère les détails de l'annonceur actuel par son ID */
+/* Appel API : récupère les détails de l'annonceur actuel par son ID */
   const fetchd = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await get_advertisers_detail(advertiser_id,tagIdParam,startDateParam,endDateParam);
+      const res = await get_advertisers_detail(advertiser_id, tagIdParam, startDateParam, endDateParam);
       console.log(res);
       setData(res);
+      
+      // 🚀 Déclenchement du fetch par bases de données
+      if (res && res.bases) {
+        fetchSegmentsByDatabases(res.bases);
+      }
     } catch (e) {
       console.error(e);
     } finally {
       setLoading(false);
     }
-  }, [advertiser_id]);
+  }, [advertiser_id, tagIdParam, startDateParam, endDateParam, fetchSegmentsByDatabases]);
 
+
+  const listNamesMapping = useMemo(() => {
+  if (!data || !data.bases) return {};
+  const mapping = {};
+  
+  data.bases.forEach((bd) => {
+    (bd.brands || []).forEach((brand) => {
+      if (brand.ListName && Array.isArray(brand.ListName)) {
+        mapping[brand.name] = brand.ListName;
+      }
+    });
+  });
+  
+  return mapping;
+}, [data]);
   /* Effect : charge les bases au mount et recharge les données si _mockData change ou ID change */
+/* Effect : charge les bases au mount et recharge les données si _mockData ou ID change */
   useEffect(() => {
     fetchMappings();
-    if (!_mockData) fetchd();
-  }, [advertiser_id, _mockData, fetchMappings]);
+    if (!_mockData) {
+      fetchd();
+    } else if (_mockData && _mockData.bases) {
+      // Extraction des segments depuis les bases du mockData
+      fetchSegmentsByDatabases(_mockData.bases);
+    }
+  }, [advertiser_id, _mockData, fetchMappings, fetchd, fetchSegmentsByDatabases]);
 
 
 
@@ -545,6 +608,8 @@ useEffect(() => {
                     styles={styles} 
                     viewMode={viewMode} 
                     setViewMode={setViewMode} 
+                    segmentNames={allsegmentNames}
+                    listNames={listNamesMapping}
                   />
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />

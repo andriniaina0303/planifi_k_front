@@ -1,33 +1,12 @@
 import { tokens } from "./Tokens";
 import { TeamOutlined, HeartOutlined, GlobalOutlined } from "@ant-design/icons";
 
-export const buildRecommendations = (data, key_value) => {
-  const merged = {};
+export const buildRecommendations = (backendData) => {
+  // 1. On extrait l'objet principal, avec une sécurité s'il est absent
+  const recommendations = backendData?.recommendation_segments;
+  if (!recommendations) return [];
 
-  data[key_value]?.forEach((key_val) => {
-    if (!key_val.dimensions) return;
-
-    Object.entries(key_val.dimensions).forEach(([dimKey, dimData]) => {
-      if (!merged[dimKey]) merged[dimKey] = {};
-
-      Object.entries(dimData).forEach(([seg, vals]) => {
-        if (!merged[dimKey][seg]) {
-          merged[dimKey][seg] = {
-            sends: 0,
-            openers: 0,
-            clickers: 0,
-            unsubs: 0,
-          };
-        }
-
-        merged[dimKey][seg].sends += vals.sends || 0;
-        merged[dimKey][seg].openers += vals.openers || 0;
-        merged[dimKey][seg].clickers += vals.clickers || 0;
-        merged[dimKey][seg].unsubs += vals.unsubs || 0;
-      });
-    });
-  });
-
+  // 2. Configuration des libellés et styles par dimension (inchangé)
   const dimLabels = {
     age_range: {
       label: "Tranche d'âge",
@@ -48,32 +27,47 @@ export const buildRecommendations = (data, key_value) => {
 
   const results = [];
 
-  Object.entries(merged).forEach(([dimKey, segments]) => {
+  // 3. On boucle sur chaque dimension renvoyée par le backend (age_range, gender, isp)
+  Object.entries(recommendations).forEach(([dimKey, dimData]) => {
     const meta = dimLabels[dimKey];
+    if (!meta) return; // Sécurité si une nouvelle dimension inconnue arrive du backend
 
-    const entries = Object.entries(segments)
-      .filter(([, v]) => v.sends > 0)
-      .map(([seg, v]) => ({
-        segment: seg,
-        ...v,
-        openRate: v.sends ? (v.openers / v.sends) * 100 : 0,
-        ctr: v.sends ? (v.clickers / v.sends) * 100 : 0,
-        unsubRate: v.sends ? (v.unsubs / v.sends) * 100 : 0,
-      }));
+    // On prépare une fonction interne pour adapter les clés du backend aux clés attendues par ton UI
+    const formatSegment = (item) => {
+      if (!item) return null;
+      return {
+        segment: item.value, // "value" devient "segment" pour ton UI
+        sends: item.sends,
+        openers: item.openers,
+        clickers: item.clickers,
+        unsubs: item.unsubs,
+        openRate: item.taux_openers, // Taux déjà calculés par le backend
+        ctr: item.taux_clickers,
+        unsubRate: item.taux_unsubs,
+        taux_cto: item.taux_cto
+      };
+    };
 
-    if (entries.length === 0) return;
+    // Le backend trie déjà par pertinence, on prend donc le premier élément [0]
+    const bestSegment = dimData.privilegier?.[0];
+    const worstSegment = dimData.eviter?.[0];
 
+    // On calcule le nombre total de segments reçus pour cette dimension
+    const totalSegments = (dimData.privilegier?.length || 0) + (dimData.eviter?.length || 0);
+
+    if (totalSegments === 0) return;
+
+    // 4. On pousse l'objet final calqué sur l'ancienne structure
     results.push({
       dimKey,
       ...meta,
-      bestCtr: [...entries].sort((a, b) => b.ctr - a.ctr)[0],
-      bestOpen: [...entries].sort((a, b) => b.openRate - a.openRate)[0],
-      bestUnsub: [...entries].sort(
-        (a, b) => a.unsubRate - b.unsubRate
-      )[0],
-      worstCtr: [...entries].sort((a, b) => a.ctr - b.ctr)[0],
-      biggestVol: [...entries].sort((a, b) => b.sends - a.sends)[0],
-      totalSegments: entries.length,
+      totalSegments,
+      // On associe les bons segments aux variables lues par tes cartes/listes
+      bestCtr: formatSegment(bestSegment),
+      bestOpen: formatSegment(bestSegment), 
+      bestUnsub: formatSegment(bestSegment),
+      worstCtr: formatSegment(worstSegment),
+      biggestVol: formatSegment(bestSegment), // Optionnel: tu peux trier tes tableaux si besoin de plus de précision
     });
   });
 

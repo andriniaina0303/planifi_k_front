@@ -490,96 +490,50 @@ export const GlobalTable = ({
   styles, 
   viewMode, 
   setViewMode, 
-  dataLabel}) => {
-
-  // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
-  const [searchCols, setSearchCols] = React.useState("");
+  dataLabel,
+  segmentNames,
+  listNames
+}) => {
 
   const [f, setF] = useState({ minSends: null, cls: null });
-  const [segmentNames, setSegmentNames] = useState({});
-  const [listNames, setListNames] = useState([]);
-  const [selectedBase, setSelectedBase] = useState(null); // ← ajout
-  const [loadingSegments, setLoadingSegments] = useState(false);
+  const [selectedBase, setSelectedBase] = useState(null); 
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
-  // console.log("Contenu de AgencyName reçu dans GlobalTable: ",agencyName)
-  const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database'
+  const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database';
 
-  // Variable pour stocké le tableau de DB/ADV 
-  const [filteredData, setFilteredData] = useState([])
-  useEffect(() => {
-    if (!selectedBase) return; // ← Si pas de base sélectionnée, on sort
+  const [filteredData, setFilteredData] = useState([]);
 
-    setLoadingSegments(true); // ← AU DÉBUT
-    const loadSegmentNames = async () => {
-      const newSegmentNames = { ...segmentNames }; // ← Garder le cache existant
-      const newListNames = {...listNames};
-      // Boucler SEULEMENT sur les brands de LA BASE SÉLECTIONNÉE
-      for (const brand of selectedBase.brands || []) {
-        // RÉCUPÉRER LES NOMS DE LISTES
-        // ListName est un array : ["acheter-malin.com", "autre-liste.com"]
-        const brandKey = brand.name; // ou brand.id si tu as un ID unique
-        if (brand.ListName && Array.isArray(brand.ListName)) {
-          newListNames[brandKey] = brand.ListName; // Stocker l'array complet
-        }
-        // Boucler sur tous les segment_id du brand
-        for (const segmentId of brand.segment_id || []) {
-        const key = `${segmentId}`;
-          if (!newSegmentNames[key]) {
-            try {
-              // console.log("Database ID : ", database_id)
-              let db_ID = selectedBase.database_id;
-              if (database_id && database_id !== null){
-                db_ID = database_id;
-              }
-              // console.log("DB_ID utilisé : ",db_ID)
-              const name = await get_segment_name(db_ID, segmentId);
-              if (name) {
-                newSegmentNames[key] = name;
-              }
-            } catch (error) {
-              console.error(`Erreur segment ${segmentId}:`, error);
-            }
-          }
-        }
+  // Construction des lignes du tableau (useMemo)
+  const rows = useMemo(() => {
+    let d = bases.flatMap((b) => {
+      if (!b.brands || b.brands.length === 0) {
+        return [{ ...b, key: `${b[`${dataIndex}_id`]}` }];
       }
-      setSegmentNames(newSegmentNames);
-      setListNames(newListNames); // ← Stocker les listes
-      setLoadingSegments(false);
-    };
+      return b.brands.map((brand, i) => ({
+        ...b,        
+        ...brand,    
+        key: `${b[`${dataIndex}_id`].id || b[`${dataIndex}_id`]}_${i}`,
+      }));
+    });
 
-    loadSegmentNames();
-  }, [selectedBase]); // ← Dépendance: selectedBase, pas bases
+    if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
+    if (f.cls) d = d.filter((r) => r.classification === f.cls);
+    return d;
+  }, [bases, f, dataIndex]);
 
- const rows = useMemo(() => {
-  let d = bases.flatMap((b) => {
-    if (!b.brands || b.brands.length === 0) {
-      return [{ ...b, key: `${b[`${dataIndex}_id`]}` }];
-    }
-    return b.brands.map((brand, i) => ({
-      ...b,        // données advertiser (sends global, classification, ca, brands[], etc.)
-      ...brand,    // données brand (écrasent celles de l'advertiser si même clé)
-      key: `${b[`${dataIndex}_id`]}_${i}`,
-    }));
-  });
+  useEffect(() => {
+    setFilteredData(rows);
+  }, [rows]);
 
-  if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
-  if (f.cls) d = d.filter((r) => r.classification === f.cls);
-  return d;
-}, [bases, f]);
-
-//Définir toutes les rows comme valeur par défaut au premier rendu 
-  useEffect(() =>{
-    setFilteredData(rows)
-  },[rows])
+  useEffect(() => {
+    setFilteredData(rows);
+  }, [rows]);
 
   const dbMap = Object.fromEntries(allbase.map((db) => [db[`${idKey}`], db[`${nameKey}`]]));
-  const tagMap = tagName
+  const tagMap = tagName;
   const agenceMap = Object.fromEntries(
     agencyName.map((ag) => [ag.agence_id, ag.agence_name])
   );  
-  const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
-  console.log("Contenu de base: ", bases)
-  const brandCols = createBrandCols(segmentNames,listNames,agenceMap)
+  const titre = pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
   const baseCols  = [
     {
       title: `${titre}`,
@@ -800,17 +754,13 @@ export const GlobalTable = ({
     //   render: (a) => <AnalyseBadges analyses={a} compact />,
     // },
   ];
+  const Precols = mergeColumns(baseCols, createBrandCols(segmentNames, listNames, agenceMap));
+  const orderCols = [`${idKey}`, "tags", "classification", "healthGauge", "name", "models", "subject", "date_schedule", "segment_id", "agence_id"];
+  const cols = reorderColumns(Precols, orderCols);
 
-  // Colonne encore désorganisé
-  const Precols = mergeColumns(baseCols, brandCols);
-
-  const orderCols = [`${idKey}`,"tags","classification","healthGauge","name","models","subject","date_schedule","segment_id","agence_id"]
-  // Colonne final à utilisé 
-
-  const cols = reorderColumns(Precols,orderCols)
   return (
     <>
-    <Card size="large" style={styles.card}>
+      <Card size="large" style={styles.card}>
         <Table
           dataSource={rows}
           columns={cols}
@@ -820,64 +770,50 @@ export const GlobalTable = ({
             pageSize: 12,
             size: "small",
             showSizeChanger: true,
-            showTotal: (t) => (
-              <Text style={{ fontSize: 11, color: "#9ca3af" }}>{t} bases</Text>
-            ),
+            showTotal: (t) => <Text style={{ fontSize: 11, color: "#9ca3af" }}>{t} bases</Text>,
           }}
-          // ── AJOUT DE LA FONCTION ONCHANGE ──────────────────────────────────
           onChange={(pagination, filters, sorter, extra) => {
-            // extra.currentDataSource contient le tableau EXACT après filtres, recherche et tris locaux.
             setFilteredData(extra.currentDataSource);
-            
-            // Si tu veux débugger et voir ce qu'il y a dedans en temps réel :
-            console.log("Données actuellement visibles :", extra.currentDataSource);
           }}
           onRow={(record) => ({
-          onClick: () => {
-            setSelectedBase(record);
-            // console.log("Selected base:", record);
-            console.log("loader: ",loadingSegments)
-            setLoadingSegments(true);
-          },
+            onClick: () => {
+              setSelectedBase(record); // Enclenche l'ouverture immédiate
+            },
             style: { cursor: "pointer" },
           })}
         />
-    </Card>
-    <Modal
-      open={!!selectedBase}
-      onCancel={() => setSelectedBase(null)}
-      footer={null}
-      width="100%"
-      style={{ top: 40 }}
-      styles={{
-        content: {
-          paddingRight: 50, // ← Espace INTERNE pour éviter le X
-        }
-      }}
-      destroyOnClose
-    >
-      {selectedBase && !loadingSegments ? (
-        <BaseCard
-          base={selectedBase}
-          viewMode={viewMode} 
-          setViewMode={setViewMode}
-          allbase={allbase} 
-          clsConfig={clsConfig} 
-          styles={styles} 
-          segmentNames={segmentNames}
-          listNames={listNames}
-          agencyName={agenceMap}
-          idKey={idKey}
-          nameKey={nameKey}
-        />
-      ) : (
-        <div style={{ padding: '40px', textAlign: 'center' }}>
-          <Spin size="large" tip="Chargement des segments..." >
-            <div></div>
-          </Spin>
-        </div>
-      )}
-    </Modal>
+      </Card>
+
+      <Modal
+        open={!!selectedBase}
+        onCancel={() => setSelectedBase(null)}
+        footer={null}
+        width="100%"
+        style={{ top: 40 }}
+        styles={{ content: { paddingRight: 50 } }}
+        destroyOnClose
+      >
+        {/* ── 2. PLUS DE BLOCAGE ICI : On ouvre directement la BaseCard ── */}
+        {selectedBase ? (
+          <BaseCard
+            base={selectedBase}
+            viewMode={viewMode} 
+            setViewMode={setViewMode}
+            allbase={allbase} 
+            clsConfig={clsConfig} 
+            styles={styles} 
+            segmentNames={segmentNames} // Les noms déjà récoltés s'afficheront tout seuls
+            listNames={listNames}
+            agencyName={agenceMap}
+            idKey={idKey}
+            nameKey={nameKey}
+          />
+        ) : null}
+      </Modal>
     </>
   );
 };
+
+
+
+

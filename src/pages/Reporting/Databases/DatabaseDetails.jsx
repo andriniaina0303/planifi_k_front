@@ -377,6 +377,22 @@ const fetchAllSegments = async () => {
     } 
   };
 
+  // Extraction synchrone des ListNames présents directement dans la donnée
+const listNamesMapping = useMemo(() => {
+  if (!data || !data.advertisers) return {};
+  const mapping = {};
+  
+  data.advertisers.forEach((adv) => {
+    (adv.brands || []).forEach((brand) => {
+      if (brand.ListName && Array.isArray(brand.ListName)) {
+        mapping[brand.name] = brand.ListName;
+      }
+    });
+  });
+  
+  return mapping;
+}, [data]);
+
 
 
   /* Effect : charge les bases au mount et recharge les données si _mockData change ou ID change */
@@ -568,6 +584,8 @@ const fetchAllSegments = async () => {
                     viewMode={viewMode} 
                     setViewMode={setViewMode} 
                     dataLabel = "database"
+                    segmentNames={allsegmentNames}
+                    listNames={listNamesMapping}
                   />
                 </div>
               ),
