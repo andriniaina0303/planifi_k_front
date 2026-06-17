@@ -1,3 +1,4 @@
+
 import 
 {   Card, 
     Select,
@@ -492,11 +493,21 @@ export const GlobalTable = ({
   setViewMode, 
   dataLabel,
   segmentNames,
-  listNames
+  listNames,
+  onFilteredBasesChange
 }) => {
 
   const [f, setF] = useState({ minSends: null, cls: null });
   const [selectedBase, setSelectedBase] = useState(null); 
+  // État pour la recherche d'advertiser (optionnel, à ajouter au parent si besoin)
+  const [searchCols, setSearchCols] = React.useState("");
+
+  // Valeurs actuellement sélectionnées dans le filtre de la colonne "Databases".
+  // Vide => aucun filtre actif => on exporte tout (comportement inchangé).
+  const [selectedDbFilter, setSelectedDbFilter] = useState([]);
+  const [segmentNames, setSegmentNames] = useState({});
+  const [listNames, setListNames] = useState([]);
+  const [loadingSegments, setLoadingSegments] = useState(false);
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
   const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database';
 
@@ -772,8 +783,10 @@ export const GlobalTable = ({
             showSizeChanger: true,
             showTotal: (t) => <Text style={{ fontSize: 11, color: "#9ca3af" }}>{t} bases</Text>,
           }}
-          onChange={(pagination, filters, sorter, extra) => {
-            setFilteredData(extra.currentDataSource);
+          onChange={(pagination, filters) => {
+            // 'filters' contient les valeurs sélectionnées par colonne filtrable,
+            // ex: { [idKey]: ["123"] } ou { [idKey]: null } si reset/aucun filtre.
+            setSelectedDbFilter(filters[idKey] || []);
           }}
           onRow={(record) => ({
             onClick: () => {

@@ -319,33 +319,7 @@ const FilterReporting = ({labelFilter, filters, setFilters, listes, countries = 
           </Col>
         )}
 
-        {/* ================= BOUTON FILTER (APPARAÎT SI DATES MODIFIÉES) ================= */}
-        {/* {hasDateChanged && (
-          <Col span={2.4}>
-            <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>&nbsp;</span>
-              <div style={{ display: "flex", gap: 6 }}>
-                <Button 
-                  type="primary"
-                  icon={<FilterOutlined />}
-                  style={{ flex: 1, background: "#1890ff", borderColor: "#1890ff" }}
-                  onClick={handleApplyDateFilter}
-                  title="Appliquer la plage de dates"
-                >
-                  Filter
-                </Button>
-                <Button 
-                  type="default"
-                  style={{ flex: 1 }}
-                  onClick={handleCancelDateFilter}
-                  title="Annuler les modifications"
-                >
-                  ✕
-                </Button>
-              </div>
-            </div>
-          </Col>
-        )} */}
+       
       </Row>
     </Card>
   );

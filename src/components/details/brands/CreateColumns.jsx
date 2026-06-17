@@ -51,7 +51,7 @@ const PopoverButton = ({
 
 
 export const buildSegmentButton = (segmentIds, segmentNames, tokens) => {
-
+  
   const content = (
     <div>
       {(!segmentIds || segmentIds.length === 0) ? (
@@ -171,7 +171,7 @@ export const createBrandCols = (segmentNames,listNames,agencyName) => [
 {
   title: "Segment",
   dataIndex: "segment_id",
-  align: "left",
+  align: "left",    
   width: 210,
   render: (segmentIds, record) => {
     const listNamesForBrand = listNames[record.name] || [];

@@ -305,6 +305,7 @@ const AdvertiserDetail = ({ _mockData }) => {
   // Etat pour stocker les mapping agences et databases 
   const [agenceMapping, setAgenceMapping] = useState({});
   const [databaseMapping, setDatabaseMapping] = useState({});
+  const [filteredBases, setFilteredBases] = useState(_mockData?.bases || []);
 
   // État pour stocker tous les segments indexés par leur ID
   const [allsegmentNames, setAllSegmentNames] = useState({});
@@ -422,7 +423,7 @@ useEffect(() => {
   }, [advertiser_id, _mockData, fetchMappings, fetchd, fetchSegmentsByDatabases]);
 
 
-
+  
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
     return (
@@ -549,6 +550,7 @@ useEffect(() => {
               viewMode={viewMode}
               setViewMode={setViewMode}
               data={data}
+              basesForExport={filteredBases}
               clsConfig={clsConfig}
               agenceMapping={agenceMapping}
               allbase={databaseMapping}
@@ -610,6 +612,7 @@ useEffect(() => {
                     setViewMode={setViewMode} 
                     segmentNames={allsegmentNames}
                     listNames={listNamesMapping}
+                    onFilteredBasesChange={setFilteredBases}
                   />
                   {/* <div style={styles.sectionTitle}>
                     <DatabaseOutlined style={{ color: tokens.primary }} />
