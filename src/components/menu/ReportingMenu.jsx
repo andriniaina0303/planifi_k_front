@@ -4,7 +4,7 @@ import "../../assets/css/sidebar.css";
 
 import { FiBarChart, FiDatabase, FiMap } from "react-icons/fi";
 import { BsFillMegaphoneFill } from "react-icons/bs";
-import { SafetyOutlined } from '@ant-design/icons';
+import { SafetyOutlined,ClockCircleOutlined} from '@ant-design/icons';
 
 
 import MenuItem from "../bouton/MenuItem";
@@ -66,6 +66,19 @@ const ReportingMenu = ({ onClose }) => {
               color="#f6ad55"
               onClick={() => {
                 navigate("/reporting/database");
+                onClose?.();
+              }}
+            />
+          </div>
+
+          {/* Database */}  
+          <div style={isActive("/reporting/seasonality") ? activeStyle : {}}>
+            <SubMenuItem
+              icon={ClockCircleOutlined}
+              label="Seasonality"
+              color="#12b61f"
+              onClick={() => {
+                navigate("/reporting/seasonality");
                 onClose?.();
               }}
             />

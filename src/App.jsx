@@ -7,6 +7,7 @@ import Advertisers from "./pages/Reporting/Advertisers/Advertisers";
 import AdvertiserDetail from "./pages/Reporting/Advertisers/AdvertiserDetail";
 import Databases from "./pages/Reporting/Databases/Databases";
 import DatabaseDetail from "./pages/Reporting/Databases/DatabaseDetails";
+import  Seasonality from "./pages/Reporting/Seasonality/Seasonality";
 import Counting from "./pages/Counting/Counting";
 import LoginPage from "./pages/Login/Login";
 import { resetInactivityTimer } from "./api/interceptor";
@@ -101,6 +102,10 @@ export default function App() {
           {/* Affiche les détails spécifiques d'un Database */}
           {/* :advertiser_id est un paramètre dynamique extrait de l'URL */}
           <Route path="reporting/database/:database_id" element={<DatabaseDetail />} />
+
+           {/* ── SEASONALITY ── */}
+          <Route path="reporting/seasonality" element={<Seasonality />}/>
+          
 
           {/* ── MODULE COUNTING ── */}
           <Route path="counting" element={<Counting />}>
