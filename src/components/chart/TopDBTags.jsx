@@ -140,7 +140,7 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
           x: {
             grid: { display: false },
             ticks: {
-              font: { size: 10 },
+              font: { size: 14 },
               color: "#555",
               maxRotation: 45,
               minRotation: 45,

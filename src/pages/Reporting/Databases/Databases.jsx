@@ -23,7 +23,7 @@ import ChartSwitcher from "../../../components/chart/ChartSwitcher";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
 import {TopDBEcpm} from "../../../components/chart/TopDBEcpm"
 import { useTagStore, useCountryStore} from "../../../utils/storedZustand";
-import TopDbsTags from "../../../components/chart/TopDBTags"
+// import TopDbsTags from "../../../components/chart/TopDBTags"
 
 
 
@@ -37,7 +37,7 @@ import TopDbsTags from "../../../components/chart/TopDBTags"
 const Databases = () => {
   // État des annonceurs chargés depuis l'API
   const [listeDatabases, setListeDatabases] = useState([]);
-  const[topdbTags,setTopdbTags] = useState([])
+  // const[topdbTags,setTopdbTags] = useState([])
 
   // État de chargement
   const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ const Databases = () => {
       // console.log("Is array?", Array.isArray(res));
       // console.log("Length:", res?.length);
       console.log("Top DB fetched : ", db_tags)
-      setTopdbTags(db_tags)
+      // setTopdbTags(db_tags)
       setListeDatabases(Array.isArray(res) ? res : []);
 
     } catch (error) {
@@ -247,9 +247,7 @@ const Databases = () => {
         <Col flex="auto">
           <ChartSwitcher data={filteredData} keyFields="database_name" />
         </Col>
-        <Col flex="none">
-          <TopDbsTags data={topdbTags} tagNames = {tagMapping}/>
-        </Col>
+       
       </Row>
 
 
