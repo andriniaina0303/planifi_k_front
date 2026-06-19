@@ -1,20 +1,70 @@
-import React, { useState } from "react";
-import {Row, Col} from "antd";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Select, Calendar } from "antd";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
-import { useCountryStore, useTagStore } from "../../../utils/storedZustand";
+import { useTagStore } from "../../../utils/storedZustand";
 import TopDbsTags from "../../../components/chart/TopDBTags";
+import { get_top_DB_tags } from "../../../api/databases";
 
 const Seasonality = () => {
-
-  const countryList = useCountryStore((state) => state.countries);
-
+  const { setTagMapping } = useTagStore();
   const tagMapping = useTagStore((state) => state.tagMap);
 
-
-  // État des filtres, initialisé avec les valeurs par défaut (90 derniers jours)
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const [topdbTags, setTopdbTags] = useState([]);
+  
+  const styles = {
+    filterCol: { display: "flex", flexDirection: "column", gap: 5 },
+    filterLabel: { fontSize: 12, color: "#888" },
+    loaderContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "60vh",
+    },
+    spinner: {
+      width: "40px",
+      height: "40px",
+      border: "4px solid #eee",
+      borderTop: "4px solid #3498db",
+      borderRadius: "50%",
+      animation: "spin 1s linear infinite",
+    },
+    text: { marginTop: "10px", fontSize: "14px", color: "#666" },
+  };
 
-  const [dbData, setdbData] = useState([]);
+  const fetchReporting = async (startDate = null, endDate = null, tagID = null) => {
+    try {
+      setLoading(true);
+      const db_tags = await get_top_DB_tags(startDate, endDate, tagID);
+      setTopdbTags(db_tags);
+    } catch (error) {
+      console.error("❌ Erreur lors du fetch:", error);
+      setTopdbTags([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onPanelChange = (value, mode) => {
+    console.log(value.format('YYYY-MM-DD'), mode);
+  };
+
+  useEffect(() => {
+    if (filters.scheduleStart && filters.scheduleEnd) {
+      fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.tag || null);
+    }
+  }, [filters.scheduleStart, filters.scheduleEnd, filters.tag]);
+
+  if (loading) {
+    return (
+      <div style={styles.loaderContainer}>
+        <div style={styles.spinner}></div>
+        <p style={styles.text}>Loading seasonality reporting...</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -26,23 +76,46 @@ const Seasonality = () => {
         gap: 16,
       }}
     >
+      {/* Barre supérieure de filtres (Où vous gérez vos boutons/dates/années) */}
       <FilterReporting
-        labelFilter="Advertisers"
         filters={filters}
         setFilters={setFilters}
         listes={[]}
-        countries={countryList}
         idList="id"
         keyList="name"
+        tagList={tagMapping}
       />
 
-      <Row>
-        <Col span={24}>
-          <TopDbsTags data={dbData} tagNames={tagMapping} />
+      {/* Zone Graphique */}
+      <Row gutter={12} >
+        <Col span={16}>
+          <div style={{ border: '1px solid #f0f0f0', borderRadius: 8, padding: 10, background: '#fff' }}>
+            <Calendar 
+              mode="year" // 1. Garde le calendrier en mode Année (affichage des 12 mois)
+              value={filters.scheduleStart} // 2. Le calendrier écoute l'état de vos filtres
+              onPanelChange={onPanelChange}
+              headerRender={() => {
+                // 3. Supprime complètement le header natif (et donc son Select d'année)
+                return null; 
+                
+                // Option alternative si vous voulez quand même afficher juste le titre textuel de l'année :
+                // return <div style={{ padding: 10, fontSize: 16, fontWeight: 'bold' }}>Year: {filters.scheduleStart?.format('YYYY')}</div>;
+              }}
+            />
+          </div>
+        </Col>
+        <Col span={8} style = {{alignSelf:'flex-start'}}>
+          <TopDbsTags 
+            data={topdbTags} 
+            tagNames={tagMapping} 
+            tagValue={filters.tag}
+            onTagChange={(value) => 
+              setFilters((prev) => ({ ...prev, tag: value }))
+            }
+          />
         </Col>
       </Row>
     </div>
-    
   );
 };
 

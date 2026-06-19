@@ -3,6 +3,7 @@ import * as config from "./../config/config";
 import mockData from "../temp/all_advertiser.json";
 import mockDataDetail from "../temp/adv_detail.json";
 import { formatDate } from "../utils/Helpers";
+import { tag } from "@turf/turf";
 
 /**
  * 🔥 SWITCH MODE DÉVELOPPEMENT
@@ -204,8 +205,8 @@ export async function get_dep_tags(tag_id, database_id, date_start, date_end){
   }
 }
 
-export async function get_top_DB_tags(date_start,date_end,country){
-  if(!(date_start||date_end||country)){
+export async function get_top_DB_tags(date_start,date_end,tag_id){
+  if(!(date_start||date_end||tag_id)){
       console.log("Mandatory fields missing, please check all fields.")
       return []
     }
@@ -214,9 +215,11 @@ export async function get_top_DB_tags(date_start,date_end,country){
     const params = new URLSearchParams ({
       startDate,
       endDate,
-      country
     })
 
+    if (tag_id && tag_id!==null){
+      params.append("tag_id",tag_id)
+    }
   try{
     const resp = await api.get(`${config.REACT_APP_ENDPOINT_ALL_MAPPING}top_base?${params.toString()}`,{timeout:120000})
   

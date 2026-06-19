@@ -84,6 +84,7 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
   const [brandSort, setBrandSort] = useState("asc");
   // Etat pour gérer les segements appliquer à la base
   const [segments,setSegments] = useState(null)
+  // console.log("Nom de segment reçu dans BaseCard : ", segmentNames)
   return (
     <Card
       style={{
@@ -506,7 +507,6 @@ export const GlobalTable = ({
   // Vide => aucun filtre actif => on exporte tout (comportement inchangé).
   const [selectedDbFilter, setSelectedDbFilter] = useState([]);
   const [selectedBase, setSelectedBase] = useState(null); // ← ajout
-  const [loadingSegments, setLoadingSegments] = useState(false);
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
   // console.log("Contenu de AgencyName reçu dans GlobalTable: ",agencyName)
   const dataIndex = dataLabel === 'database' ? 'advertiser' : 'database'
@@ -783,6 +783,7 @@ export const GlobalTable = ({
   // Colonne final à utilisé 
 
   const cols = reorderColumns(Precols,orderCols)
+  console.log("Nom de segment reçu dans GlobalTable : ", segmentNames)
   return (
     <>
     <Card size="large" style={styles.card}>
@@ -808,8 +809,6 @@ export const GlobalTable = ({
           onClick: () => {
             setSelectedBase(record);
             // console.log("Selected base:", record);
-            console.log("loader: ",loadingSegments)
-            setLoadingSegments(true);
           },
             style: { cursor: "pointer" },
           })}
@@ -828,7 +827,7 @@ export const GlobalTable = ({
       }}
       destroyOnClose
     >
-      {selectedBase && !loadingSegments ? (
+      {selectedBase && (
         <BaseCard
           base={selectedBase}
           viewMode={viewMode} 
@@ -842,12 +841,6 @@ export const GlobalTable = ({
           idKey={idKey}
           nameKey={nameKey}
         />
-      ) : (
-        <div style={{ padding: '40px', textAlign: 'center' }}>
-          <Spin size="large" tip="Chargement des segments..." >
-            <div></div>
-          </Spin>
-        </div>
       )}
     </Modal>
     </>

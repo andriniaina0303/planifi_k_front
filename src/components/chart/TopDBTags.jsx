@@ -2,12 +2,12 @@
  * ═══════════════════════════════════════════════════════════════════════════
  * TOPDBSTAGS.JSX - Graphique top bases de données par tags (Classé par Score)
  * ═══════════════════════════════════════════════════════════════════════════
- * * Affiche les 10 meilleures bases de données classées par Score décroissant
- * issues du filtrage par tags.
+ * Affiche les 10 meilleures bases de données classées par Score décroissant
+ * issues du filtrage par tags. Incorporé avec son sélecteur de Tag dédié.
  */
 
 import { useMemo, useEffect, useRef } from "react";
-import { Card } from "antd";
+import { Card, Select } from "antd";
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
@@ -17,10 +17,13 @@ const COLORS = ["#722ed1", "#9254de", "#b37feb", "#531dab", "#8b5cf6"];
 
 /**
  * Composant TopDbsTags
- * * @param {Object} props
- * @param {Array} props.data - Tableau d'objets contenant les DB reçues du backend (avec le champ score)
+ * @param {Object} props
+ * @param {Array} props.data - Tableau d'objets contenant les DB reçues du backend
+ * @param {Object} props.tagNames - Dictionnaire de mapping { id: name } pour les tags
+ * @param {any} props.tagValue - Valeur actuelle du tag sélectionné (issu des filtres du parent)
+ * @param {Function} props.onTagChange - Callback déclenché au changement du tag pour notifier le parent
  */
-const TopDbsTags = ({ data = [], tagNames = [] }) => {
+const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange }) => {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
 
@@ -33,17 +36,14 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
     return data
       .map((item) => ({
         name: item.base_name || `DB #${item.database_id}`,
-        score: item.score ?? 0, // 👈 Récupération du nouveau champ score
+        score: item.score ?? 0,
         tauxClick: item.taux_clickers ?? 0,
         sends: item.sends ?? 0,
         clickers: item.clickers ?? 0,
-        tagId : item.tag_id ?? null,
+        tagId: item.tag_id ?? null,
       }))
-      // Optionnel : on filtre pour éviter d'afficher les DB avec un score de 0
       .filter((db) => db.score > 0)
-      // 👑 Tri par le champ SCORE (du plus grand au plus petit)
       .sort((a, b) => b.score - a.score)
-      // On garde uniquement les 10 premières DB
       .slice(0, 10);
   }, [data]);
 
@@ -51,25 +51,33 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
    * Plugin Chart.js personnalisé pour afficher le score au-dessus des barres
    */
   const valueLabelPlugin = {
-    id: "valueLabel",
-    afterDatasetsDraw(chart) {
-      const { ctx } = chart;
-      const dataset = chart.getDatasetMeta(0);
+  id: "valueLabel",
+  afterDatasetsDraw(chart) {
+    const { ctx } = chart;
+    const dataset = chart.getDatasetMeta(0);
 
+    ctx.save();
+    ctx.font = "600 11px sans-serif";
+    ctx.fillStyle = "#722ed1";
+    ctx.textAlign = "center"; // Alignement à gauche pour la rotation
+    ctx.textBaseline = "middle";
+
+    dataset.data.forEach((bar, i) => {
+      const value = chart.data.datasets[0].data[i] ?? 0;
+      
       ctx.save();
-      ctx.font = "600 11px sans-serif";
-      ctx.fillStyle = "#722ed1";
-      ctx.textAlign = "center";
-
-      dataset.data.forEach((bar, i) => {
-        const value = chart.data.datasets[0].data[i] ?? 0;
-        // On affiche la valeur brute du score (arrondie à 1 décimale ou entière selon ton besoin)
-        ctx.fillText(value.toLocaleString(), bar.x, bar.y - 4);
-      });
-
+      // On déplace le repère au-dessus de la barre
+      ctx.translate(bar.x, bar.y - 10);
+      // 👑 On pivote le texte de -45 degrés (ou -90 pour une verticale stricte)
+      ctx.rotate(-Math.PI / 4); 
+      
+      ctx.fillText(value.toLocaleString(), 0, 0);
       ctx.restore();
-    },
-  };
+    });
+
+    ctx.restore();
+  },
+};
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -82,12 +90,13 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
         datasets: [
           {
             label: "Score",
-            data: topDbs.map((db) => db.score), // 👈 Le graphique utilise le score pour la hauteur des barres
+            data: topDbs.map((db) => db.score),
             backgroundColor: topDbs.map((_, i) => COLORS[i % COLORS.length]),
             borderRadius: 6,
             borderSkipped: false,
             categoryPercentage: 0.6,
-            barPercentage: 0.8,
+            barPercentage: 0.75,
+            maxBarThickness: 50, // 2. Évite que les bâtons deviennent géants et étalent le texte
           },
         ],
       },
@@ -96,7 +105,7 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
         maintainAspectRatio: false,
         layout: {
           padding: {
-            top: 25,
+            top: 30, // Un peu plus de padding en haut de la zone de dessin
           },
         },
         plugins: {
@@ -109,20 +118,16 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
             bodyColor: "#b37feb",
             padding: 10,
             callbacks: {
-                title: (items) => {
-                    // 1. Récupérer l'index de la barre survolée
-                    const index = items[0].dataIndex;
-                    // 2. Trouver les infos de la DB correspondante
-                    const dbInfo = topDbs[index];
-                    // 3. Récupérer le nom du tag depuis le dictionnaire (ou tableau) passé en props
-                    const tagName = tagNames[dbInfo.tagId] || `Tag #${dbInfo.tagId}`;
-                    
-                    return tagName; // 👑 Sera affiché en gros titre dans le tooltip
-                },
-                label: (item) => {
+              title: (items) => {
+                const index = items[0].dataIndex;
+                const dbInfo = topDbs[index];
+                const tagName = tagNames[dbInfo.tagId] || `Tag #${dbInfo.tagId}`;
+                return tagName;
+              },
+              label: (item) => {
                 const dbInfo = topDbs[item.dataIndex];
                 return [
-                  `🎯 Score : ${item.raw}`, // Affiche le score dans le tooltip
+                  `🎯 Score : ${item.raw}`,
                   `Taux de clics : ${dbInfo.tauxClick}%`,
                   `Envois : ${dbInfo.sends.toLocaleString()}`,
                   `Cliqueurs : ${dbInfo.clickers.toLocaleString()}`
@@ -140,14 +145,19 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
           x: {
             grid: { display: false },
             ticks: {
-              font: { size: 10 },
+              font: { size: 13 },
               color: "#555",
               maxRotation: 45,
               minRotation: 45,
             },
           },
           y: {
-            display: false, // Toujours masqué car la valeur du score est écrite au-dessus de chaque barre
+            // 3. ON REPASSE À TRUE MAIS EN MASQUANT UNIQUEMENT LE VISUEL
+            display: true, 
+            grid: { display: false },
+            border: { display: false },
+            ticks: { display: false }, // Cache les chiffres sur le côté gauche
+            grace: "18%", // 👑 Offre 15% d'espace vide au-dessus de la barre la plus haute !
           },
         },
       },
@@ -162,8 +172,24 @@ const TopDbsTags = ({ data = [], tagNames = [] }) => {
       title="📊 Top 10 des Bases par tags"
       size="medium"
       style={{ width: "100%", height: "100%" }}
+      extra={
+        <Select
+          showSearch
+          allowClear
+          placeholder="Filtrer par tags"
+          value={tagValue}
+          onChange={onTagChange}
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          options={Object.entries(tagNames || {}).map(([id, name]) => ({
+            value: id,
+            label: name,
+          }))}
+        />
+      }
     >
-      <div style={{ width: "100%", minWidth: 330, height: 280 }}>
+      <div style={{ width: "100%", height: 280 }}>
         <canvas ref={canvasRef} />
       </div>
     </Card>
