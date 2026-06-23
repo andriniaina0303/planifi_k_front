@@ -8,6 +8,7 @@ import React, { useState, useMemo } from "react";
 import { Card, Row, Col, Select, Button, DatePicker } from "antd";
 import { FilterOutlined, ReloadOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { AlignCenter } from "lucide-react";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -107,8 +108,8 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
         
         {/* ================= DATE DÉBUT ================= */}
         <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>Start Date</span>
+          <div style={labelFilter=== "tag"?styles.filterRow:styles.filterCol}>
+            <span style={styles.filterLabel}>Start Date: </span>
             <DatePicker
               value={pendingDates.scheduleStart}
               onChange={(date) =>
@@ -127,8 +128,8 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
 
         {/* ================= DATE FIN ================= */}
         <Col span={2.4}>
-          <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>End Date</span>
+          <div style={labelFilter=== "tag"?styles.filterRow:styles.filterCol}>
+            <span style={styles.filterLabel}>End Date: </span>
             <DatePicker
               value={pendingDates.scheduleEnd}
               onChange={(date) =>
@@ -217,7 +218,7 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
 
         {/* ================= BOUTONS ACTIONS (SEARCH / FILTER / ANNULER) ================= */}
         {(hasSelectionChanged || hasDateChanged) && (
-          <Col span={2.4}>
+          <Col span={3}>
             <div style={styles.filterCol}>
               <span style={styles.filterLabel}>&nbsp;</span>
               <div style={{ display: "flex", gap: 6 }}>
@@ -267,7 +268,8 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
 
 const styles = {
   filterCol: { display: "flex", flexDirection: "column", gap: 5 },
-  filterLabel: { fontSize: 12, color: "#888" },
+  filterRow: {display:"flex", flexDirection: "row", gap:8, whiteSpace: "nowrap", alignItems: "center"},
+  filterLabel: { fontSize: 12, color: "#888", margin:0 },
 };
 
 export { DEFAULT_FILTERS, generateDefaultDates };

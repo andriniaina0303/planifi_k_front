@@ -12,13 +12,14 @@ const ALL_MONTHS = [
   { key: "10", label: "Oct" }, { key: "11", label: "Nov" }, { key: "12", label: "Déc" }
 ];
 
-export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping }) => {
+export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping,modeFilters,setModeFilters }) => {
 
   /**
    * Transformer : Transforme la structure imbriquée du backend en lignes plates pour Ant Design
    */
   // console.log("Contenu de rawData : ", rawData)
   const navigate = useNavigate()
+
 
   // Formater les dates aux format traitable 
   const date_start = startDate.format && startDate.format("YYYY-MM-DD")
@@ -232,7 +233,23 @@ export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping }
       title="🔥 Heatmap saisonnière" 
       size="medium"
       style={{ width: "100%", borderRadius: 8, boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
+      extra={
+        <div style={{display:'flex', flexDirection: 'row', gap:6, alignItems:'center'}}>
+          <p style={{margin:0}}>Filtrer par: </p>
+          <Select
+            style={{ width: "130px" }} // Augmenté un peu pour afficher correctement le texte entier
+            value={modeFilters}
+            onChange={(value) => setModeFilters(value)}
+            options={[
+              { value: 'clicks', label: 'Top clickers' },
+              { value: 'ca', label: 'Top CA' },
+              { value: 'ecpm', label: 'Top eCPM' },
+            ]}
+          />
+        </div>
+      }
     >
+      
       <p style={{ color: "#666", marginBottom: 20 }}>
         Cette vue permet de détecter en quelques secondes les meilleures périodes de diffusion pour chaque catégorie. Survolez un indicateur pour voir le top 5 des annonceurs.
       </p>

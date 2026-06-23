@@ -12,6 +12,8 @@ const Seasonality = () => {
   const { setTagMapping } = useTagStore();
   const tagMapping = useTagStore((state) => state.tagMap);
   const [loading, setLoading] = useState(true);
+  const [modeFilters,setModeFilters] = useState("ecpm")
+
   const [filters, setFilters] = useState(() => {
     return {
       ...DEFAULT_FILTERS,
@@ -43,10 +45,10 @@ const Seasonality = () => {
     text: { marginTop: "10px", fontSize: "14px", color: "#666" },
   };
 
-  const fetchReporting = async (startDate = null, endDate = null, tagID = null) => {
+  const fetchReporting = async (startDate = null, endDate = null, tagID = null, filterBy = null) => {
     try {
       setLoading(true);
-      const adv_tags = await getTopAdvByTags(startDate, endDate);
+      const adv_tags = await getTopAdvByTags(startDate, endDate, filterBy);
       const db_tags = await get_top_DB_tags(startDate, endDate, tagID);
       
       console.log("Valeur de adv_tags fetched : ",adv_tags)
@@ -63,9 +65,9 @@ const Seasonality = () => {
 
   useEffect(() => {
     if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.tag || null);
+      fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.tag || null, modeFilters);
     }
-  }, [filters.scheduleStart, filters.scheduleEnd, filters.tag]);
+  }, [filters.scheduleStart, filters.scheduleEnd, filters.tag, modeFilters]);
 
   if (loading) {
     return (
@@ -119,6 +121,8 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
             startDate={filters.scheduleStart} 
             endDate={filters.scheduleEnd} 
             tagMapping = {tagMapping}
+            modeFilters={modeFilters}
+            setModeFilters={setModeFilters}
           />
         </Col>
         <Col span={6} style = {{alignSelf:'flex-start'}}>

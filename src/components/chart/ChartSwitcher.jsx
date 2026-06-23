@@ -89,49 +89,6 @@ const ChartSwitcher = ({ data, keyFields="advertiser_name" }) => {
 
   const charts = [
     {
-      
-      label: "Top Sends",
-      showControls : true,
-      onNext: () =>
-        setSendOffset(v =>
-          Math.min(v + 5, Math.max(0, data.length - 10))
-        ),
-      onPrev: () => setSendOffset(v => Math.max(0, v - 5)),
-      legendItems: [{ color: "#1890ff", label: "Sends" }],
-      config: {
-        type: "bar",
-        data: {
-          labels: top5Sends.map((a) => a[keyFields]),
-          datasets: [{ label: "Sends", data: top5Sends.map((a) => a.globales.sends), backgroundColor: "#1890ff", borderRadius: 4}],
-        },
-        options: commonBarOptions(),
-      },
-    },
-    {
-      label: "Openers vs Clickers vs Unsubs",
-      showControls : false,
-      legendItems: [
-        { color: "#52c41a", label: "Openers" },
-        { color: "#faad14", label: "Clickers" },
-        { color: "#f5222d", label: "Unsubs" },
-      ],
-      config: {
-        type: "bar",
-        data: {
-          labels: top5Sends.map((a) => a[keyFields]),
-          datasets: [
-            { label: "Openers", data: top5Sends.map((a) => a.globales.openers), backgroundColor: "#52c41a", borderRadius: 4, stack: "a" },
-            { label: "Clickers", data: top5Sends.map((a) => a.globales.clickers), backgroundColor: "#faad14", borderRadius: 4, stack: "a" },
-            { label: "Unsubs", data: top5Sends.map((a) => a.globales.unsubs), backgroundColor: "#f5222d", borderRadius: 4, stack: "a" },
-          ],
-        },
-        options: {
-          ...commonBarOptions(),
-          plugins: { legend: { display: false } },
-        },
-      },
-    },
-    {
       label: "Top CA",
       showControls : true,
       onNext: () =>
@@ -175,6 +132,49 @@ const ChartSwitcher = ({ data, keyFields="advertiser_name" }) => {
           datasets: [{ label: "eCPM", data: top5eCPM.map((a) => a.globales.ecpm), backgroundColor: "#722ed1", borderRadius: 4 }],
         },
         options: commonBarOptions(),
+      },
+    },
+    {
+      
+      label: "Top Sends",
+      showControls : true,
+      onNext: () =>
+        setSendOffset(v =>
+          Math.min(v + 5, Math.max(0, data.length - 10))
+        ),
+      onPrev: () => setSendOffset(v => Math.max(0, v - 5)),
+      legendItems: [{ color: "#1890ff", label: "Sends" }],
+      config: {
+        type: "bar",
+        data: {
+          labels: top5Sends.map((a) => a[keyFields]),
+          datasets: [{ label: "Sends", data: top5Sends.map((a) => a.globales.sends), backgroundColor: "#1890ff", borderRadius: 4}],
+        },
+        options: commonBarOptions(),
+      },
+    },
+    {
+      label: "Openers vs Clickers vs Unsubs",
+      showControls : false,
+      legendItems: [
+        { color: "#52c41a", label: "Openers" },
+        { color: "#faad14", label: "Clickers" },
+        { color: "#f5222d", label: "Unsubs" },
+      ],
+      config: {
+        type: "bar",
+        data: {
+          labels: top5Sends.map((a) => a[keyFields]),
+          datasets: [
+            { label: "Openers", data: top5Sends.map((a) => a.globales.openers), backgroundColor: "#52c41a", borderRadius: 4, stack: "a" },
+            { label: "Clickers", data: top5Sends.map((a) => a.globales.clickers), backgroundColor: "#faad14", borderRadius: 4, stack: "a" },
+            { label: "Unsubs", data: top5Sends.map((a) => a.globales.unsubs), backgroundColor: "#f5222d", borderRadius: 4, stack: "a" },
+          ],
+        },
+        options: {
+          ...commonBarOptions(),
+          plugins: { legend: { display: false } },
+        },
       },
     },
   ];

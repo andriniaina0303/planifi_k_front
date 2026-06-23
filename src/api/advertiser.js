@@ -201,11 +201,13 @@ export function clearMappingCache(cacheKey = null) {
   }
 }
 
-export async function getTopAdvByTags (startDate, endDate) {
+export async function getTopAdvByTags (startDate, endDate, filtersBy) {
   if(!(startDate||endDate)){
         console.log("Mandatory fields missing, please check all fields.")
         return []
       }
+      
+
   const date_start = startDate.format && startDate.format("YYYY-MM-DD")
   const date_end = endDate.format && endDate.format("YYYY-MM-DD")
   console.log("Date start : ", date_start)
@@ -214,6 +216,10 @@ export async function getTopAdvByTags (startDate, endDate) {
     date_start,
     date_end,
   })
+  if (!filtersBy || filtersBy==null){
+    const filtersBy = "ecpm"
+  }
+  params.append('sort_by',filtersBy)
   const url = `${config.REACT_APP_ENDPOINT_ADV_BY_TAGS}?${params.toString()}`
   console.log("URL utiliser : ", url)
   try{

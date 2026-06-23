@@ -247,9 +247,6 @@ const Databases = () => {
         <Col flex="auto">
           <ChartSwitcher data={filteredData} keyFields="database_name" />
         </Col>
-        <Col flex="none">
-          <TopDbsTags data={topdbTags} tagNames = {tagMapping}/>
-        </Col>
       </Row>
 
 

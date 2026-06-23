@@ -6,7 +6,7 @@
  * issues du filtrage par tags. Incorporé avec son sélecteur de Tag dédié.
  */
 
-import { useMemo, useEffect, useRef } from "react";
+import { useMemo, useEffect, useRef, useState } from "react";
 import { Card, Select } from "antd";
 import { Chart, registerables } from "chart.js";
 
@@ -166,30 +166,29 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange }) => {
 
     return () => chartRef.current?.destroy();
   }, [topDbs]);
-
   return (
     <Card
       title="📊 Top 10 des Bases par tags"
       size="medium"
       style={{ width: "100%", height: "100%" }}
-      extra={
-        <Select
-          showSearch
-          allowClear
-          placeholder="Filtrer par tags"
-          value={tagValue}
-          onChange={onTagChange}
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          options={Object.entries(tagNames || {}).map(([id, name]) => ({
-            value: id,
-            label: name,
-          }))}
-        />
-      }
     >
       <div style={{ width: "100%", height: 280 }}>
+        <div style={{display:'flex',gap:4}}>
+          <Select
+            showSearch
+            allowClear
+            placeholder="Filtrer par tags"
+            value={tagValue}
+            onChange={onTagChange}
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
+            options={Object.entries(tagNames || {}).map(([id, name]) => ({
+              value: id,
+              label: name,
+            }))}
+          />
+        </div>
         <canvas ref={canvasRef} />
       </div>
     </Card>
