@@ -18,8 +18,8 @@ export const StatusDot = ({ resultEmoji }) => {
   return (
     <div
       style={{
-        width: 16,
-        height: 16,
+        width: 12,
+        height: 12,
         borderRadius: "50%",
         background: current.bg,
         boxShadow: "0 2px 4px rgba(0,0,0,0.15), inset 0 -2px 3px rgba(0,0,0,0.2)",

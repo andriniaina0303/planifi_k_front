@@ -127,7 +127,18 @@ export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping,m
       key: "thematic",
       align: "left",
       className: "heatmap-theme-cell",
-      width: 150,
+      width: 200,
+      
+      render: (text) => (
+        <span
+          style={{
+           fontSize: "12px",
+           fontWeight: 500,
+         }}
+        >
+          {text}
+        </span>
+      ),
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -275,10 +286,14 @@ export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping,m
         className="custom-heatmap-table"
         dataSource={formattedData}
         columns={columns}
-        pagination={false}
+        pagination={{
+          pageSize:5,
+          showSizeChanger : false,
+          hideOnSinglePage : true,
+          position : ["bottomCenter"]
+        }}
         scroll={{
             x: "100%",
-            y: 500,
             scrollToFirstRowOnChange: true
         }}
       />

@@ -82,7 +82,7 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
     <div
       style={{
         padding: 24,
-        minHeight: "100vh",
+        height: "auto",
         display: "flex",
         flexDirection: "column",
         gap: 16,
@@ -102,20 +102,7 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
       {/* Zone Graphique */}
       <Row gutter={12} >
         <Col span={18}>
-          {/* <div style={{ border: '1px solid #f0f0f0', borderRadius: 8, padding: 10, background: '#fff' }}>
-            <Calendar 
-              mode="year" // 1. Garde le calendrier en mode Année (affichage des 12 mois)
-              value={filters.scheduleStart} // 2. Le calendrier écoute l'état de vos filtres
-              onPanelChange={onPanelChange}
-              headerRender={() => {
-                // 3. Supprime complètement le header natif (et donc son Select d'année)
-                // return null; 
-                
-                // Option alternative si vous voulez quand même afficher juste le titre textuel de l'année :
-                return <div style={{ padding: 10, fontSize: 16, fontWeight: 'bold' }}>Année: {filters.scheduleStart?.format('YYYY')}</div>;
-              }}
-            />
-          </div> */}
+        
           <SeasonalHeatmap 
             rawData={topAdvTags} 
             startDate={filters.scheduleStart} 
@@ -136,6 +123,7 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
           />
         </Col>
       </Row>
+     
     </div>
   );
 };
