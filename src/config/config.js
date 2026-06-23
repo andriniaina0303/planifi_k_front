@@ -26,3 +26,6 @@ export const REACT_APP_ENDPOINT_ALL_SEGMENT = REACT_APP_ENDPOINT + '/reporting/s
 export const REACT_APP_ENDPOINT_BY_TAGS = REACT_APP_ENDPOINT + '/reporting/filter_by_tags'
 // Récupère les données de mapping comme tags, nom_agence, nom_DB 
 export const REACT_APP_ENDPOINT_ALL_MAPPING = REACT_APP_ENDPOINT + '/reporting/'
+
+// Récupérer les tops des advertisers par tags au cours des mois de l'années 
+export const REACT_APP_ENDPOINT_ADV_BY_TAGS  = REACT_APP_ENDPOINT + '/reporting/top_advertisers'

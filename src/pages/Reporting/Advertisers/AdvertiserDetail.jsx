@@ -307,6 +307,7 @@ const AdvertiserDetail = ({ _mockData }) => {
   const [databaseMapping, setDatabaseMapping] = useState({});
   const [filteredBases, setFilteredBases] = useState(_mockData?.bases || []);
 
+  const [selectedSegments, setSelectedSegments] = useState(['include_o_age', 'include_o_gender', 'include_o_isp']);
   // État pour stocker tous les segments indexés par leur ID
   const [allsegmentNames, setAllSegmentNames] = useState({});
 
@@ -362,6 +363,7 @@ useEffect(() => {
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
   const fetchMappings = useCallback(async () => {
   try {
+    console.log("🚀 Déclenchement de getMappingData...");
     const [agences, databases] = await Promise.all([
       getMappingData('agences', 'agences'),
       getMappingData('all_bases', 'databases'),
@@ -378,23 +380,36 @@ useEffect(() => {
   /* Appel API : récupère les détails de l'annonceur actuel par son ID */
 /* Appel API : récupère les détails de l'annonceur actuel par son ID */
   const fetchd = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await get_advertisers_detail(advertiser_id, tagIdParam, startDateParam, endDateParam);
-      console.log(res);
-      setData(res);
-      
-      // 🚀 Déclenchement du fetch par bases de données
-      if (res && res.bases) {
-        fetchSegmentsByDatabases(res.bases);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }, [advertiser_id, tagIdParam, startDateParam, endDateParam, fetchSegmentsByDatabases]);
+  try {
+    setLoading(true);
+    
+    // 1. On vérifie si chaque segment est présent dans le tableau des filtres
+    // Si le tableau contient 'O_age', ça renvoie "True", sinon "False"
+    const hasAge = selectedSegments.includes('include_o_age') ? 'True' : 'False';
+    const hasGender = selectedSegments.includes('include_o_gender') ? 'True' : 'False';
+    const hasIsp = selectedSegments.includes('include_o_isp') ? 'True' : 'False';
 
+    // 2. On passe ces 3 variables bien distinctes à la fonction de service API
+    const res = await get_advertisers_detail(
+      advertiser_id, 
+      tagIdParam, 
+      startDateParam, 
+      endDateParam,
+      hasAge,    // correspondra à include_o_age
+      hasGender, // correspondra à include_o_gender
+      hasIsp     // correspondra à include_o_isp
+    );
+    
+    setData(res);
+    if (res && res.bases) {
+      fetchSegmentsByDatabases(res.bases);
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+}, [advertiser_id, tagIdParam, startDateParam, endDateParam, fetchSegmentsByDatabases, selectedSegments]);
 
   const listNamesMapping = useMemo(() => {
   if (!data || !data.bases) return {};
@@ -577,6 +592,8 @@ useEffect(() => {
                     styles={styles} 
                     label_value="advertiser" 
                     tagMapping={tagMapping}
+                    selectedSegments={selectedSegments}
+                    onSegmentsChange={setSelectedSegments}
                   />
                 </div>
               ),

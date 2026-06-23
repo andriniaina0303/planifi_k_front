@@ -21,7 +21,7 @@ import {
   TrophyOutlined
 } from "@ant-design/icons";
 import { Chart } from "chart.js";
-import { Tooltip, Tag, Card, Col, Divider, Popover, Row, Typography,Collapse,Table, Flex, FloatButton} from "antd";
+import { Tooltip, Tag, Card, Col, Select, Checkbox,Button, Divider, Popover, Row, Typography,Collapse,Table, Flex, FloatButton} from "antd";
 import { FunnelViz } from "./common/FunnelViz";
 import { RateBar } from "./common/RateBar";
 import { AnalyseBadges } from "./common/AnalyseBadge";
@@ -42,39 +42,79 @@ const {Text, Paragraph} = Typography;
  * Calcule pour chaque dimension : meilleur CTR, meilleur open rate, moins de désabos, segment à éviter.
  * Affiche recommandations formatées avec synthèse textuelle pour optimiser le ciblage.
  */
-const SegmentRecommendations = ({styles,recommendations }) => {
- 
- 
+const SegmentRecommendations = ({
+  styles,
+  recommendations,
+  selectedSegments, 
+  onSegmentsChange
+ }) => {
+  // État local temporaire pour stocker les sélections sous forme de tableau
+  const [tempSegments, setTempSegments] = useState(selectedSegments);
+
+  useEffect(() => {
+    setTempSegments(selectedSegments);
+  }, [selectedSegments]);
+
   if (recommendations.length === 0) return null;
- 
-  // Préparer les items du Collapse
- 
+
+  const handleApply = () => {
+    onSegmentsChange(tempSegments);
+  };
+
   return (
-  <Card
-    size="small"
-    style={{
-      ...styles.card,
-      border: `1px solid ${tokens.primary}33`,
-    }}
-  >
-    {/* ── TITRE GLOBAL ── */}
-    <div style={{ marginBottom: 10 }}>
-      <span style={{ ...styles.sectionTitle }}>
-        <BulbOutlined style={{ color: tokens.warning, fontSize: 18 }} />
-        Recommandations par segment
-        <Tag
-          color="blue"
-          style={{ borderRadius: 10, fontSize: 10, marginLeft: 8 }}
-        >
-          {recommendations.length} dimensions analysées
-        </Tag>
-      </span>
- 
-      <Paragraph style={{ fontSize: 12, color: "#6b7280", marginTop: 6 }}>
-        Récapitulatif des meilleurs segments identifiés sur l'ensemble des bases
-        pour optimiser le ciblage.
-      </Paragraph>
-    </div>
+    <Card
+      size="small"
+      style={{
+        ...styles.card,
+        border: `1px solid ${tokens.primary}33`,
+      }}
+    >
+      {/* ── TITRE GLOBAL ── */}
+      <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <span style={{ ...styles.sectionTitle }}>
+            <BulbOutlined style={{ color: tokens.warning, fontSize: 18 }} />
+            Recommandations par segment
+            <Tag color="blue" style={{ borderRadius: 10, fontSize: 10, marginLeft: 8 }}>
+              {recommendations.length} dimensions analysées
+            </Tag>
+          </span>
+          <Paragraph style={{ fontSize: 12, color: "#6b7280", marginTop: 6 }}>
+            Récapitulatif des meilleurs segments identifiés sur l'ensemble des bases pour optimiser le ciblage.
+          </Paragraph>
+        </div>
+
+        {/* ── Groupement de cases à cocher Checkbox + Bouton Appliquer ── */}
+        <Card style={{background:'#F7FAFF', padding:0}}>
+          <span style={{fontWeight: 'bolder', marginBottom:'12px'}}>Inclure les autres: </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <Checkbox.Group 
+              value={tempSegments} 
+              onChange={(values) => setTempSegments(values)}
+            >
+              <Flex gap={12}>
+                <Checkbox value="include_o_age">Age</Checkbox>
+                <Checkbox value="include_o_gender">Gender</Checkbox>
+                <Checkbox value="include_o_isp">ISP</Checkbox>
+              </Flex>
+            </Checkbox.Group>
+
+            <button 
+              onClick={handleApply}
+              style={{
+                backgroundColor: tokens.primary,
+                color: '#fff',
+                border: 'none',
+                padding: '4px 12px',
+                borderRadius: 6,
+                cursor: 'pointer'
+              }}
+            >
+              Appliquer
+            </button>
+          </div>
+        </Card>
+      </div>
  
     {/* ── 🔥 SYNTHÈSE EN HAUT ── */}
     <SyntheseText recommendations={recommendations} />
@@ -422,7 +462,18 @@ const SyntheseText = ({ recommendations = [] }) => {
  * En haut (côte à côte) : slider Top Brands et recommandations par segment.
  * En bas : graphiques comparatifs par base et autres analyses.
  */
-export const GlobalOverview = ({ segmentNames, open, setOpen, data, mappingData, styles, label_value, tagMapping}) => {
+export const GlobalOverview = ({ 
+  segmentNames, 
+  open, 
+  setOpen, 
+  data, 
+  mappingData, 
+  styles, 
+  label_value, 
+  tagMapping,
+  selectedSegments, 
+  onSegmentsChange}) => {
+
   const g = data.globales;
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(mappingData);
   const key_value = label_value === "database" ? "advertisers" : "bases";
@@ -486,6 +537,8 @@ useEffect(() =>{
           <SegmentRecommendations 
             styles={styles} 
             recommendations={recommendations}
+            selectedSegments={selectedSegments}
+            onSegmentsChange={onSegmentsChange}
           />     
         </Col>
       </Row>

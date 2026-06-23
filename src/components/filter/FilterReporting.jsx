@@ -67,11 +67,27 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
   /**
    * Réinitialise tous les filtres
    */
+
   const handleReset = () => {
-    setFilters(DEFAULT_FILTERS);
+    // Si c'est un tag, on cible l'année civile entière, sinon le défaut (4 mois glissants)
+    const startDate = labelFilter === "tag" 
+      ? dayjs().startOf('year') 
+      : dayjs().subtract(4, 'months');
+
+    const endDate = labelFilter === "tag" 
+      ? dayjs().endOf('year') 
+      : dayjs();
+
+    const resetValues = {
+      ...DEFAULT_FILTERS,
+      scheduleStart: startDate,
+      scheduleEnd: endDate,
+    };
+
+    setFilters(resetValues);
     setPendingDates({
-      scheduleStart: DEFAULT_FILTERS.scheduleStart,
-      scheduleEnd: DEFAULT_FILTERS.scheduleEnd,
+      scheduleStart: resetValues.scheduleStart,
+      scheduleEnd: resetValues.scheduleEnd,
     });
     setPendingSelection([]);
   };
@@ -85,7 +101,6 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
       scheduleEnd: filters.scheduleEnd,
     });
   };
-console.log("Contenu de tagList reçus dans FilterReporting : ", tagList)
   return (
     <Card style={{ borderRadius: 10, background: "#ffffff" }}>
       <Row gutter={8} align="bottom">     
@@ -130,7 +145,7 @@ console.log("Contenu de tagList reçus dans FilterReporting : ", tagList)
           </div>
         </Col>
 
-        {labelFilter ? (
+        {labelFilter !== 'tag' ? (
           /* AFFICHE LA MULTI-SÉLECTION INITIALE */
           <Col flex="auto">
             <div style={styles.filterCol}>
