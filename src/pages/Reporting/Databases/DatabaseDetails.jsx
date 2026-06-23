@@ -310,6 +310,7 @@ const DatabaseDetail = ({ _mockData }) => {
   // État pour les mappings de tags
   const tagMapping = useTagStore((state) => state.tagMap);
 
+  const [selectedSegments, setSelectedSegments] = useState(['include_o_age', 'include_o_gender', 'include_o_isp']);
   // Etat de tout les segments de la base 
   const [allsegmentNames,setAllSegmentNames] = useState({})
 
@@ -340,23 +341,50 @@ useEffect(() => {
 }, []);
 
   /* Appel API : récupère les détails de l'annonceur actuel par son ID */
-  const fetchd = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await get_databases_detail(database_id,startDateParam,endDateParam);
-      console.log(res);
-      setData(res);
-      const advMapping = res.advertisers.map((adv) => ({
-        advertiser_id: adv.advertiser_id,
-        advertiser_name: adv.advertiser_name,
-      }));
-      setAdvertiserMapping(advMapping);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }, [database_id]);
+  /* Appel API : récupère les détails de la base avec les dates ET les segments cochés */
+const fetchd = useCallback(async () => {
+  try {
+    setLoading(true);
+    
+       // 1. On vérifie si chaque segment est présent dans le tableau des filtres
+    // Si le tableau contient 'O_age', ça renvoie "True", sinon "False"
+    const hasAge = selectedSegments.includes('include_o_age') ? 'True' : 'False';
+    const hasGender = selectedSegments.includes('include_o_gender') ? 'True' : 'False';
+    const hasIsp = selectedSegments.includes('include_o_isp') ? 'True' : 'False';
+    // On passe selectedSegments à ton API (il faudra peut-être l'adapter dans ton fichier api/databases.js)
+    const res = await get_databases_detail(
+      database_id, 
+      startDateParam, 
+      endDateParam, 
+      hasAge,    // correspondra à include_o_age
+      hasGender, // correspondra à include_o_gender
+      hasIsp     // correspondra à include_o_isp
+    );
+    
+    console.log("Données fetchées avec segments :", res);
+    setData(res);
+    
+    const advMapping = res.advertisers.map((adv) => ({
+      advertiser_id: adv.advertiser_id,
+      advertiser_name: adv.advertiser_name,
+    }));
+    setAdvertiserMapping(advMapping);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+}, [database_id, startDateParam, endDateParam, selectedSegments]); // <-- Ajout des dépendances pour suivre les changements URL + Checkbox
+
+
+/* Effect : Se déclenche au chargement initial et à chaque fois que l'ID, les dates ou les segments changent */
+useEffect(() => {
+  fetchAllSegments();
+  fetchMappings();
+  if (!_mockData) {
+    fetchd();
+  }
+}, [database_id, _mockData, fetchMappings, fetchd]); // <-- fetchd inclut maintenant selectedSegments
 
 
 const fetchAllSegments = async () => {
@@ -550,7 +578,18 @@ const listNamesMapping = useMemo(() => {
               children: (
                 <div style={{ padding: "20px 4px 24px" }}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
-                  <GlobalOverview segmentNames = {allsegmentNames} open={openPopover} setOpen={setOpenPopover} data={data} mappingData={advertiserMapping} styles={styles} label_value="database" tagMapping={tagMapping}/>
+                  <GlobalOverview 
+                    segmentNames = {allsegmentNames} 
+                    open={openPopover} 
+                    setOpen={setOpenPopover} 
+                    data={data} 
+                    mappingData={advertiserMapping} 
+                    styles={styles} 
+                    label_value="database" 
+                    tagMapping={tagMapping}
+                    selectedSegments={selectedSegments} 
+                    onSegmentsChange={setSelectedSegments} 
+                  />
                 </div>
               ),
             },

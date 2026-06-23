@@ -19,6 +19,7 @@ export const HeadersDetails = ({labelKey,open,setOpen,styles,data,totalBrands,he
     const location = useLocation();
     // console.log("State in HeadersDetails:", location.state);
     const record = location.state?.record;
+    console.log("Contenu de record: ", record )
     // console.log(`${labelKey} in HeadersDetails:`, record);
     const fmt = (v) => Number(v ?? 0).toLocaleString("fr-FR");
 

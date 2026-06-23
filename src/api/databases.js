@@ -90,20 +90,41 @@ if (startDate && endDate) {
 }
 
 
-export async function get_databases_detail(database_id,date_start,date_end) {
+export async function get_databases_detail(
+  database_id, 
+  date_start, 
+  date_end, 
+  include_o_age,
+  include_o_gender,
+  include_o_isp
+
+) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
     return new Promise((resolve) => { setTimeout(() => resolve(mockDataDetail), 300); });
   }
+
   if (!date_start || !date_end){
-    console.log("PathParams missing!!!")
+    console.log("PathParams missing!!!");
     return null;
   }
+
+  // Création des paramètres d'URL de base
   const params = new URLSearchParams({
     date_start,
-    date_end
-  })
-  const response = await api.get(`${config.REACT_APP_ENDPOINT_DATABASE_DETAIL}${database_id}?${params.toString()}`, { timeout: 120000 });
+    date_end,
+    include_o_age,
+    include_o_gender,
+    include_o_isp
+  });
+
+  const url = `${config.REACT_APP_ENDPOINT_DATABASE_DETAIL}${database_id}?${params.toString()}`
+  console.log("URL utilisé : ", url)
+  const response = await api.get(
+   url , 
+    { timeout: 120000 }
+  );
+
   return response.data;
 }
 

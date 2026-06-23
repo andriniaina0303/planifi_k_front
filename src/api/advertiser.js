@@ -76,7 +76,15 @@ if (startDate && endDate) {
 }
 
 
-export async function get_advertisers_detail(adv_id,tag_id, date_start, date_end) {
+export async function get_advertisers_detail(
+  adv_id,
+  tag_id,
+  date_start,
+  date_end,
+  include_o_age,
+  include_o_gender,
+  include_o_isp
+) {
   if (USE_MOCK) {
     console.log("⚡ Using MOCK data");
     return new Promise((resolve) => { setTimeout(() => resolve(mockDataDetail), 300); });
@@ -88,9 +96,14 @@ export async function get_advertisers_detail(adv_id,tag_id, date_start, date_end
   const params = new URLSearchParams({
     tag_id,
     date_start,
-    date_end
+    date_end,
+    include_o_age,
+    include_o_gender,
+    include_o_isp
   })
-  const response = await api.get(`${config.REACT_APP_ENDPOINT_ADVERTISER_DETAIL}${adv_id}?${params.toString()}`, { timeout: 120000 });
+  const url = `${config.REACT_APP_ENDPOINT_ADVERTISER_DETAIL}${adv_id}?${params.toString()}`
+  console.log("URL fetcher: ", url)
+  const response = await api.get(url, { timeout: 120000 });
   return response.data;
 }
 
@@ -185,5 +198,37 @@ export function clearMappingCache(cacheKey = null) {
     delete mappingCache[cacheKey];
   } else {
     Object.keys(mappingCache).forEach(key => delete mappingCache[key]);
+  }
+}
+
+export async function getTopAdvByTags (startDate, endDate) {
+  if(!(startDate||endDate)){
+        console.log("Mandatory fields missing, please check all fields.")
+        return []
+      }
+  const date_start = startDate.format && startDate.format("YYYY-MM-DD")
+  const date_end = endDate.format && endDate.format("YYYY-MM-DD")
+  console.log("Date start : ", date_start)
+  console.log("Date end  : ",date_end)
+  const params = new URLSearchParams ({
+    date_start,
+    date_end,
+  })
+  const url = `${config.REACT_APP_ENDPOINT_ADV_BY_TAGS}?${params.toString()}`
+  console.log("URL utiliser : ", url)
+  try{
+    const resp = await api.get(url,{timeout:120000})
+  
+    if (resp && resp!=null){
+      return resp.data
+    }
+    else{
+      console.warn("Tableau vide ou undefined retourner.")
+      return []
+    }
+  }
+  catch(error){
+    console.log("Erreur lors du fetch des departements via tags: ",error)
+  
   }
 }

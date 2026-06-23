@@ -33,7 +33,7 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange }) => {
   const topDbs = useMemo(() => {
     if (!Array.isArray(data)) return [];
 
-    return data 
+    return data
       .map((item) => ({
         name: item.base_name || `DB #${item.database_id}`,
         score: item.score ?? 0,
