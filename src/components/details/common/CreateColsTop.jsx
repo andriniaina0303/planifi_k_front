@@ -125,7 +125,6 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
   dataIndex: config.getInfo,
   key: config.getInfo,
   width: config.getInfo === "subject" ? 500 : 100,
-
   render: (text) => {
     const isSmallScreen = screens.xs || screens.sm || screens.md;
 
@@ -176,11 +175,12 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
         width: 100,
         align: "left",
         // sorter: (a, b) => a.sends - b.sends,
-        render: (value) => (
+        render: (value) => {
+            return (
           <Text style={{ fontSize: 12, color: "#6b7280", fontWeight:"bolder" }}>
             {value}          
           </Text>
-        ),
+        )}
       },
       
       {
@@ -249,34 +249,34 @@ export const TopBrandsSlider = ({segmentNames, data, styles, key_value, label_va
       },
     ]:[]),
     {
-      title: config.modeFilter === "taux_clickers" ? "CTR" : "Open Rate",
-      dataIndex: config.modeFilter,
-      key: config.modeFilter,
+      title:"CTR",
+      dataIndex: "taux_clickers",
+      key: "taux_clickers",
       width: 70,
       align: "right",
-      sorter: (a, b) => (a[config.modeFilter] || 0) - (b[config.modeFilter] || 0),
+      sorter: (a, b) => (a.taux_clickers || 0) - (b.taux_clickers || 0),
       render: (value) => (
         <Text
           strong
           style={{
             fontSize: 12,
-            color: config.modeFilter === "taux_clickers" ? tokens.success : tokens.warning,
+            color: tokens.success
           }}
         >
-          {pct(value)}
+          {value}
         </Text>
       ),
     },
     {
-      title: config.modeFilter === "taux_clickers" ? "Open Rate" : "CTR",
-      dataIndex: config.modeFilter === "taux_clickers" ? "taux_openers" : "taux_clickers",
-      key: config.modeFilter === "taux_clickers" ? "taux_openers" : "taux_clickers",
+      title: "Open Rate",
+      dataIndex: "taux_openers",
+      key: "taux_openers",
       width: 80,
       align: "right",
-      sorter: (a, b) => (a[config.modeFilter === "taux_clickers" ? "taux_openers" : "taux_clickers"] || 0) - (b[config.modeFilter === "taux_clickers" ? "taux_openers" : "taux_clickers"] || 0),
+      sorter: (a, b) => (a.taux_openers || 0) - (b.taux_openers || 0),
       render: (value) => (
-        <Text style={{ fontSize: 11, color : config.modeFilter === "taux_clickers" ? tokens.warning : tokens.success}}>
-          {pct(value)}
+        <Text style={{ fontSize: 11, color : tokens.warning}}>
+          {value}
         </Text>
       ),
     },
