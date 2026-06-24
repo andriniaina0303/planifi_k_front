@@ -23,7 +23,7 @@ const COLORS = ["#722ed1", "#9254de", "#b37feb", "#531dab", "#8b5cf6"];
  * @param {any} props.tagValue - Valeur actuelle du tag sélectionné (issu des filtres du parent)
  * @param {Function} props.onTagChange - Callback déclenché au changement du tag pour notifier le parent
  */
-const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange }) => {
+const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop, styles }) => {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
 
@@ -166,6 +166,17 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange }) => {
 
     return () => chartRef.current?.destroy();
   }, [topDbs]);
+
+   if (loadingTop) {
+    return (
+      <Card>
+        <div style={styles.loaderContainer}>
+          <div style={styles.spinner}></div>
+          <p style={styles.text}>Loading seasonality reporting...</p>
+        </div>
+      </Card>
+    );
+  }
   return (
     <Card
       title="📊 Top 10 des Bases par tags"
