@@ -9,8 +9,8 @@
 
 
 
-import { LinkOutlined } from "@ant-design/icons";
-import { Popover, Space, Tooltip, Typography } from "antd";
+import { LinkOutlined, SearchOutlined } from "@ant-design/icons";
+import { Popover, Space, Tooltip, Typography, Select } from "antd";
 import {fmt,pct, usd,formatDate} from "../../../utils/Helpers";
 import { decodeBase64 } from "../../../utils/utils";
 import { tokens } from "../../../utils/Tokens";
@@ -113,16 +113,80 @@ export const buildListButton = (listNamesForBrand, tokens) => {
 
 
 
-export const createBrandCols = (segmentNames,listNames,agencyName) => [
+export const createBrandCols = (segmentNames,listNames,agencyName,rows=[]) => [
   {
     title: "Brand",
     dataIndex: "name",
     fixed: "left",
-    width:180,
+    width: 180,
     
+    // 1. Génération et gestion du dropdown de filtrage par Select
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+      
+      // Extraction dynamique des marques uniques présentes dans le tableau actuel
+      const brandOptions = Array.from(
+        new Set(
+          rows
+            .map((row) => row.name)
+            .filter(Boolean) // Élimine les valeurs nulles ou undefined
+        )
+      ).map((base64Name) => {
+        const decoded = decodeBase64(base64Name);
+        return {
+          value: base64Name, // On garde le Base64 comme valeur technique/ID pour le filtre
+          label: decoded,    // On affiche le nom décodé à l'utilisateur
+        };
+      }).sort((a, b) => a.label.localeCompare(b.label)); // Tri alphabétique des labels
+
+      return (
+        <div style={{ padding: 8, minWidth: 240 }} onKeyDown={(e) => e.stopPropagation()}>
+          <Select
+            mode="multiple"
+            allowClear
+            showSearch
+            style={{ width: '100%', marginBottom: 8 }}
+            placeholder="Sélectionner des marques"
+            value={selectedKeys}
+            onChange={(values) => setSelectedKeys(values ? values : [])}
+            options={brandOptions}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+          />
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+            <a 
+              onClick={() => confirm()} 
+              style={{ color: "#1677ff", fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              Filtrer
+            </a>
+            <a
+              onClick={() => {
+                clearFilters();
+                confirm({ closeDropdown: true });
+              }}
+              style={{ cursor: 'pointer', color: '#999' }}
+            >
+              Reset
+            </a>
+          </div>
+        </div>
+      );
+    },
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+
+    // 2. La logique de comparaison d'Antd
+    onFilter: (value, record) => {
+      // 'value' contient ici le nom en Base64 sélectionné dans le Select
+      // On fait une comparaison stricte sur la valeur brute (très rapide)
+      return record.name === value;
+    },
+
     render: (_, v) => (
       <>
-        <Text strong style={{display: "flex", fontSize: 12 }}>
+        <Text strong style={{ display: "flex", fontSize: 12 }}>
           {decodeBase64(v.name)}
         </Text>
         <Tooltip title={v.creativities}>    

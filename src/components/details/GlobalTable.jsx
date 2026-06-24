@@ -79,7 +79,7 @@ const BaseCard = ({ base, viewMode, setViewMode, allbase, clsConfig, styles, seg
   const cls = clsConfig[base.classification] || clsConfig.C;
   const health = getHealthScore(base);
   const dbMap = Object.fromEntries(allbase.map((db) => [db[idKey], db[nameKey]]));
-  const brandCols = createBrandCols(segmentNames,listNames,agencyName)
+  const brandCols = createBrandCols(segmentNames,listNames,agencyName,base.brands)
   // Etat pour filtrer dans dimensions brands 
   const [brandSort, setBrandSort] = useState("asc");
   // Etat pour gérer les segements appliquer à la base
@@ -506,6 +506,8 @@ export const GlobalTable = ({
   // Valeurs actuellement sélectionnées dans le filtre de la colonne "Databases".
   // Vide => aucun filtre actif => on exporte tout (comportement inchangé).
   const [selectedDbFilter, setSelectedDbFilter] = useState([]);
+  const [selectedBrandFilter, setSelectedBrandFilter] = useState([]);
+
   const [selectedBase, setSelectedBase] = useState(null); // ← ajout
   const { idKey, nameKey, singularKey, pluralKey } = getKeyMapping(allbase);
   // console.log("Contenu de AgencyName reçu dans GlobalTable: ",agencyName)
@@ -526,18 +528,52 @@ export const GlobalTable = ({
       key: `${b[`${dataIndex}_id`]}_${i}`,
     }));
   });
-
   if (f.minSends) d = d.filter((r) => r.sends >= f.minSends);
   if (f.cls) d = d.filter((r) => r.classification === f.cls);
   return d;
 }, [bases, f]);
+console.log("Contenu de rows : ", rows)
 
   // ── Données filtrées pour l'export ───────────────────────────────────────
-  const filteredBases = useMemo(() => {
-    if (!selectedDbFilter || selectedDbFilter.length === 0) return bases;
-    const selectedSet = new Set(selectedDbFilter.map(String));
-    return bases.filter((b) => selectedSet.has(String(b[idKey])));
-  }, [bases, selectedDbFilter, idKey]);
+ const filteredBases = useMemo(() => {
+  const hasDbFilter = selectedDbFilter && selectedDbFilter.length > 0;
+  const hasBrandFilter = selectedBrandFilter && selectedBrandFilter.length > 0;
+
+  // Si aucun filtre n'est activé, on retourne tout
+  if (!hasDbFilter && !hasBrandFilter) return bases;
+
+  const dbSet = new Set(selectedDbFilter.map(String));
+  const brandSet = new Set(selectedBrandFilter.map(String));
+
+  return bases
+    // 1. On applique le premier filtre global sur la base de données / l'annonceur
+    .filter((b) => {
+      if (!hasDbFilter) return true;
+      return dbSet.has(String(b[idKey]));
+    })
+    // 2. On reconstruit l'objet en filtrant les brands à l'intérieur
+    .map((b) => {
+      // Si aucun filtre de marque n'est coché, on garde toutes ses marques intactes
+      if (!hasBrandFilter) return b;
+
+      // Sinon, on ne garde que les marques cochées dans le filtre
+      const marquesFiltrees = (b.brands || []).filter((brand) => 
+        // /!\ Ajustez brand.name ou brand.brand_id selon ce que renvoie votre filtre AntD
+        brandSet.has(String(brand.name)) || brandSet.has(String(brand.brand_id))
+      );
+
+      // On retourne une copie de la base avec uniquement ses marques sélectionnées
+      return {
+        ...b,
+        brands: marquesFiltrees,
+      };
+    })
+    // 3. Sécurité : Si un annonceur n'a plus aucune marque valide après le filtre, on l'exclut de l'export
+    .filter((b) => b.brands && b.brands.length > 0);
+
+}, [bases, selectedDbFilter, selectedBrandFilter, idKey]);
+
+
 
   // On informe le parent (qui détient le bouton "Export") du sous-ensemble
   // actuellement filtré, pour qu'il l'utilise à la place de `bases` complet.
@@ -554,7 +590,7 @@ export const GlobalTable = ({
   );  
   const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
   console.log("Contenu de base: ", bases)
-  const brandCols = createBrandCols(segmentNames,listNames,agenceMap)
+  const brandCols = createBrandCols(segmentNames,listNames,agenceMap,rows)
   const baseCols  = [
     {
       title: `${titre}`,
@@ -804,11 +840,13 @@ export const GlobalTable = ({
             // 'filters' contient les valeurs sélectionnées par colonne filtrable,
             // ex: { [idKey]: ["123"] } ou { [idKey]: null } si reset/aucun filtre.
             setSelectedDbFilter(filters[idKey] || []);
+            // Filtre Brand (Ajustez "name" par la clé exacte configurée dans 'dataIndex' de votre colonne Brand)
+            setSelectedBrandFilter(filters["name"] || []);
           }}
           onRow={(record) => ({
           onClick: () => {
             setSelectedBase(record);
-            // console.log("Selected base:", record);
+            console.log("Selected base:", record);
           },
             style: { cursor: "pointer" },
           })}
