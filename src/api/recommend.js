@@ -5,7 +5,8 @@ export const getAllRecommendation = async (endpoints) => {
   
   try{
     if (endpoints){
-      const urlRec = `${config.REACT_APP_ENDPOINT_SEASONAL_RECOMMEND}+${endpoints}`
+      const urlRec = `${config.REACT_APP_ENDPOINT_SEASONAL_RECOMMEND}${endpoints}`
+      console.log("URL fetcher: ",urlRec)
       const response = await api.get(urlRec,{timeout:120000});
       return response.data
     }

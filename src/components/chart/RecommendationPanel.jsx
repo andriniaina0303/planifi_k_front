@@ -1,6 +1,5 @@
-// src/components/chart/RecommendationPanel.jsx
 import React, { useState } from "react";
-import { Card, Row, Col, Tag, Tooltip, Badge } from "antd";
+import { Card, Row, Col, Tag, Tooltip } from "antd";
 import { TrophyOutlined, RiseOutlined } from "@ant-design/icons";
 
 const MONTH_NAMES = [
@@ -22,40 +21,30 @@ const getRankBg = (rank) => {
   return "#fff";
 };
 
-const DatabaseRow = ({ item }) => (
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: "8px 12px",
-      marginBottom: 6,
-      borderRadius: 8,
-      background: getRankBg(item.rank),
-      border: `1px solid ${item.rank <= 3 ? getRankColor(item.rank) : "#f0f0f0"}`,
-      transition: "box-shadow 0.2s",
-    }}
-  >
+const ItemRow = ({ item, nameKey }) => (
+  <div style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "8px 12px",
+    marginBottom: 6,
+    borderRadius: 8,
+    background: getRankBg(item.rank),
+    border: `1px solid ${item.rank <= 3 ? getRankColor(item.rank) : "#f0f0f0"}`,
+  }}>
     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <span
-        style={{
-          minWidth: 28,
-          height: 28,
-          borderRadius: "50%",
-          background: getRankColor(item.rank),
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: "bold",
-          fontSize: 12,
-          color: item.rank <= 3 ? "#333" : "#888",
-        }}
-      >
+      <span style={{
+        minWidth: 28, height: 28, borderRadius: "50%",
+        background: getRankColor(item.rank),
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontWeight: "bold", fontSize: 12,
+        color: item.rank <= 3 ? "#333" : "#888",
+      }}>
         {item.rank}
       </span>
-      <Tooltip title={`Sends: ${item.sends?.toLocaleString()} | Open rate: ${item.open_rate}% | Click rate: ${item.click_rate}%`}>
+      <Tooltip title={` eCPM: ${item.ecpm ?? "-"}`}>
         <span style={{ fontSize: 13, fontWeight: item.rank <= 3 ? 600 : 400, color: "#333" }}>
-          {item.database_name?.trim()}
+          {item[nameKey]?.trim() ?? "—"}
         </span>
       </Tooltip>
     </div>
@@ -63,21 +52,16 @@ const DatabaseRow = ({ item }) => (
   </div>
 );
 
-const RecommendationPanel = ({ data }) => {
+const MonthPair = ({ currentMonth, nextMonth, nameKey, title }) => {
   const [showAll, setShowAll] = useState({ current: false, next: false });
-
-  if (!data) return null;
-
-  const { current_month, next_month } = data;
 
   const renderList = (monthData, key) => {
     const list = monthData?.data || [];
     const displayed = showAll[key] ? list : list.slice(0, 5);
-
     return (
       <>
-        {displayed.map((item) => (
-          <DatabaseRow key={item.database_id} item={item} />
+        {displayed.map((item, i) => (
+          <ItemRow key={item.database_id ?? item.advertiser_id ?? item.tag_id ?? i} item={item} nameKey={nameKey} />
         ))}
         {list.length > 5 && (
           <div
@@ -92,44 +76,89 @@ const RecommendationPanel = ({ data }) => {
   };
 
   return (
-    <Row gutter={12} style={{ marginTop: 16 }}>
-      {/* Mois en cours */}
-      <Col span={12}>
-       
-        <Card
-          size="small"
-          title={
-            <span>
-              <TrophyOutlined style={{ color: "#FFD700", marginRight: 6 }} />
-               <strong>{MONTH_NAMES[current_month?.month]} {current_month?.year}</strong>
-              <Tag color="blue" style={{ marginLeft: 8, fontSize: 11 }}>Mois en cours</Tag>
-            </span>
-          }
-          style={{ borderRadius: 10 }}
-          bodyStyle={{ padding: "10px 12px" }}
-        >
-          {renderList(current_month, "current")}
-        </Card>
-      </Col>
+    <div>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#555", marginBottom: 10, borderLeft: "3px solid #1890ff", paddingLeft: 8 }}>
+        {title}
+      </div>
+      <Row gutter={12}>
+        <Col span={12}>
+          <Card
+            size="small"
+            title={<span><TrophyOutlined style={{ color: "#FFD700", marginRight: 6 }} /><strong>{MONTH_NAMES[currentMonth?.month]} {currentMonth?.year}</strong><Tag color="blue" style={{ marginLeft: 8, fontSize: 11 }}>Mois en cours</Tag></span>}
+            style={{ borderRadius: 10 }}
+            bodyStyle={{ padding: "10px 12px" }}
+          >
+            {renderList(currentMonth, "current")}
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card
+            size="small"
+            title={<span><RiseOutlined style={{ color: "#52c41a", marginRight: 6 }} /><strong>{MONTH_NAMES[nextMonth?.month]}</strong><Tag color="green" style={{ marginLeft: 8, fontSize: 11 }}>Mois prochain</Tag></span>}
+            style={{ borderRadius: 10 }}
+            bodyStyle={{ padding: "10px 12px" }}
+          >
+            {renderList(nextMonth, "next")}
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
-      {/* Mois prochain */}
-      <Col span={12}>
-        <Card
-          size="small"
-          title={
-            <span>
-              <RiseOutlined style={{ color: "#52c41a", marginRight: 6 }} />
-              <strong>{MONTH_NAMES[next_month?.month]}</strong>
-              <Tag color="green" style={{ marginLeft: 8, fontSize: 11 }}>Mois prochain</Tag>
-            </span>
-          }
-          style={{ borderRadius: 10 }}
-          bodyStyle={{ padding: "10px 12px" }}
-        >
-          {renderList(next_month, "next")}
-        </Card>
-      </Col>
-    </Row>
+const RecommendationPanel = ({ databases, advertisers, tags }) => {
+  const [activeTab, setActiveTab] = useState("databases");
+
+  const sections = [
+    { key: "databases", label: "🗄️ Databases", title: "Recommandation des databases par eCPM", nameKey: "database_name", data: databases },
+    { key: "advertisers", label: "📢 Advertisers", title: "Recommandation des advertisers par eCPM", nameKey: "adv_name", data: advertisers },
+    { key: "tags", label: "🏷️ Tags", title: "Recommandation des tags par eCPM", nameKey: "tag_name", data: tags },
+  ].filter((s) => s.data);
+
+  if (!sections.length) return null;
+
+  const current = sections.find((s) => s.key === activeTab) ?? sections[0];
+
+  return (
+    <div style={{
+      background: "#fff",
+      borderRadius: 12,
+      border: "1px solid #f0f0f0",
+      padding: "16px 20px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    }}>
+      {/* Onglets manuels uniquement */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        {sections.map((s) => (
+          <button
+            key={s.key}
+            onClick={() => setActiveTab(s.key)}
+            style={{
+              padding: "4px 14px",
+              borderRadius: 20,
+              border: "none",
+              cursor: "pointer",
+              fontWeight: s.key === activeTab ? 700 : 400,
+              fontSize: 12,
+              background: s.key === activeTab ? "#1890ff" : "#f0f0f0",
+              color: s.key === activeTab ? "#fff" : "#555",
+              transition: "all 0.25s",
+            }}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Contenu de l'onglet actif */}
+      <MonthPair
+        key={current.key}
+        currentMonth={current.data?.current_month}
+        nextMonth={current.data?.next_month}
+        nameKey={current.nameKey}
+        title={current.title}
+      />
+    </div>
   );
 };
 
