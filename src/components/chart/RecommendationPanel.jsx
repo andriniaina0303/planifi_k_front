@@ -17,31 +17,31 @@ const SORT_OPTIONS = [
 ];
 
 // ─── Helpers visuels ──────────────────────────────────────────────────────────
-const getRankColor = (rank) => {
-  if (rank === 1) return "#FFD700";
-  if (rank === 2) return "#C0C0C0";
-  if (rank === 3) return "#CD7F32";
-  return "#e8f4fd";
-};
-const getRankBg = (rank) => {
-  if (rank === 1) return "#fffbe6";
-  if (rank === 2) return "#f5f5f5";
-  if (rank === 3) return "#fff7f0";
-  return "#fff";
-};
+// const getRankColor = (rank) => {
+//   if (rank === 1) return "#FFD700";
+//   if (rank === 2) return "#C0C0C0";
+//   if (rank === 3) return "#CD7F32";
+//   return "#e8f4fd";
+// };
+// const getRankBg = (rank) => {
+//   if (rank === 1) return "#fffbe6";
+//   if (rank === 2) return "#f5f5f5";
+//   if (rank === 3) return "#fff7f0";
+//   return "#fff";
+// };
 
-const RankBadge = ({ rank }) => (
-  <span style={{
-    minWidth: 26, height: 26, borderRadius: "50%",
-    background: getRankColor(rank),
-    display: "inline-flex", alignItems: "center", justifyContent: "center",
-    fontWeight: "bold", fontSize: 11,
-    color: rank <= 3 ? "#333" : "#888",
-    flexShrink: 0,
-  }}>
-    {rank}
-  </span>
-);
+// const RankBadge = ({ rank }) => (
+//   <span style={{
+//     minWidth: 26, height: 26, borderRadius: "50%",
+//     background: getRankColor(rank),
+//     display: "inline-flex", alignItems: "center", justifyContent: "center",
+//     fontWeight: "bold", fontSize: 11,
+//     color: rank <= 3 ? "#333" : "#888",
+//     flexShrink: 0,
+//   }}>
+//     {rank}
+//   </span>
+// );
 
 const MetricPill = ({ label, value, color = "#555" }) => (
   <span style={{
@@ -102,7 +102,11 @@ const AdvertiserRow = ({ adv }) => {
         <Chevron open={open} />
         {/* <RankBadge rank={adv.rank} /> */}
         <ShopOutlined style={{ color: "#8c8c8c", fontSize: 12 }} />
-        <span style={{ fontSize: 12, fontWeight: adv.rank <= 3 ? 600 : 400, color: "#333", flex: 1, minWidth: 100 }}>
+        <span style={{
+           fontSize: 12,
+            fontWeight:  400,
+             color: "#333",
+              flex: 1, minWidth: 100 }}>
           {adv.adv_name}
         </span>
         <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -122,8 +126,7 @@ const AdvertiserRow = ({ adv }) => {
           background: "#fafbfc",
           borderRadius: 8,
           border: "1px dashed #d9d9d9",
-          maxHeight: 320,      
-           overflowY: "auto",
+           
         }}>
           <div style={{ fontSize: 10, color: "#bbb", fontWeight: 600, letterSpacing: 0.5, marginBottom: 6 }}>
             TOP DATABASES
@@ -147,15 +150,15 @@ const TagItem = ({ item, nameKey }) => {
         style={{
           display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
           padding: "10px 12px", borderRadius: 10, cursor: "pointer",
-          background: open ? "#f0f5ff" : getRankBg(item.rank),
-          border: `1px solid ${item.rank <= 3 ? getRankColor(item.rank) : open ? "#d6e4ff" : "#f0f0f0"}`,
+          // background: open ? "#f0f5ff" : getRankBg(item.rank),
+          // border: `1px solid ${item.rank <= 3 ? getRankColor(item.rank) : open ? "#d6e4ff" : "#f0f0f0"}`,
           userSelect: "none", transition: "background 0.15s",
         }}
       >
         <Chevron open={open} />
-        <RankBadge rank={item.rank} />
+        {/* <RankBadge rank={item.rank} /> */}
         <TagsOutlined style={{ color: "#1890ff", fontSize: 12 }} />
-        <span style={{ fontSize: 13, fontWeight: item.rank <= 3 ? 700 : 500, color: "#1d1d1f", flex: 1, minWidth: 80 }}>
+        <span style={{ fontSize: 13, fontWeight:400, color: "#1d1d1f", flex: 1, minWidth: 80 }}>
           {item[nameKey]?.trim() ?? "—"}
         </span>
         <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -209,12 +212,7 @@ const MonthSection = ({ monthData, nameKey, monthIcon, monthLabel, monthTag }) =
         <span style={{ fontSize: 13, fontWeight: 700, color: "#555", display: "flex", alignItems: "center", gap: 6 }}>
           {monthIcon} {monthLabel} {monthTag}
         </span>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 11, color: "#aaa" }}>Trier :</span>
-          <Select size="small" value={sortBy} onChange={setSortBy} style={{ width: 110 }}>
-            {SORT_OPTIONS.map((o) => <Option key={o.value} value={o.value}>{o.label}</Option>)}
-          </Select>
-        </div>
+       
       </div>
 
       <List
