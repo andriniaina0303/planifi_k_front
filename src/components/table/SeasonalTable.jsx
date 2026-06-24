@@ -252,9 +252,9 @@ export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping,m
             value={modeFilters}
             onChange={(value) => setModeFilters(value)}
             options={[
-              { value: 'clicks', label: 'Top clickers' },
-              { value: 'ca', label: 'Top CA' },
-              { value: 'ecpm', label: 'Top eCPM' },
+              { value: 'clicks', label: 'Clickers' },
+              { value: 'ca', label: 'CA' },
+              { value: 'ecpm', label: 'eCpm' },
             ]}
           />
         </div>

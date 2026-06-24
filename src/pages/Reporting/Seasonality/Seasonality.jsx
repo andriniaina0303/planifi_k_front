@@ -7,17 +7,12 @@ import TopDbsTags from "../../../components/chart/TopDBTags";
 import { get_top_DB_tags } from "../../../api/databases";
 import { SeasonalHeatmap } from "../../../components/table/SeasonalTable";
 import { getTopAdvByTags } from "../../../api/advertiser";
-import RecommendationPanel from "../../../components/chart/RecommendationPanel";
-import { getRecommendDatabases } from "../../../api/recommend";
-
-
 
 const Seasonality = () => {
   const { setTagMapping } = useTagStore();
   const tagMapping = useTagStore((state) => state.tagMap);
   const [loading, setLoading] = useState(true);
   const [modeFilters,setModeFilters] = useState("ecpm")
-  const [recommendData, setRecommendData] = useState(null);
 
   const [filters, setFilters] = useState(() => {
     return {
@@ -52,9 +47,6 @@ const Seasonality = () => {
 
   const fetchReporting = async (startDate = null, endDate = null, tagID = null, filterBy = null) => {
     try {
-      const recommend = await getRecommendDatabases();
-      setRecommendData(recommend);
-
       setLoading(true);
       const adv_tags = await getTopAdvByTags(startDate, endDate, filterBy);
       const db_tags = await get_top_DB_tags(startDate, endDate, tagID);
@@ -131,7 +123,7 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
           />
         </Col>
       </Row>
-      <RecommendationPanel data={recommendData} />
+     
     </div>
   );
 };

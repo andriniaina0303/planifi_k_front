@@ -14,8 +14,8 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const generateDefaultDates = () => {
-  const endDate = dayjs();
-  const startDate = dayjs().subtract(4, 'months');
+  const startDate = dayjs().startOf('month'); // 1er du mois courant
+  const endDate = dayjs().endOf('month');     // Dernier jour du mois courant
   return {
     scheduleStart: startDate,
     scheduleEnd: endDate,
@@ -103,12 +103,13 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
     });
   };
   return (
-    <Card style={{ borderRadius: 10, background: "#ffffff" }}>
-      <Row gutter={8} align="bottom">     
+    <Card style={{ borderRadius: 10, background: "#ffffff" }} styles={{ body: { padding: "12px 16px" } }}>
+      {/* 1. Aligner verticalement au milieu pour égaliser toutes les hauteurs de composants */}
+      <Row gutter={8} align="middle">     
         
         {/* ================= DATE DÉBUT ================= */}
-        <Col span={2.4}>
-          <div style={labelFilter=== "tag"?styles.filterRow:styles.filterCol}>
+        <Col span={4}>
+          <div style={labelFilter === "tag" ? styles.filterRow : styles.filterCol}>
             <span style={styles.filterLabel}>Start Date: </span>
             <DatePicker
               value={pendingDates.scheduleStart}
@@ -118,7 +119,7 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
                   scheduleStart: date,
                 })
               }
-              style={{ width: "80%" }}
+              style={{ width: "100%" }}
               format="YYYY-MM-DD"
               placeholder="Start"
               status={hasDateChanged ? "warning" : ""}
@@ -127,8 +128,8 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
         </Col>
 
         {/* ================= DATE FIN ================= */}
-        <Col span={2.4}>
-          <div style={labelFilter=== "tag"?styles.filterRow:styles.filterCol}>
+        <Col span={4}>
+          <div style={labelFilter === "tag" ? styles.filterRow : styles.filterCol}>
             <span style={styles.filterLabel}>End Date: </span>
             <DatePicker
               value={pendingDates.scheduleEnd}
@@ -138,7 +139,7 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
                   scheduleEnd: date,
                 })
               }
-              style={{ width: "80%" }}
+              style={{ width: "100%" }}
               format="YYYY-MM-DD"
               placeholder="End"
               status={hasDateChanged ? "warning" : ""}
@@ -146,7 +147,7 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
           </div>
         </Col>
 
-        {labelFilter !== 'tag' ? (
+        {labelFilter !== 'tag' && (
           /* AFFICHE LA MULTI-SÉLECTION INITIALE */
           <Col flex="auto">
             <div style={styles.filterCol}>
@@ -175,13 +176,14 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
               />
             </div>
           </Col>
-        ):[]}
+        )}
 
         {/* ================= Filtre Country ================= */}
         {countries.length > 0 && (
-          <Col span={2.4}>
+          <Col span={3}>
             <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>Country</span>
+              {/* N'affiche le label "Country" que si ce n'est pas un tag, pour garder la ligne fine */}
+              {labelFilter !== "tag" && <span style={styles.filterLabel}>Country</span>}
               <Select
                 value={filters.country}
                 style={{ width: "100%" }}
@@ -200,10 +202,11 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
           </Col>
         )}
 
-        {/* ================= BOUTON RESET (TOUJOURS VISIBLE) ================= */}
-        <Col span={2.4}>
+        {/* ================= BOUTON RESET ================= */}
+        <Col span={3}>
           <div style={styles.filterCol}>
-            <span style={styles.filterLabel}>&nbsp;</span>
+            {/* 2. CONDITION ICI : On supprime complètement l'espace vide si c'est un tag */}
+            {labelFilter !== "tag" && <span style={styles.filterLabel}>&nbsp;</span>}
             <Button 
               type="primary"
               icon={<ReloadOutlined />}
@@ -216,11 +219,12 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
           </div>
         </Col>
 
-        {/* ================= BOUTONS ACTIONS (SEARCH / FILTER / ANNULER) ================= */}
+        {/* ================= BOUTONS ACTIONS ================= */}
         {(hasSelectionChanged || hasDateChanged) && (
           <Col span={3}>
             <div style={styles.filterCol}>
-              <span style={styles.filterLabel}>&nbsp;</span>
+              {/* 3. CONDITION ICI AUSSI : Pas d'espace supérieur en mode tag */}
+              {labelFilter !== "tag" && <span style={styles.filterLabel}>&nbsp;</span>}
               <div style={{ display: "flex", gap: 6 }}>
                 <Button
                   type="primary"
@@ -245,7 +249,6 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
                   {hasSelectionChanged ? "Search" : "Filter"}
                 </Button>
 
-                {/* Bouton Annuler (✕) visible si changement de date uniquement */}
                 {hasDateChanged && !hasSelectionChanged && (
                   <Button
                     type="default"
@@ -268,8 +271,9 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
 
 const styles = {
   filterCol: { display: "flex", flexDirection: "column", gap: 5 },
-  filterRow: {display:"flex", flexDirection: "row", gap:8, whiteSpace: "nowrap", alignItems: "center"},
+  filterRow: {width:"170px",display:"flex", flexDirection: "row", gap:8, whiteSpace: "nowrap", justifyContents: 'space-between',alignItems: "center"},
   filterLabel: { fontSize: 12, color: "#888", margin:0 },
+  filterCard: {}
 };
 
 export { DEFAULT_FILTERS, generateDefaultDates };

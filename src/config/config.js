@@ -29,3 +29,5 @@ export const REACT_APP_ENDPOINT_ALL_MAPPING = REACT_APP_ENDPOINT + '/reporting/'
 
 // Récupérer les tops des advertisers par tags au cours des mois de l'années 
 export const REACT_APP_ENDPOINT_ADV_BY_TAGS  = REACT_APP_ENDPOINT + '/reporting/top_advertisers'
+
+export const REACT_APP_ENDPOINT_SEASONAL_RECOMMEND = REACT_APP_ENDPOINT + '/reporting/recommend/'
