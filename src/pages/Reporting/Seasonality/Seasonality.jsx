@@ -12,21 +12,22 @@ import { getAllRecommendation } from "../../../api/recommend";
 
 const Seasonality = () => {
   const tagMapping = useTagStore((state) => state.tagMap);
+
   const [loading, setLoading] = useState(true);
-  const [loadingTopDB, setLoadingTopDB] = useState(false); // ── Géré de façon autonome ──
+  const [loadingTopDB, setLoadingTopDB] = useState(false); // Géré de façon autonome pour le composant de droite
   const [modeFilters, setModeFilters] = useState("ecpm");
+  const [sortBy, setSortBy] = useState("ecpm");
   const [filters, setFilters] = useState(() => ({
     ...DEFAULT_FILTERS,
     scheduleStart: dayjs().startOf('year'),
     scheduleEnd: dayjs().endOf('year'),
   }));
+
   const [topdbTags, setTopdbTags] = useState([]);
   const [topAdvTags, setTopAdvTags] = useState([]);
   const [recommendTags, setRecommendTags] = useState(null);
 
   const styles = {
-    filterCol: { display: "flex", flexDirection: "column", gap: 5 },
-    filterLabel: { fontSize: 12, color: "#888" },
     loaderContainer: {
       display: "flex",
       flexDirection: "column",
@@ -45,51 +46,72 @@ const Seasonality = () => {
     text: { marginTop: "10px", fontSize: "14px", color: "#666" },
   };
 
-  // ── 1. Fetch Global (Premier chargement ou changement de date global) ──
-  const fetchGlobalReporting = async (startDate, endDate, filterBy) => {
+  // ── 1. Fetch Global (Heatmap + Recommandations) ──
+  const fetchReporting = async (startDate = null, endDate = null, filterBy = null, sort = "ecpm") => {
     try {
       setLoading(true);
       const [adv_tags, recTags] = await Promise.all([
         getTopAdvByTags(startDate, endDate, filterBy),
-        getAllRecommendation(filterBy),
+        getAllRecommendation(sort),
       ]);
       setTopAdvTags(adv_tags);
       setRecommendTags(recTags);
     } catch (error) {
       console.error("❌ Erreur lors du fetch global:", error);
       setTopAdvTags([]);
+      setRecommendTags(null);
     } finally {
       setLoading(false);
     }
   };
 
-  // ── 2. Fetch Spécifique pour le composant Top DBs (Cliquable/Indépendant) ──
+  // ── 2. Fetch Spécifique pour le composant Top DBs (Autonome & Rapide) ──
   const fetchTopDBReporting = async (startDate, endDate, tagID) => {
     try {
-      setLoadingTopDB(true); // Active le loader ciblé
+      setLoadingTopDB(true);
       const db_tags = await get_top_DB_tags(startDate, endDate, tagID);
       setTopdbTags(db_tags);
     } catch (error) {
       console.error("❌ Erreur lors du fetch Top DB:", error);
       setTopdbTags([]);
     } finally {
-      setLoadingTopDB(false); // Désactive le loader ciblé à coup sûr
+      setLoadingTopDB(false);
     }
   };
 
-  // ── Effect A : Écoute les filtres généraux (Dates, Mode eCPM/Volume) ──
+  // ── Effect A : Écoute les filtres généraux (Sauf le filtre Tag pour éviter le rechargement global) ──
   useEffect(() => {
     if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchGlobalReporting(filters.scheduleStart, filters.scheduleEnd, modeFilters);
+      fetchReporting(
+        filters.scheduleStart,
+        filters.scheduleEnd,
+        modeFilters,
+        sortBy
+      );
     }
-  }, [filters.scheduleStart, filters.scheduleEnd, modeFilters]);
+  }, [filters.scheduleStart, filters.scheduleEnd, modeFilters, sortBy]);
 
-  // ── Effect B : Écoute les changements liés au Top DB (y compris le clic sur un Tag) ──
+  // ── Effect B : Écoute spécifiquement le composant Top DBs (Réagit au changement de date et de Tag) ──
   useEffect(() => {
     if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchTopDBReporting(filters.scheduleStart, filters.scheduleEnd, filters.tag || null);
+      fetchTopDBReporting(
+        filters.scheduleStart,
+        filters.scheduleEnd,
+        filters.tag || null
+      );
     }
   }, [filters.scheduleStart, filters.scheduleEnd, filters.tag]);
+
+  // Changement du tri provenant de RecommendationPanel
+  const handleSortChange = async (val) => {
+    setSortBy(val);
+    try {
+      const recTags = await getAllRecommendation(val);
+      setRecommendTags(recTags);
+    } catch (error) {
+      console.error("❌ Erreur recommandation:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -130,16 +152,19 @@ const Seasonality = () => {
             data={topdbTags}
             tagNames={tagMapping}
             tagValue={filters.tag}
-            // ── Correction ici : on met juste à jour l'état, les useEffects s'occupent du reste ──
             onTagChange={(value) => setFilters((prev) => ({ ...prev, tag: value }))}
-            loadingTop={loadingTopDB}
+            loadingTop={loadingTopDB} // Prop nettoyé, utilise la bonne variable autonome
             styles={styles}
           />
         </Col>
       </Row>
 
-      {/* Panel recommandations avec auto-slide */}
-      <RecommendationPanel tags={recommendTags} />
+      {/* Panel recommandations */}
+      <RecommendationPanel
+        tags={recommendTags}
+        sortBy={sortBy}
+        onSortChange={handleSortChange}
+      />
     </div>
   );
 };
