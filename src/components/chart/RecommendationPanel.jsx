@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Tag, Tooltip } from "antd";
+import { Card, Row, Col, Tag, Tooltip, List } from "antd";
 import { TrophyOutlined, RiseOutlined } from "@ant-design/icons";
 
 const MONTH_NAMES = [
@@ -59,19 +59,19 @@ const MonthPair = ({ currentMonth, nextMonth, nameKey, title }) => {
     const list = monthData?.data || [];
     const displayed = showAll[key] ? list : list.slice(0, 5);
     return (
-      <>
-        {displayed.map((item, i) => (
-          <ItemRow key={item.database_id ?? item.advertiser_id ?? item.tag_id ?? i} item={item} nameKey={nameKey} />
-        ))}
-        {list.length > 5 && (
-          <div
-            style={{ textAlign: "center", marginTop: 8, cursor: "pointer", color: "#1890ff", fontSize: 12 }}
-            onClick={() => setShowAll((prev) => ({ ...prev, [key]: !prev[key] }))}
-          >
-            {showAll[key] ? "▲ Voir moins" : `▼ Voir les ${list.length - 5} autres`}
-          </div>
-        )}
-      </>
+      <List
+        rowKey="tag_id"
+        dataSource={list}
+        pagination={{
+          size: "small",
+          align:"center",
+          hideOnSinglePage: true,
+          pageSize : 5
+        }}
+        renderItem={(item) => 
+          <ItemRow  item={item} nameKey={nameKey} />
+        }
+      />
     );
   };
 
@@ -106,18 +106,10 @@ const MonthPair = ({ currentMonth, nextMonth, nameKey, title }) => {
   );
 };
 
-const RecommendationPanel = ({ databases, advertisers, tags }) => {
-  const [activeTab, setActiveTab] = useState("databases");
+const RecommendationPanel = ({ tags }) => {
 
-  const sections = [
-    { key: "databases", label: "🗄️ Databases", title: "Recommandation des databases par eCPM", nameKey: "database_name", data: databases },
-    { key: "advertisers", label: "📢 Advertisers", title: "Recommandation des advertisers par eCPM", nameKey: "adv_name", data: advertisers },
-    { key: "tags", label: "🏷️ Tags", title: "Recommandation des tags par eCPM", nameKey: "tag_name", data: tags },
-  ].filter((s) => s.data);
-
-  if (!sections.length) return null;
-
-  const current = sections.find((s) => s.key === activeTab) ?? sections[0];
+  const sections = 
+    { key: "tags", label: "🏷️ Tags", title: "Recommandation des tags par eCPM", nameKey: "tag_name", data: tags }
 
   return (
     <div style={{
@@ -127,36 +119,14 @@ const RecommendationPanel = ({ databases, advertisers, tags }) => {
       padding: "16px 20px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     }}>
-      {/* Onglets manuels uniquement */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        {sections.map((s) => (
-          <button
-            key={s.key}
-            onClick={() => setActiveTab(s.key)}
-            style={{
-              padding: "4px 14px",
-              borderRadius: 20,
-              border: "none",
-              cursor: "pointer",
-              fontWeight: s.key === activeTab ? 700 : 400,
-              fontSize: 12,
-              background: s.key === activeTab ? "#1890ff" : "#f0f0f0",
-              color: s.key === activeTab ? "#fff" : "#555",
-              transition: "all 0.25s",
-            }}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
 
       {/* Contenu de l'onglet actif */}
       <MonthPair
-        key={current.key}
-        currentMonth={current.data?.current_month}
-        nextMonth={current.data?.next_month}
-        nameKey={current.nameKey}
-        title={current.title}
+        key={tags?.length}
+        currentMonth={sections.data?.current_month}
+        nextMonth={sections.data?.next_month}
+        nameKey={sections.nameKey}
+        title={sections.title}
       />
     </div>
   );

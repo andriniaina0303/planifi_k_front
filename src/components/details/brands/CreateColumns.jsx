@@ -119,6 +119,7 @@ export const createBrandCols = (segmentNames,listNames,agencyName) => [
     dataIndex: "name",
     fixed: "left",
     width:180,
+    
     render: (_, v) => (
       <>
         <Text strong style={{display: "flex", fontSize: 12 }}>

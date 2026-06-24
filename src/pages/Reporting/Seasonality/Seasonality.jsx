@@ -26,8 +26,6 @@ const Seasonality = () => {
   const [topdbTags, setTopdbTags] = useState([]);
   const [topAdvTags, setTopAdvTags] = useState([]);
 
-  const [recommendDatabases, setRecommendDatabases] = useState(null);
-  const [recommendAdvertisers, setRecommendAdvertisers] = useState(null);
   const [recommendTags, setRecommendTags] = useState(null);
 
   
@@ -56,18 +54,14 @@ const Seasonality = () => {
     try {
       setLoading(true);
 
-       const [adv_tags, db_tags, recDatabases, recAdvertisers, recTags] = await Promise.all([
+       const [adv_tags, db_tags, recTags] = await Promise.all([
         getTopAdvByTags(startDate, endDate, filterBy),
         get_top_DB_tags(startDate, endDate, tagID),
-        getAllRecommendation('databases'),
-        getAllRecommendation('advertisers'),
-        getAllRecommendation('tags'),
+        getAllRecommendation(filterBy),
       ]);
 
       setTopAdvTags(adv_tags);
       setTopdbTags(db_tags);
-      setRecommendDatabases(recDatabases);
-      setRecommendAdvertisers(recAdvertisers);
       setRecommendTags(recTags);
     } catch (error) {
       console.error("❌ Erreur lors du fetch:", error);
@@ -92,7 +86,7 @@ const Seasonality = () => {
       </div>
     );
   }
-console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.format("MMMM YYYY"));
+console.log("Valeur de recommendation: ",recommendTags)
   return (
     <div style={{ padding: 24, height: "auto", display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Filtres */}
@@ -130,8 +124,6 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
 
       {/* 👑 Panel recommandations avec auto-slide */}
       <RecommendationPanel
-        databases={recommendDatabases}
-        advertisers={recommendAdvertisers}
         tags={recommendTags}
       />
     </div>
