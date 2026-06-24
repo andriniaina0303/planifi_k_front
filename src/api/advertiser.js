@@ -31,7 +31,7 @@ export async function get_liste_advertisers(startDate = null, endDate = null, co
 
   // ── AUJOURD'HUI - 3 MOIS ──
   const threeMonthsAgo = new Date();
-  threeMonthsAgo.setMonth(today.getMonth() - 3);
+  threeMonthsAgo.setMonth(today.getMonth());
 
   // ── VALEURS PAR DÉFAUT ──
   // Convertir les objets dayjs en Date avant d'appeler formatDate
@@ -206,7 +206,7 @@ export async function getTopAdvByTags (startDate, endDate, filtersBy) {
         console.log("Mandatory fields missing, please check all fields.")
         return []
       }
-      
+
 
   const date_start = startDate.format && startDate.format("YYYY-MM-DD")
   const date_end = endDate.format && endDate.format("YYYY-MM-DD")

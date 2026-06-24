@@ -44,9 +44,9 @@ export async function get_all_databases(startDate = null, endDate = null, countr
   // ── DATE DU JOUR ──
   const today = new Date();
 
-  // ── AUJOURD'HUI - 3 MOIS ──
+  // ── LE MOIS COURANT ──
   const threeMonthsAgo = new Date();
-  threeMonthsAgo.setMonth(today.getMonth() - 3);
+  threeMonthsAgo.setMonth(today.getMonth());
 
   // ── VALEURS PAR DÉFAUT ──
   // Convertir les objets dayjs en Date avant d'appeler formatDate

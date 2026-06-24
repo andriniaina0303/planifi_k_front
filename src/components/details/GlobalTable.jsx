@@ -578,7 +578,7 @@ export const GlobalTable = ({
               mode="multiple" // FORCE LA MULTI-SÉLECTION
               allowClear
               style={{ width: '100%', marginBottom: 8 }}
-              placeholder="Sélectionner les DB"
+              placeholder="Sélectionner des advertisers"
               // selectedKeys est un tableau contenant les valeurs sélectionnées
               value={selectedKeys}
               // On passe directement le tableau de valeurs sélectionnées

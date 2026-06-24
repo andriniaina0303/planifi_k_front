@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import dayjs from "dayjs"; // 👑 Assurez-vous d'importer dayjs ici
-import { Row, Col, Select, Calendar } from "antd";
+import dayjs from "dayjs";
+import { Row, Col } from "antd";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
 import { useTagStore } from "../../../utils/storedZustand";
 import TopDbsTags from "../../../components/chart/TopDBTags";
@@ -8,32 +8,28 @@ import { get_top_DB_tags } from "../../../api/databases";
 import { SeasonalHeatmap } from "../../../components/table/SeasonalTable";
 import { getTopAdvByTags } from "../../../api/advertiser";
 import RecommendationPanel from "../../../components/chart/RecommendationPanel";
-import { getRecommendDatabases, getRecommendAdvertisers, getRecommendTags } from "../../../api/recommend";
-
-
+import { getAllRecommendation } from "../../../api/recommend";
 
 const Seasonality = () => {
   const { setTagMapping } = useTagStore();
   const tagMapping = useTagStore((state) => state.tagMap);
+
   const [loading, setLoading] = useState(true);
-  const [modeFilters,setModeFilters] = useState("ecpm")
-  const [filters, setFilters] = useState(() =>( {
-         ...DEFAULT_FILTERS,
-      scheduleStart: dayjs().startOf('year'), // 👑 Fixe au 1er Janvier de l'année en cours (00:00:00)
-      scheduleEnd: dayjs().endOf('year'),     // 👑 Fixe au 31 Décembre de l'année en cours (23:59:59)
-    
+  const [loadingDbTags, setLoadingDbTags] = useState(true);
+  const [modeFilters, setModeFilters] = useState("ecpm");
+  const [sortBy, setSortBy] = useState("ecpm");
+
+  const [filters, setFilters] = useState(() => ({
+    ...DEFAULT_FILTERS,
+    scheduleStart: dayjs().startOf("year"),
+    scheduleEnd: dayjs().endOf("year"),
   }));
+
   const [topdbTags, setTopdbTags] = useState([]);
   const [topAdvTags, setTopAdvTags] = useState([]);
-
-  const [recommendDatabases, setRecommendDatabases] = useState(null);
-  const [recommendAdvertisers, setRecommendAdvertisers] = useState(null);
   const [recommendTags, setRecommendTags] = useState(null);
 
-  
   const styles = {
-    filterCol: { display: "flex", flexDirection: "column", gap: 5 },
-    filterLabel: { fontSize: 12, color: "#888" },
     loaderContainer: {
       display: "flex",
       flexDirection: "column",
@@ -52,27 +48,26 @@ const Seasonality = () => {
     text: { marginTop: "10px", fontSize: "14px", color: "#666" },
   };
 
-  const fetchReporting = async (startDate = null, endDate = null, tagID = null, filterBy = null) => {
+  // 👑 Fetch principal (heatmap + topDB + recommandations)
+  const fetchReporting = async (startDate = null, endDate = null, tagID = null, filterBy = null, sort = "ecpm") => {
     try {
       setLoading(true);
+      setLoadingDbTags(true);
 
-       const [adv_tags, db_tags, recDatabases, recAdvertisers, recTags] = await Promise.all([
+      const [adv_tags, db_tags, recTags] = await Promise.all([
         getTopAdvByTags(startDate, endDate, filterBy),
-        get_top_DB_tags(startDate, endDate, tagID),
-        getRecommendDatabases(),
-        getRecommendAdvertisers(),
-        getRecommendTags(),
+        get_top_DB_tags(startDate, endDate, tagID).finally(() => setLoadingDbTags(false)),
+        getAllRecommendation(sort),
       ]);
 
       setTopAdvTags(adv_tags);
       setTopdbTags(db_tags);
-      setRecommendDatabases(recDatabases);
-      setRecommendAdvertisers(recAdvertisers);
       setRecommendTags(recTags);
     } catch (error) {
       console.error("❌ Erreur lors du fetch:", error);
       setTopAdvTags([]);
       setTopdbTags([]);
+      setRecommendTags(null);
     } finally {
       setLoading(false);
     }
@@ -80,9 +75,26 @@ const Seasonality = () => {
 
   useEffect(() => {
     if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchReporting(filters.scheduleStart, filters.scheduleEnd, filters.tag || null, modeFilters);
+      fetchReporting(
+        filters.scheduleStart,
+        filters.scheduleEnd,
+        filters.tag || null,
+        modeFilters,
+        sortBy
+      );
     }
-  }, [filters.scheduleStart, filters.scheduleEnd, filters.tag, modeFilters]);
+  }, [filters.scheduleStart, filters.scheduleEnd, filters.tag, modeFilters, sortBy]);
+
+  // 👑 Changement du tri API depuis RecommendationPanel → relance uniquement getAllRecommendation
+  const handleSortChange = async (val) => {
+    setSortBy(val);
+    try {
+      const recTags = await getAllRecommendation(val);
+      setRecommendTags(recTags);
+    } catch (error) {
+      console.error("❌ Erreur recommandation:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -92,7 +104,7 @@ const Seasonality = () => {
       </div>
     );
   }
-console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.format("MMMM YYYY"));
+
   return (
     <div style={{ padding: 24, height: "auto", display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Filtres */}
@@ -123,15 +135,17 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
             data={topdbTags}
             tagNames={tagMapping}
             tagValue={filters.tag}
+            loading={loadingDbTags}
             onTagChange={(value) => setFilters((prev) => ({ ...prev, tag: value }))}
           />
         </Col>
       </Row>
 
-      {/* 👑 Panel recommandations avec auto-slide */}
+      {/* 👑 Panel recommandations */}
       <RecommendationPanel
-         startDate={filters.scheduleStart}
-           endDate={filters.scheduleEnd}
+        tags={recommendTags}
+        sortBy={sortBy}
+        onSortChange={handleSortChange}
       />
     </div>
   );
