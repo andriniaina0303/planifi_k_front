@@ -130,9 +130,8 @@ console.log("Mois configuré dans le calendrier :", filters.scheduleStart?.forma
 
       {/* 👑 Panel recommandations avec auto-slide */}
       <RecommendationPanel
-        databases={recommendDatabases}
-        advertisers={recommendAdvertisers}
-        tags={recommendTags}
+         startDate={filters.scheduleStart}
+           endDate={filters.scheduleEnd}
       />
     </div>
   );
