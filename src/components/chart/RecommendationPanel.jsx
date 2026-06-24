@@ -1,6 +1,5 @@
-// src/components/chart/RecommendationPanel.jsx
-import React, { useState } from "react";
-import { Card, Row, Col, Tag, Tooltip, Badge } from "antd";
+import React, { useState, useEffect, useRef } from "react";
+import { Card, Row, Col, Tag, Tooltip } from "antd";
 import { TrophyOutlined, RiseOutlined } from "@ant-design/icons";
 
 const MONTH_NAMES = [
@@ -22,7 +21,8 @@ const getRankBg = (rank) => {
   return "#fff";
 };
 
-const DatabaseRow = ({ item }) => (
+
+const ItemRow = ({ item, nameKey }) => (
   <div
     style={{
       display: "flex",
@@ -33,7 +33,6 @@ const DatabaseRow = ({ item }) => (
       borderRadius: 8,
       background: getRankBg(item.rank),
       border: `1px solid ${item.rank <= 3 ? getRankColor(item.rank) : "#f0f0f0"}`,
-      transition: "box-shadow 0.2s",
     }}
   >
     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -53,31 +52,29 @@ const DatabaseRow = ({ item }) => (
       >
         {item.rank}
       </span>
-      <Tooltip title={`Sends: ${item.sends?.toLocaleString()} | Open rate: ${item.open_rate}% | Click rate: ${item.click_rate}%`}>
+      <Tooltip
+        title={`eCPM: ${item.ecpm ?? "-"}`}
+      >
         <span style={{ fontSize: 13, fontWeight: item.rank <= 3 ? 600 : 400, color: "#333" }}>
-          {item.database_name?.trim()}
+          {item[nameKey]?.trim() ?? "—"}
         </span>
       </Tooltip>
     </div>
-   
+    
   </div>
 );
 
-const RecommendationPanel = ({ data }) => {
+// ─── Paire de cards (mois en cours + mois prochain) ──────────────────────────s
+const MonthPair = ({ currentMonth, nextMonth, nameKey, title }) => {
   const [showAll, setShowAll] = useState({ current: false, next: false });
-
-  if (!data) return null;
-
-  const { current_month, next_month } = data;
 
   const renderList = (monthData, key) => {
     const list = monthData?.data || [];
     const displayed = showAll[key] ? list : list.slice(0, 5);
-
     return (
       <>
-        {displayed.map((item) => (
-          <DatabaseRow key={item.database_id} item={item} />
+        {displayed.map((item, i) => (
+          <ItemRow key={item.database_id ?? item.advertiser_id ?? item.tag_id ?? i} item={item} nameKey={nameKey} />
         ))}
         {list.length > 5 && (
           <div
@@ -92,44 +89,182 @@ const RecommendationPanel = ({ data }) => {
   };
 
   return (
-    <Row gutter={12} style={{ marginTop: 16 }}>
-      {/* Mois en cours */}
-      <Col span={12}>
-       
-        <Card
-          size="small"
-          title={
-            <span>
-              <TrophyOutlined style={{ color: "#FFD700", marginRight: 6 }} />
-               <strong>{MONTH_NAMES[current_month?.month]} {current_month?.year}</strong>
-              <Tag color="blue" style={{ marginLeft: 8, fontSize: 11 }}>Mois en cours</Tag>
-            </span>
-          }
-          style={{ borderRadius: 10 }}
-          bodyStyle={{ padding: "10px 12px" }}
-        >
-          {renderList(current_month, "current")}
-        </Card>
-      </Col>
+    <div style={{ minWidth: "100%", padding: "0 4px", boxSizing: "border-box" }}>
+      {/* Titre de section */}
+      <div style={{
+        fontSize: 13,
+        fontWeight: 700,
+        color: "#555",
+        marginBottom: 10,
+        paddingLeft: 4,
+        borderLeft: "3px solid #1890ff",
+        paddingLeft: 8,
+      }}>
+        {title}
+      </div>
 
-      {/* Mois prochain */}
-      <Col span={12}>
-        <Card
-          size="small"
-          title={
-            <span>
-              <RiseOutlined style={{ color: "#52c41a", marginRight: 6 }} />
-              <strong>{MONTH_NAMES[next_month?.month]}</strong>
-              <Tag color="green" style={{ marginLeft: 8, fontSize: 11 }}>Mois prochain</Tag>
-            </span>
-          }
-          style={{ borderRadius: 10 }}
-          bodyStyle={{ padding: "10px 12px" }}
-        >
-          {renderList(next_month, "next")}
-        </Card>
-      </Col>
-    </Row>
+      <Row gutter={12}>
+        {/* Mois en cours */}
+        <Col span={12}>
+          <Card
+            size="small"
+            title={
+              <span>
+                <TrophyOutlined style={{ color: "#FFD700", marginRight: 6 }} />
+                <strong>{MONTH_NAMES[currentMonth?.month]} {currentMonth?.year}</strong>
+                <Tag color="blue" style={{ marginLeft: 8, fontSize: 11 }}>Mois en cours</Tag>
+              </span>
+            }
+            style={{ borderRadius: 10 }}
+            bodyStyle={{ padding: "10px 12px" }}
+          >
+            {renderList(currentMonth, "current")}
+          </Card>
+        </Col>
+
+        {/* Mois prochain */}
+        <Col span={12}>
+          <Card
+            size="small"
+            title={
+              <span>
+                <RiseOutlined style={{ color: "#52c41a", marginRight: 6 }} />
+                <strong>{MONTH_NAMES[nextMonth?.month]}</strong>
+                <Tag color="green" style={{ marginLeft: 8, fontSize: 11 }}>Mois prochain</Tag>
+              </span>
+            }
+            style={{ borderRadius: 10 }}
+            bodyStyle={{ padding: "10px 12px" }}
+          >
+            {renderList(nextMonth, "next")}
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
+// ─── Composant principal ──────────────────────────────────────────────────────
+const RecommendationPanel = ({ databases, advertisers, tags }) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const intervalRef = useRef(null);
+
+  const slides = [
+    {
+      key: "databases",
+      title: "Recommandation des databases par eCPM",
+      nameKey: "database_name",
+      data: databases,
+    },
+    {
+      key: "advertisers",
+      title: "Recommandation des advertisers par eCPM",
+      nameKey: "adv_name",
+      data: advertisers,
+    },
+    {
+      key: "tags",
+      title: "Recommandation des tags par eCPM",
+      nameKey: "tag_name",
+      data: tags,
+    },
+  ].filter((s) => s.data);
+
+  // Auto-slide toutes les 6 secondes
+  const startTimer = () => {
+    intervalRef.current = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+  };
+
+  useEffect(() => {
+    if (slides.length > 1) startTimer();
+    return () => clearInterval(intervalRef.current);
+  }, [slides.length]);
+
+  const goTo = (idx) => {
+    setActiveSlide(idx);
+    clearInterval(intervalRef.current);
+    startTimer(); // repart depuis 0 après clic manuel
+  };
+
+  if (!slides.length) return null;
+
+  const current = slides[activeSlide];
+
+  return (
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: 12,
+        border: "1px solid #f0f0f0",
+        padding: "16px 20px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+        overflow: "hidden",
+      }}
+    >
+      {/* ── Onglets / indicateurs ── */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+        {slides.map((s, i) => (
+          <button
+            key={s.key}
+            onClick={() => goTo(i)}
+            style={{
+              padding: "4px 14px",
+              borderRadius: 20,
+              border: "none",
+              cursor: "pointer",
+              fontWeight: i === activeSlide ? 700 : 400,
+              fontSize: 12,
+              background: i === activeSlide ? "#1890ff" : "#f0f0f0",
+              color: i === activeSlide ? "#fff" : "#555",
+              transition: "all 0.25s",
+            }}
+          >
+            {s.key === "databases" ? "🗄️ Databases" : s.key === "advertisers" ? "📢 Advertisers" : "🏷️ Tags"}
+          </button>
+        ))}
+
+        {/* Barre de progression */}
+        {/* <div style={{ flex: 1, height: 3, background: "#f0f0f0", borderRadius: 4, overflow: "hidden" }}>
+          <div
+            key={activeSlide} // reset l'animation à chaque changement
+            style={{
+              height: "100%",
+              background: "#1890ff",
+              borderRadius: 4,
+              animation: "progress 6s linear forwards",
+            }}
+          />
+        </div> */}
+      </div>
+
+      {/* ── Contenu animé ── */}
+      <div
+        key={activeSlide}
+        style={{ animation: "fadeSlide 0.4s ease" }}
+      >
+        <MonthPair
+          currentMonth={current.data?.current_month}
+          nextMonth={current.data?.next_month}
+          nameKey={current.nameKey}s
+          title={current.title}
+        />
+      </div>
+
+      {/* ── Styles CSS keyframes ── */}
+      <style>{`
+        @keyframes fadeSlide {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes progress {
+          from { width: 0%; }
+          to   { width: 100%; }
+        }
+      `}
+      </style>
+    </div>
   );
 };
 
