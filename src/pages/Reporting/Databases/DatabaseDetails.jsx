@@ -310,6 +310,8 @@ const DatabaseDetail = ({ _mockData }) => {
   // État pour les mappings de tags
   const tagMapping = useTagStore((state) => state.tagMap);
 
+
+
   const [selectedSegments, setSelectedSegments] = useState(['include_o_age', 'include_o_gender', 'include_o_isp']);
   // Etat de tout les segments de la base 
   const [allsegmentNames,setAllSegmentNames] = useState({})
@@ -333,7 +335,6 @@ useEffect(() => {
   try {
     const agences = await getMappingData('agences', 'agences')
     
-    console.log("Nom d'agence fetcher: ", agences)
     setAgenceMapping(agences);
   } catch (e) {
     console.error(e);
@@ -361,7 +362,6 @@ const fetchd = useCallback(async () => {
       hasIsp     // correspondra à include_o_isp
     );
     
-    console.log("Données fetchées avec segments :", res);
     setData(res);
     
     const advMapping = res.advertisers.map((adv) => ({
@@ -389,7 +389,6 @@ useEffect(() => {
 
 const fetchAllSegments = async () => {
     try {
-      console.log("fetching des segments name ")      
       const data = await get_segment_name(database_id)
       // console.log("Tous les segments: ",data)
       // const data = Array.isArray(response.data) ? response.data : [];
@@ -422,8 +421,46 @@ const listNamesMapping = useMemo(() => {
   return mapping;
 }, [data]);
 
+// ── Extraction des tag_id uniques de chaque brand ───────────────────────────
+const allDBTags = useMemo(() => {
+  if (!data || !data.advertisers) return [];
+
+  // 1. On traverse data.advertisers puis les brands pour collecter les tag_id
+  const allTagsIds = data.advertisers.flatMap((advertiser) =>
+    advertiser.brands 
+      ? advertiser.brands.map((brand) => brand.tag_id) 
+      : []
+  );
+
+  // 2. On élimine les doublons, les valeurs fausses (null, undefined, 0)
+  return [...new Set(allTagsIds.filter(Boolean))];
+}, [data]);
+
+// ── Filtrage du tagMapping pour ne garder que les tags présents dans la base ──
+const tagMappingFiltre = useMemo(() => {
+  if (!tagMapping || allDBTags.length === 0) return {};
+
+  const nouveauMapping = {};
+  
+  allDBTags.forEach((id) => {
+    // On s'assure de chercher avec le bon type (chaîne ou nombre selon votre store)
+    if (tagMapping[id]) {
+      nouveauMapping[id] = tagMapping[id];
+    } else if (tagMapping[String(id)]) {
+      nouveauMapping[id] = tagMapping[String(id)];
+    } else {
+      // Optionnel : Si le tag_id n'est pas trouvé dans le mapping global, on met un fallback
+      nouveauMapping[id] = `Tag #${id}`;
+    }
+  });
+
+  return nouveauMapping;
+}, [allDBTags, tagMapping]);
+
+console.log("Nouveau tagMapping filtré :", tagMappingFiltre);
 
 
+// console.log("TagMapping: ",tagMapping)
   /* Effect : charge les bases au mount et recharge les données si _mockData change ou ID change */
   useEffect(() => {
     setLoading(true);
@@ -706,26 +743,13 @@ const listNamesMapping = useMemo(() => {
                 <div style={{ padding: "20px 4px 16px", height:"600px"}}>
                   {/* Onglet 1 : Vue d'ensemble globale avec funnel, taux clés, diagnostic et recommandations */}
                   {/* <GlobalOverview open={openPopover} setOpen={setOpenPopover} data={data} mappingData={databaseMapping} styles={styles} label_value="advertiser" /> */}
-                  <MapApp data={data.globales} tagMapping={tagMapping} db_id={database_id} start_date={startDateParam} end_date={endDateParam} />
+                  <MapApp data={data.globales} tagMapping={tagMappingFiltre} db_id={database_id} start_date={startDateParam} end_date={endDateParam} />
                 </div>
               ),
             },
           ]}
         />
       </Card>
-
-      {/* Footer du rapport : informations de génération */}
-      {/* <div
-        style={{
-          textAlign: "center",
-          padding: "20px 0 8px",
-          color: "#9ca3af",
-          fontSize: 11,
-        }}
-      >
-        Rapport généré automatiquement · Database #{data.database_id} ·{" "}
-        {new Date().toLocaleDateString("fr-FR")}
-      </div> */}
     </div>
   );
 };

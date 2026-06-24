@@ -165,8 +165,8 @@ const isTownMode = viewMode === 'ville';
     setSearchResults([]);
     setShowSearchResults(false);
   };
-// En dehors de la fonction
-console.log('🟢 App rendu avec viewMode:', viewMode, 'isRegionMode:', isRegionMode);
+  // En dehors de la fonction
+  console.log('🟢 App rendu avec viewMode:', viewMode, 'isRegionMode:', isRegionMode);
 
 
   // Fonction de recherche
