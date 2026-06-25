@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Card, Row, Col, Tag, Tooltip, List, Select } from "antd";
+import { Row, Col, Tag, List, Select } from "antd";
 import { TrophyOutlined, RiseOutlined, CaretRightOutlined, ShopOutlined, DatabaseOutlined, TagsOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -10,45 +10,17 @@ const MONTH_NAMES = [
 ];
 
 const SORT_OPTIONS = [
-  { value: "total_ca",       label: "CA"      },
-  { value: "ecpm",           label: "eCPM"    },
-  { value: "clickers",       label: "Clickers" },
-
+  { value: "total_ca",  label: "CA"       },
+  { value: "ecpm",      label: "eCPM"     },
+  { value: "clickers",  label: "Clickers" },
 ];
 
-// ─── Helpers visuels ──────────────────────────────────────────────────────────
-// const getRankColor = (rank) => {
-//   if (rank === 1) return "#FFD700";
-//   if (rank === 2) return "#C0C0C0";
-//   if (rank === 3) return "#CD7F32";
-//   return "#e8f4fd";
-// };
-// const getRankBg = (rank) => {
-//   if (rank === 1) return "#fffbe6";
-//   if (rank === 2) return "#f5f5f5";
-//   if (rank === 3) return "#fff7f0";
-//   return "#fff";
-// };
-
-// const RankBadge = ({ rank }) => (
-//   <span style={{
-//     minWidth: 26, height: 26, borderRadius: "50%",
-//     background: getRankColor(rank),
-//     display: "inline-flex", alignItems: "center", justifyContent: "center",
-//     fontWeight: "bold", fontSize: 11,
-//     color: rank <= 3 ? "#333" : "#888",
-//     flexShrink: 0,
-//   }}>
-//     {rank}
-//   </span>
-// );
-
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 const MetricPill = ({ label, value, color = "#555" }) => (
   <span style={{
     fontSize: 11, padding: "2px 8px", borderRadius: 10,
     background: "#f5f7fa", color,
-    border: "1px solid #e8eaed",
-    whiteSpace: "nowrap",
+    border: "1px solid #e8eaed", whiteSpace: "nowrap",
   }}>
     <span style={{ color: "#aaa", marginRight: 3 }}>{label}</span>
     <strong>{value}</strong>
@@ -59,8 +31,7 @@ const Chevron = ({ open }) => (
   <CaretRightOutlined style={{
     fontSize: 11, color: "#aaa",
     transform: open ? "rotate(90deg)" : "rotate(0deg)",
-    transition: "transform 0.2s",
-    flexShrink: 0,
+    transition: "transform 0.2s", flexShrink: 0,
   }} />
 );
 
@@ -69,49 +40,45 @@ const DatabaseRow = ({ db }) => (
   <div style={{
     display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
     padding: "6px 10px", marginBottom: 4, borderRadius: 8,
-   
+    background: "#fafafa", border: "1px solid #f0f0f0",
   }}>
-    
     <DatabaseOutlined style={{ color: "#8c8c8c", fontSize: 12 }} />
-    <span style={{ fontSize: 12, fontWeight: db.rank <= 3 ? 600 : 400, color: "#333", flex: 1, minWidth: 100 }}>
+    <span style={{ fontSize: 12, fontWeight: 400, color: "#333", flex: 1, minWidth: 100 }}>
       {db.database_name}
     </span>
     <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
       <MetricPill label="eCPM"     value={db.ecpm}                                     color="#1890ff" />
-      <MetricPill label="CA"       value={`${db.total_ca?.toLocaleString("fr-FR")} €`} color="#389e0d" />      
+      <MetricPill label="CA"       value={`${db.total_ca?.toLocaleString("fr-FR")} €`} color="#389e0d" />
       <MetricPill label="Clickers" value={db.clickers?.toLocaleString("fr-FR")}        color="#722ed1" />
     </div>
   </div>
 );
 
-// ─── Ligne Advertiser + collapse databases ────────────────────────────────────
-const AdvertiserRow = ({ adv }) => {
-  const [open, setOpen] = useState(false);
+// ─── Ligne Advertiser (contrôlé par le parent) ────────────────────────────────
+const AdvertiserRow = ({ adv, isOpen, onToggle }) => {
   const bases = adv.bases || [];
 
   return (
     <div style={{ marginBottom: 5 }}>
       <div
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         style={{
           display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
           padding: "7px 10px", borderRadius: 8, cursor: "pointer",
-          
+          background: isOpen ? "#f6ffed" : "#fff",
+          border: `1px solid ${isOpen ? "#b7eb8f" : "#f0f0f0"}`,
+          transition: "background 0.15s",
+          userSelect: "none",
         }}
       >
-        <Chevron open={open} />
-        {/* <RankBadge rank={adv.rank} /> */}
+        <Chevron open={isOpen} />
         <ShopOutlined style={{ color: "#8c8c8c", fontSize: 12 }} />
-        <span style={{
-           fontSize: 12,
-            fontWeight:  400,
-             color: "#333",
-              flex: 1, minWidth: 100 }}>
+        <span style={{ fontSize: 12, fontWeight: 400, color: "#333", flex: 1, minWidth: 100 }}>
           {adv.adv_name}
         </span>
         <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
           <MetricPill label="eCPM"     value={adv.ecpm}                                      color="#1890ff" />
-          <MetricPill label="CA"       value={`${adv.total_ca?.toLocaleString("fr-FR")} €`} color="#389e0d" />         
+          <MetricPill label="CA"       value={`${adv.total_ca?.toLocaleString("fr-FR")} €`} color="#389e0d" />
           <MetricPill label="Clickers" value={adv.clickers?.toLocaleString("fr-FR")}         color="#722ed1" />
         </div>
         <Tag color="default" style={{ fontSize: 10, marginLeft: "auto" }}>
@@ -119,14 +86,16 @@ const AdvertiserRow = ({ adv }) => {
         </Tag>
       </div>
 
-      {open && bases.length > 0 && (
+      {/* 👑 Un seul advertiser ouvert à la fois — bases scrollables */}
+      {isOpen && bases.length > 0 && (
         <div style={{
           marginTop: 3, marginLeft: 20,
           padding: "8px 10px 4px",
           background: "#fafbfc",
           borderRadius: 8,
           border: "1px dashed #d9d9d9",
-           
+          maxHeight: 280,
+          overflowY: "auto",
         }}>
           <div style={{ fontSize: 10, color: "#bbb", fontWeight: 600, letterSpacing: 0.5, marginBottom: 6 }}>
             TOP DATABASES
@@ -138,55 +107,71 @@ const AdvertiserRow = ({ adv }) => {
   );
 };
 
-// ─── Item Tag dans la List (carte cliquable + collapse advertisers) ────────────
-const TagItem = ({ item, nameKey }) => {
-  const [open, setOpen] = useState(false);
+// ─── Item Tag (contrôlé par MonthSection) ────────────────────────────────────
+const TagItem = ({ item, nameKey, isOpen, onToggle }) => {
+  const [openAdvId, setOpenAdvId] = useState(null); // 👑 un seul advertiser ouvert
+
   const advertisers = item.advertisers || [];
+
+  const handleAdvToggle = (advId) => {
+    setOpenAdvId((prev) => (prev === advId ? null : advId));
+  };
+
+  // Reset advertisers quand le tag se ferme
+  React.useEffect(() => {
+    if (!isOpen) setOpenAdvId(null);
+  }, [isOpen]);
 
   return (
     <div style={{ marginBottom: 8 }}>
       <div
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         style={{
           display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
           padding: "10px 12px", borderRadius: 10, cursor: "pointer",
-          // background: open ? "#f0f5ff" : getRankBg(item.rank),
-          // border: `1px solid ${item.rank <= 3 ? getRankColor(item.rank) : open ? "#d6e4ff" : "#f0f0f0"}`,
+          background: isOpen ? "#f0f5ff" : "#fff",
+          border: `1px solid ${isOpen ? "#d6e4ff" : "#f0f0f0"}`,
           userSelect: "none", transition: "background 0.15s",
         }}
       >
-        <Chevron open={open} />
-        {/* <RankBadge rank={item.rank} /> */}
+        <Chevron open={isOpen} />
         <TagsOutlined style={{ color: "#1890ff", fontSize: 12 }} />
-        <span style={{ fontSize: 13, fontWeight:400, color: "#1d1d1f", flex: 1, minWidth: 80 }}>
+        <span style={{ fontSize: 13, fontWeight: 400, color: "#1d1d1f", flex: 1, minWidth: 80 }}>
           {item[nameKey]?.trim() ?? "—"}
         </span>
         <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
           <MetricPill label="eCPM"     value={item.ecpm}                                      color="#1890ff" />
-          <MetricPill label="CA"       value={`${item.total_ca?.toLocaleString("fr-FR")} €`} color="#389e0d" />         
+          <MetricPill label="CA"       value={`${item.total_ca?.toLocaleString("fr-FR")} €`} color="#389e0d" />
           <MetricPill label="Clickers" value={item.clickers?.toLocaleString("fr-FR")}         color="#722ed1" />
-         </div>   
+        </div>
         <Tag color="default" style={{ fontSize: 10 }}>
           {advertisers.length} annonceur{advertisers.length > 1 ? "s" : ""}
         </Tag>
       </div>
 
-      {open && (
+      {isOpen && (
         <div style={{
           marginTop: 4, marginLeft: 16,
           padding: "10px 12px 6px",
           background: "#fff",
           borderRadius: 8,
           border: "1px dashed #d6e4ff",
-          maxHeight: 250,       
-         overflowY: "auto",   
+          maxHeight: 320,
+          overflowY: "auto",
         }}>
           <div style={{ fontSize: 10, color: "#bbb", fontWeight: 600, letterSpacing: 0.5, marginBottom: 8 }}>
             TOP ADVERTISERS — cliquez pour voir les databases
           </div>
           {advertisers.length === 0
             ? <div style={{ color: "#ccc", fontSize: 12 }}>Aucun advertiser</div>
-            : advertisers.map((adv) => <AdvertiserRow key={adv.adv_id} adv={adv} />)
+            : advertisers.map((adv) => (
+                <AdvertiserRow
+                  key={adv.adv_id}
+                  adv={adv}
+                  isOpen={openAdvId === adv.adv_id}          // 👑 contrôlé par le parent
+                  onToggle={() => handleAdvToggle(adv.adv_id)} // 👑 un seul à la fois
+                />
+              ))
           }
         </div>
       )}
@@ -194,14 +179,19 @@ const TagItem = ({ item, nameKey }) => {
   );
 };
 
-// ─── Section mois (avec tri local) ───────────────────────────────────────────
+// ─── Section mois ─────────────────────────────────────────────────────────────
 const MonthSection = ({ monthData, nameKey, monthIcon, monthLabel, monthTag }) => {
-  const [sortBy, setSortBy] = useState("ecpm");
+  const [sortBy, setSortBy]       = useState("ecpm");
+  const [openTagId, setOpenTagId] = useState(null); // 👑 un seul tag ouvert à la fois
 
   const sortedData = useMemo(() => {
     const list = monthData?.data || [];
     return [...list].sort((a, b) => (b[sortBy] ?? 0) - (a[sortBy] ?? 0));
   }, [monthData, sortBy]);
+
+  const handleTagToggle = (tagId) => {
+    setOpenTagId((prev) => (prev === tagId ? null : tagId));
+  };
 
   return (
     <div>
@@ -212,7 +202,7 @@ const MonthSection = ({ monthData, nameKey, monthIcon, monthLabel, monthTag }) =
         <span style={{ fontSize: 13, fontWeight: 700, color: "#555", display: "flex", alignItems: "center", gap: 6 }}>
           {monthIcon} {monthLabel} {monthTag}
         </span>
-       
+        
       </div>
 
       <List
@@ -220,11 +210,18 @@ const MonthSection = ({ monthData, nameKey, monthIcon, monthLabel, monthTag }) =
         dataSource={sortedData}
         pagination={{
           size: "small",
-          align: "center",
+          position: "bottom",
           hideOnSinglePage: true,
           pageSize: 5,
         }}
-        renderItem={(item) => <TagItem item={item} nameKey={nameKey} />}
+        renderItem={(item) => (
+          <TagItem
+            item={item}
+            nameKey={nameKey}
+            isOpen={openTagId === item.tag_id}
+            onToggle={() => handleTagToggle(item.tag_id)}
+          />
+        )}
       />
     </div>
   );
@@ -246,7 +243,6 @@ const RecommendationPanel = ({ tags, onSortChange, sortBy }) => {
       padding: "16px 20px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     }}>
-      {/* Header : titre + tri API */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
         marginBottom: 16, flexWrap: "wrap", gap: 10,
@@ -256,7 +252,7 @@ const RecommendationPanel = ({ tags, onSortChange, sortBy }) => {
           {sections.title}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 12, color: "#999" }}>Tri Global:</span>
+          <span style={{ fontSize: 12, color: "#999" }}>Filtrer par :</span>
           <Select size="small" value={sortBy} onChange={onSortChange} style={{ width: 110 }}>
             <Option value="ca">CA</Option>
             <Option value="ecpm">eCPM</Option>
@@ -265,7 +261,6 @@ const RecommendationPanel = ({ tags, onSortChange, sortBy }) => {
         </div>
       </div>
 
-      {/* Deux colonnes mois */}
       <Row gutter={16}>
         <Col span={12}>
           <MonthSection
