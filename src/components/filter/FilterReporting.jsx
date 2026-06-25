@@ -38,6 +38,7 @@ const DEFAULT_FILTERS = {
 
 const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries = [], tagList = [], idList, keyList }) => {
   
+  console.log("Contenu de countries : ", countries)
   // ── État local pour les dates en attente de validation ──
   const [pendingDates, setPendingDates] = useState({
     scheduleStart: filters.scheduleStart,

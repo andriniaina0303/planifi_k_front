@@ -172,11 +172,12 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop
       <Card>
         <div style={styles.loaderContainer}>
           <div style={styles.spinner}></div>
-          <p style={styles.text}>Loading seasonality reporting...</p>
+          <p style={styles.text}>Loading TopDB by {tagNames[tagValue]}...</p>
         </div>
       </Card>
     );
   }
+  else if(data.length>0){
   return (
     <Card
       title="📊 Top 10 des Bases par tags"
@@ -204,6 +205,36 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop
       </div>
     </Card>
   );
+}
+else{
+  return(
+    <Card 
+      size="medium"
+      title="📊 Top 10 des Bases par tags"
+      style={{ width: "100%", height: "100%" }}
+    >
+      <div style={{display:'flex',gap:4}}>
+        <Select
+          showSearch
+          allowClear
+          placeholder="Filtrer par tags"
+          value={tagValue}
+          onChange={onTagChange}
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          options={Object.entries(tagNames || {}).map(([id, name]) => ({
+            value: id,
+            label: name,
+          }))}
+        />
+      </div>
+      <div style={{display:"flex",justifyContent:"center", width:"100%", height:"100%"}}>
+        Aucunes données à afficher pour {tagNames[tagValue]}.
+      </div>
+    </Card>
+  )
+}
 };
 
 export default TopDbsTags;

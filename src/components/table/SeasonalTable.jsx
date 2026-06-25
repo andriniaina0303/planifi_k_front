@@ -12,7 +12,16 @@ const ALL_MONTHS = [
   { key: "10", label: "Oct" }, { key: "11", label: "Nov" }, { key: "12", label: "Déc" }
 ];
 
-export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping,modeFilters,setModeFilters }) => {
+export const SeasonalHeatmap = ({ 
+  rawData = [], 
+  startDate, 
+  endDate, 
+  tagMapping,
+  modeFilters,
+  setModeFilters, 
+  isLoading,
+  styles
+ }) => {
 
   /**
    * Transformer : Transforme la structure imbriquée du backend en lignes plates pour Ant Design
@@ -59,6 +68,7 @@ export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping,m
     if (top5List.length === 0) {
       return <span style={{ color: "#888", fontSize: "12px" }}>Aucun Advertisers</span>;
     }
+
 
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingTop: 4 }}>
@@ -238,7 +248,16 @@ export const SeasonalHeatmap = ({ rawData = [], startDate, endDate, tagMapping,m
       },
     })),
   ];
-
+if (isLoading) {
+    return (
+      <Card>
+        <div style={styles.loaderContainer}>
+          <div style={styles.spinner}></div>
+          <p style={styles.text}>Loading All HeatMap by {modeFilters}...</p>
+        </div>
+      </Card>
+    );
+  }
   return (
     <Card 
       title="🔥 Heatmap saisonnière" 

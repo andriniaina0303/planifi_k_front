@@ -198,10 +198,8 @@ const TagItem = ({ item, nameKey }) => {
 const MonthSection = ({ monthData, nameKey, monthIcon, monthLabel, monthTag }) => {
   const [sortBy, setSortBy] = useState("ecpm");
 
-  const sortedData = useMemo(() => {
-    const list = monthData?.data || [];
-    return [...list].sort((a, b) => (b[sortBy] ?? 0) - (a[sortBy] ?? 0));
-  }, [monthData, sortBy]);
+  const list = monthData?.data || [];
+    
 
   return (
     <div>
@@ -217,7 +215,7 @@ const MonthSection = ({ monthData, nameKey, monthIcon, monthLabel, monthTag }) =
 
       <List
         rowKey="tag_id"
-        dataSource={sortedData}
+        dataSource={list}
         pagination={{
           size: "small",
           align: "center",
@@ -231,12 +229,22 @@ const MonthSection = ({ monthData, nameKey, monthIcon, monthLabel, monthTag }) =
 };
 
 // ─── Composant principal ──────────────────────────────────────────────────────
-const RecommendationPanel = ({ tags, onSortChange, sortBy }) => {
+const RecommendationPanel = ({ tags, onSortChange, sortBy, isLoading, styles }) => {
   const sections = {
     nameKey: "tag_name",
     title: "Recommandation des tags",
     data: tags,
   };
+  if (isLoading) {
+      return (
+        <Card>
+          <div style={styles.loaderContainer}>
+            <div style={styles.spinner}></div>
+            <p style={styles.text}>Loading All Recommendations by {sortBy}...</p>
+          </div>
+        </Card>
+      );
+    }
 
   return (
     <div style={{
@@ -256,7 +264,7 @@ const RecommendationPanel = ({ tags, onSortChange, sortBy }) => {
           {sections.title}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 12, color: "#999" }}>Tri Global:</span>
+          <span style={{ fontSize: 12, color: "#999" }}>Trier :</span>
           <Select size="small" value={sortBy} onChange={onSortChange} style={{ width: 110 }}>
             <Option value="ca">CA</Option>
             <Option value="ecpm">eCPM</Option>

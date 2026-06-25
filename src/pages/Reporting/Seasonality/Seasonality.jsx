@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { Row, Col } from "antd";
 import FilterReporting, { DEFAULT_FILTERS } from "../../../components/filter/FilterReporting";
-import { useTagStore } from "../../../utils/storedZustand";
+import { useTagStore,useCountryStore } from "../../../utils/storedZustand";
 import TopDbsTags from "../../../components/chart/TopDBTags";
 import { get_top_DB_tags } from "../../../api/databases";
 import { SeasonalHeatmap } from "../../../components/table/SeasonalTable";
@@ -11,10 +11,17 @@ import RecommendationPanel from "../../../components/chart/RecommendationPanel";
 import { getAllRecommendation } from "../../../api/recommend";
 
 const Seasonality = () => {
-  const tagMapping = useTagStore((state) => state.tagMap);
 
+  const {setCountries} = useCountryStore();
+
+  const tagMapping = useTagStore((state) => state.tagMap);
+  const countryList = useCountryStore((state) => state.countries)
+  
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingTopDB, setLoadingTopDB] = useState(false); // Géré de façon autonome pour le composant de droite
+  const [loadingRecom, setLoadingRecom] = useState(false);
+  const [loadingHeatMap, setLoadingHeatMap] = useState(false);
   const [modeFilters, setModeFilters] = useState("ecpm");
   const [sortBy, setSortBy] = useState("ecpm");
   const [filters, setFilters] = useState(() => ({
@@ -46,74 +53,65 @@ const Seasonality = () => {
     text: { marginTop: "10px", fontSize: "14px", color: "#666" },
   };
 
-  // ── 1. Fetch Global (Heatmap + Recommandations) ──
-  const fetchReporting = async (startDate = null, endDate = null, filterBy = null, sort = "ecpm") => {
-    try {
-      setLoading(true);
-      const [adv_tags, recTags] = await Promise.all([
-        getTopAdvByTags(startDate, endDate, filterBy),
-        getAllRecommendation(sort),
-      ]);
-      setTopAdvTags(adv_tags);
-      setRecommendTags(recTags);
-    } catch (error) {
-      console.error("❌ Erreur lors du fetch global:", error);
-      setTopAdvTags([]);
-      setRecommendTags(null);
-    } finally {
-      setLoading(false);
-    }
+// ── Premier chargement global ──
+useEffect(() => {
+  const init = async () => {
+    await Promise.all([
+      getTopAdvByTags(filters.scheduleStart, filters.scheduleEnd, modeFilters).then(setTopAdvTags).catch(() => setTopAdvTags([])),
+      get_top_DB_tags(filters.scheduleStart, filters.scheduleEnd, filters.tag || null).then(setTopdbTags).catch(() => setTopdbTags([])),
+      getAllRecommendation(sortBy).then(setRecommendTags).catch(() => setRecommendTags(null)),
+    ]);
+    setIsFirstLoad(false); // débloque l'affichage
   };
+  init();
+}, []); // une seule fois
 
-  // ── 2. Fetch Spécifique pour le composant Top DBs (Autonome & Rapide) ──
-  const fetchTopDBReporting = async (startDate, endDate, tagID) => {
-    try {
-      setLoadingTopDB(true);
-      const db_tags = await get_top_DB_tags(startDate, endDate, tagID);
-      setTopdbTags(db_tags);
-    } catch (error) {
-      console.error("❌ Erreur lors du fetch Top DB:", error);
-      setTopdbTags([]);
-    } finally {
-      setLoadingTopDB(false);
-    }
-  };
 
-  // ── Effect A : Écoute les filtres généraux (Sauf le filtre Tag pour éviter le rechargement global) ──
-  useEffect(() => {
-    if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchReporting(
-        filters.scheduleStart,
-        filters.scheduleEnd,
-        modeFilters,
-        sortBy
-      );
-    }
-  }, [filters.scheduleStart, filters.scheduleEnd, modeFilters, sortBy]);
+// ── Heatmap : skip au premier rendu ──
+useEffect(() => {
+  if (isFirstLoad) return;
+  if (!filters.scheduleStart || !filters.scheduleEnd) return;
 
-  // ── Effect B : Écoute spécifiquement le composant Top DBs (Réagit au changement de date et de Tag) ──
-  useEffect(() => {
-    if (filters.scheduleStart && filters.scheduleEnd) {
-      fetchTopDBReporting(
-        filters.scheduleStart,
-        filters.scheduleEnd,
-        filters.tag || null
-      );
-    }
-  }, [filters.scheduleStart, filters.scheduleEnd, filters.tag]);
+  setLoadingHeatMap(true);
+  getTopAdvByTags(filters.scheduleStart, filters.scheduleEnd, modeFilters)
+    .then(setTopAdvTags)
+    .catch(() => setTopAdvTags([]))
+    .finally(() => setLoadingHeatMap(false));
 
-  // Changement du tri provenant de RecommendationPanel
-  const handleSortChange = async (val) => {
-    setSortBy(val);
-    try {
-      const recTags = await getAllRecommendation(val);
-      setRecommendTags(recTags);
-    } catch (error) {
-      console.error("❌ Erreur recommandation:", error);
-    }
-  };
+}, [filters.scheduleStart, filters.scheduleEnd, filters.tag, modeFilters]);
 
-  if (loading) {
+
+// ── Top DBs : skip au premier rendu ──
+useEffect(() => {
+  if (isFirstLoad) return;
+  if (!filters.scheduleStart || !filters.scheduleEnd) return;
+
+  setLoadingTopDB(true);
+  get_top_DB_tags(filters.scheduleStart, filters.scheduleEnd, filters.tag || null)
+    .then(setTopdbTags)
+    .catch(() => setTopdbTags([]))
+    .finally(() => setLoadingTopDB(false));
+
+}, [filters.scheduleStart, filters.scheduleEnd, filters.tag]);
+
+
+// ── Recommendations : skip au premier rendu ──
+useEffect(() => {
+  if (isFirstLoad) return;
+
+  setLoadingRecom(true);
+  getAllRecommendation(sortBy)
+    .then(setRecommendTags)
+    .catch(() => setRecommendTags(null))
+    .finally(() => setLoadingRecom(false));
+
+}, [sortBy]);
+
+
+
+  
+
+  if (isFirstLoad) {
     return (
       <div style={styles.loaderContainer}>
         <div style={styles.spinner}></div>
@@ -130,6 +128,7 @@ const Seasonality = () => {
         filters={filters}
         setFilters={setFilters}
         listes={[]}
+        countries={countryList}
         idList="id"
         keyList="name"
         tagList={tagMapping}
@@ -145,6 +144,8 @@ const Seasonality = () => {
             tagMapping={tagMapping}
             modeFilters={modeFilters}
             setModeFilters={setModeFilters}
+            isLoading = {loadingHeatMap}
+            styles={styles}
           />
         </Col>
         <Col span={6} style={{ alignSelf: "flex-start" }}>
@@ -163,7 +164,9 @@ const Seasonality = () => {
       <RecommendationPanel
         tags={recommendTags}
         sortBy={sortBy}
-        onSortChange={handleSortChange}
+        onSortChange={setSortBy}
+        isLoading={loadingRecom}
+        styles={styles}
       />
     </div>
   );
