@@ -1,219 +1,158 @@
-# 📚 Résumé de la Documentation du Projet PlannifiK
+﻿# 📚 Résumé de la Documentation du Projet PlannifiK
 
-## Status de Commentaire des Fichiers
+## Mise à jour du résumé
 
-Date: Avril 2026  
-Fichiers traités: **36/47** ✅ (76% terminé)
-
----
-
-## ✅ Fichiers Commentés (36)
-
-### Core Files (2/2)
-- ✅ **main.jsx** - Point d'entrée React avec Ant Design + Bootstrap
-- ✅ **App.jsx** - Routeur principal avec structure de navigation
-
-### Pages (5/6)
-- ✅ **pages/Login/Login.jsx** - Formulaire de connexion avec validation
-- ✅ **pages/Home/Home.jsx** - Layout principal responsive avec sidebar
-- ✅ **pages/Reporting/Advertisers.jsx** - Dashboard des annonceurs
-- ✅ **pages/Reporting/Databases.jsx** - Placeholder page base de données
-- ⚠️  **pages/Counting/Counting.jsx** - Majorité du code commenté (non utilisé)
-- ⏳ **pages/Reporting/AdvertiserDetail.jsx** - Complexe, page détails annonceur
-
-### API & Configuration (4/4)
-- ✅ **config/config.js** - Endpoints API centralisés
-- ✅ **api/interceptor.js** - Axios avec JWT + gestion erreurs
-- ✅ **api/advertiser.js** - Récupération données annonceurs
-- ✅ **api/databases.js** - Récupération bases de données + cache
-
-### Utils & Helpers (3/4)
-- ✅ **utils/Helpers.js** - Formatage nombres/pourcentages/devises
-- ✅ **utils/Tokens.js** - Design tokens (couleurs, ombres)
-- ✅ **utils/healthKitFunc.js** - Calcul scores santé campagne
-- ⚠️  **utils/utils.jsx** - Décodage Base64 (caractères spéciaux)
-
-### Menu & Navigation (5/5)
-- ✅ **components/menu/SideBarContent.jsx** - Sidebar principal
-- ✅ **components/menu/ReportingMenu.jsx** - Menu Reporting avec sous-menus
-- ✅ **components/menu/CountingMenuItem.jsx** - Menu Counting
-- ✅ **components/bouton/MenuItem.jsx** - Bouton menu réutilisable
-- ✅ **components/bouton/SubMenuItem.jsx** - Bouton sous-menu réutilisable
-
-### Filtres (5/5)
-- ✅ **components/filter/FilterAdvertiser.jsx** - Filtres multi-critères
-- ✅ **components/filter/FiltersBar.jsx** - Barre de filtres compacte
-- ✅ **components/filter/RangeFilter.jsx** - Filtre min/max numérique
-- ✅ **components/filter/ScoreFilter.jsx** - Filtre avec comparateur
-- ⚠️  **components/filter/** - Tous les filtres principaux documentés
-
-### Sélecteurs & Données (4/4)
-- ✅ **components/other/MultiSelect.jsx** - Sélecteur multiple réutilisable
-- ✅ **components/other/CountryMultiSelect.jsx** - Formulaire ciblage multi-critères
-- ✅ **components/other/GlobalInsights.jsx** - Graphiques insights globaux
-- ✅ **components/healthComponents/HealthKit.jsx** - Composants santé (partiellement)
-
-### KPI Cards (1/2)
-- ✅ **components/Kpi/KpiCardAdvertiser.jsx** - Carte KPI avec icône
-- ⏳ **components/Kpi/KpiCardAdvertiserDetail.jsx** - Détail KPI (code commenté)
-
-### Data (1/2)
-- ⚠️  **data/listetags.js** - Fichier vide
-- ⏳ **data/testadv.js** - Données test pour développement
+Date : 25 juin 2026  
+Base : `src/`  
+Fichiers source détectés : **90** (JS / JSX / TS / TSX)
 
 ---
 
-## ⏳ Fichiers Restants (11)
+## Structure du projet `src/`
 
-### Charts (5 fichiers)
-- **components/chart/ChartSwitcher.jsx** - Graphiques switchables (Chart.js)
-- **components/chart/DashboardCharts.jsx** - Dashboard charts
-- **components/chart/AdvertiserDetailChart.jsx** - Charts détails annonceur
-- **components/chart/GenderPieChart.jsx** - Pie chart genre (Recharts)
-- **components/chart/TopTagsEcpm.jsx** - Top tags eCPM (Chart.js)
+### Entrée et configuration
+- `src/main.jsx` — point d'entrée React / Vite
+- `src/App.jsx` — application principale, routing et layout global
+- `src/App.css` — styles applicatifs
+- `src/index.css` — styles globaux
+- `src/config/config.js` — configuration API et endpoints
 
-### Details (4 fichiers)
-- **components/details/GlobalOverView.jsx** - Vue d'ensemble globale
-- **components/details/GlobalTable.jsx** - Tableau global
-- **components/details/common/AnalyseBadge.jsx** - Badge analyse
-- **components/details/common/RateBar.jsx** - Barre de taux
-- **components/details/common/DimSection.jsx** - Section dimensions
-- **components/details/common/FunnelViz.jsx** - Visualisation funnel
+### API
+- `src/api/interceptor.js` — intercepteurs Axios, JWT, gestion d'erreurs
+- `src/api/advertiser.js` — données annonceurs
+- `src/api/databases.js` — données bases de données
+- `src/api/recommend.js` — recommandations / service additionnel
 
-### Headers (1 fichier)
-- **components/headers/HeadersDetails.jsx** - En-tête détails
+### Pages
+- `src/pages/Login/Login.jsx` — page de connexion
+- `src/pages/Home/Home.jsx` — page d'accueil
+- `src/pages/Counting/Counting.jsx` — page Counting / métriques
+- `src/pages/Reporting/Advertisers/Advertisers.jsx` — liste des annonceurs
+- `src/pages/Reporting/Advertisers/AdvertiserDetail.jsx` — détail annonceur
+- `src/pages/Reporting/Advertisers/AdvertiserDetailBackup.jsx` — version backup / alternative
+- `src/pages/Reporting/Databases/Databases.jsx` — page bases de données
+- `src/pages/Reporting/Databases/DatabaseDetails.jsx` — détails base de données
+- `src/pages/Reporting/Seasonality/Seasonality.jsx` — reporting saisonnalité
 
-### Table (1 fichier)
-- **components/table/AdvertisersTable.jsx** - Tableau annonceurs
+### Menu et navigation
+- `src/components/menu/SideBarContent.jsx` — sidebar principale
+- `src/components/menu/ReportingMenu.jsx` — menu reporting
+- `src/components/menu/CountingMenuItem.jsx` — menu Counting
+- `src/components/bouton/MenuItem.jsx` — bouton de menu
+- `src/components/bouton/SubMenuItem.jsx` — bouton sous-menu
+- `src/components/bouton/SwitchBtnTableChart.jsx` — switch tableau / chart
 
----
+### Filtres et sélecteurs
+- `src/components/filter/FilterReporting.jsx` — filtre principal reporting
+- `src/components/filter/FiltersBar.jsx` — barre de filtres
+- `src/components/filter/RangeFilter.jsx` — filtre plage numérique
+- `src/components/filter/ScoreFilter.jsx` — filtre score
+- `src/components/other/MultiSelect.jsx` — sélection multiple
+- `src/components/other/CountryMultiSelect.jsx` — sélection pays
+- `src/components/other/GlobalInsights .jsx` — graphique insights global (nom de fichier à vérifier)
 
-## 📝 Format de Commentaires Appliqué
+### KPI
+- `src/components/Kpi/KpiCardReporting.jsx` — carte KPI reporting
+- `src/components/Kpi/KpiCardAdvertiserDetail.jsx` — carte KPI détail annonceur
 
-### 1. En-têtes de fichier (JSDoc bloc)
-```javascript
-/**
- * ═══════════════════════════════════════════════════════════════════════════
- * FILENAME.jsx - Description du fichier
- * ═══════════════════════════════════════════════════════════════════════════
- * 
- * Description détaillée avec points clés
- */
-```
+### Charts
+- `src/components/chart/ChartSwitcher.jsx` — commutateur de graphiques
+- `src/components/chart/DashboardCharts.jsx` — graphiques dashboard
+- `src/components/chart/GenderPieChart.jsx` — diagramme genre
+- `src/components/chart/RecommendationPanel.jsx` — panneau recommandations
+- `src/components/chart/ReportingDetailsChart.jsx` — chart détails reporting
+- `src/components/chart/TopDBEcpm.jsx` — top eCPM par base
+- `src/components/chart/TopDBTags.jsx` — top tags base
+- `src/components/chart/TopTagsEcpm.jsx` — top tags eCPM
 
-### 2. Composants (JSDoc fonction)
-```javascript
-/**
- * Composant ComponentName
- * Description du composant et de son rôle
- * 
- * @component
- * @param {Object} props - Props du composant
- * @param {string} props.prop1 - Description prop 1
- * @returns {JSX.Element} Description du rendu
- * @example
- * <ComponentName prop1="value" />
- */
-```
+### Détails et tables
+- `src/components/details/GlobalOverView.jsx` — aperçu global
+- `src/components/details/GlobalTable.jsx` — tableau global
+- `src/components/details/common/AnalyseBadge.jsx` — badge analyse
+- `src/components/details/common/CreateColsTop.jsx` — création colonnes top
+- `src/components/details/common/createMergedColumns.jsx` — colonnes fusionnées
+- `src/components/details/common/DimSection.jsx` — section dimensions
+- `src/components/details/common/Exportadvertiser.jsx` — export annonceur
+- `src/components/details/common/ExportBase.jsx` — export base
+- `src/components/details/common/FunnelViz.jsx` — visualisation funnel
+- `src/components/details/common/RateBar.jsx` — barre de taux
+- `src/components/details/brands/CreateColumns.jsx` — colonnes marques
+- `src/components/details/brands/DimensionsCollaps.jsx` — dimensions collapsibles
 
-### 3. Fonctions (JSDoc complet)
-```javascript
-/**
- * Brève description de la fonction
- * Description détaillée si complexe
- * 
- * @param {type} paramName - Description du paramètre
- * @returns {type} Description du retour
- * @description Étapes et logique si nécessaire
- */
-```
+### Tableaux
+- `src/components/table/ReportingTable.jsx` — tableau reporting
+- `src/components/table/SeasonalTable.jsx` — tableau saisonnalité
 
-### 4. Commentaires inline
-```javascript
-// Courtes explications de la logique complexe
-// Sections clés marquées avec ================= TITRE
-```
+### Utilitaires
+- `src/utils/Helpers.js` — utilitaires généraux
+- `src/utils/Tokens.js` — design tokens
+- `src/utils/healthKitFunc.js` — calculs de santé campagne
+- `src/utils/batchFiltersDating.js` — batchs filtres
+- `src/utils/getDataKeys.js` — extraction de clés
+- `src/utils/getSegmentID.js` — récupération ID segment
+- `src/utils/getSegmentRecomd.jsx` — recommandation segment
+- `src/utils/getStatusDots.jsx` — indicateurs de statut
+- `src/utils/storedZustand.js` — stockage Zustand
+- `src/utils/utils.jsx` — utilitaires divers
 
----
+### Données / temporaires
+- `src/data/listetags.js` — tags
+- `src/data/testadv.js` — données test
+- `src/temp/adv_detail.json` — données temporaires annonceur
+- `src/temp/all_advertiser.json` — données temporaires annonceurs
 
-## 🎯 Points Clés Documentés
-
-### Authentification & API
-- ✅ Système de tokens JWT via localStorage
-- ✅ Intercepteurs Axios pour authentification
-- ✅ Gestion erreurs HTTP (401, 403, 404, 500)
-- ✅ Mode développement avec données mockées
-
-### Formatage & Styles
-- ✅ Fonctions helpers (fmt, pct, usd)
-- ✅ Design tokens centralisés (couleurs, ombres)
-- ✅ Responsive design (Bootstrap classes)
-
-### Calculs & Logique Métier
-- ✅ Scoring santé campagne (0-100 points)
-- ✅ Filtrage multi-critères avec memoization
-- ✅ Calcul eCPM et concentration CA
-
-### Composants Réutilisables
-- ✅ Sélecteurs multiples avec "tout sélectionner"
-- ✅ Cartes KPI avec icônes
-- ✅ Filtres numériques (range, score)
-- ✅ Menus et sous-menus collapsibles
-
----
-
-## 🚀 Prochaines Étapes
-
-1. **Compléter les 11 fichiers restants**
-   - Charts complexes (Chart.js + Recharts)
-   - Composants details
-   - HeadersDetails
-   - AdvertisersTable
-
-2. **Améliorer les fichiers existants**
-   - Ajouter @example pour chaque composant
-   - Documenter les props optionnelles
-   - Clarifier les états complexes
-
-3. **Créer une guide de style**
-   - Conventions de nommage
-   - Structure des composants
-   - Bonnes pratiques React
-
-4. **Générer la documentation**
-   - JSDoc HTML avec jsdoc-cli
-   - Storybook pour les composants
-   - README par module
+### Sous-projet FranceMap
+- `src/FranceMap/App.css`
+- `src/FranceMap/index.css`
+- `src/FranceMap/main.tsx`
+- `src/FranceMap/MapApp.tsx`
+- `src/FranceMap/MIGRATION_STATUS.md`
+- `src/FranceMap/TAILWIND_TO_BOOTSTRAP_MIGRATION.md`
+- fichiers `src/FranceMap/components/...`
+- fichiers `src/FranceMap/hooks/...`
+- fichiers `src/FranceMap/services/...`
+- fichiers `src/FranceMap/utils/...`
 
 ---
 
-## 📊 Statistiques
+## Notes importantes
 
-- **Fichiers totaux**: 47
-- **Fichiers commentés**: 36 (76%)
-- **Fichiers en attente**: 11 (24%)
-- **Lignes de commentaires ajoutées**: ~800+
-- **Blocs JSDoc créés**: 36+
-
----
-
-## 💡 Points Forts
-
-✅ Code unifié et lisible  
-✅ JSDoc pour autocompltion IDE  
-✅ Commentaires inline pour logique complexe  
-✅ Blocs délimiteurs visuels (═══)  
-✅ Structure cohérente dans tous les fichiers  
+- Le projet contient maintenant **90 fichiers source** détectés dans `src/`.
+- La structure Reporting est plus complète que le résumé précédent : il y a des dossiers `Advertisers`, `Databases`, `Seasonality`.
+- `src/components/other/GlobalInsights .jsx` contient un espace dans le nom de fichier. Vérifier si ce fichier doit être renommé.
+- `src/pages/Reporting/Advertisers/AdvertiserDetailBackup.jsx` est présent et doit être documenté si utilisé.
+- `src/api/recommend.js` est un nouveau service API à intégrer dans la documentation.
+- `src/components/bouton/SwitchBtnTableChart.jsx` et `src/components/Kpi/KpiCardReporting.jsx` sont des composants récents.
 
 ---
 
-## ⚠️ Notes Spéciales
+## Recommandations immédiates
 
-- **pages/Counting/Counting.jsx** : Majorité du code commenté (non utilisé en production)
-- **data/listetags.js** : Fichier vide
-- **utils/utils.jsx** : Guillemets spéciaux peuvent nécessiter remplacement manuel
-- **API mode MOCK** : Basculer avec `const USE_MOCK = true/false`
+1. Vérifier le contenu et l’usage de `src/components/other/GlobalInsights .jsx`.
+2. Documenter séparément les pages `Reporting/Seasonality` et `Reporting/Databases/DatabaseDetails.jsx`.
+3. Mettre à jour le décompte de fichiers commentés basé sur le nouveau total de 90.
+4. Ajouter une section FranceMap si ce sous-projet doit rester dans le résumé principal.
 
 ---
 
-*Documentation générée le 28 avril 2026*
+## Statistiques actualisées
+
+- **Fichiers source détectés** : 90
+- **Sous-dossiers principaux** : `api`, `components`, `config`, `data`, `pages`, `temp`, `utils`, `FranceMap`
+- **Pages Reporting** : 9 fichiers principaux
+- **Composants chart** : 8 fichiers
+- **Composants détails** : 12 fichiers
+- **Utilitaires** : 10 fichiers
+
+---
+
+## Résumé rapide
+
+- ✅ Résumé aligné avec l’état actuel du projet.
+- ✅ Nouveaux fichiers et dossiers identifiés.
+- ⚠️ Deux éléments à valider : `GlobalInsights .jsx` et le dossier `FranceMap`.
+- 💡 Le résumé doit désormais refléter 90 fichiers source plutôt que 47.
+
+---
+
+*Documentation mise à jour le 25 juin 2026*

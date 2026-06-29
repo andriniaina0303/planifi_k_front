@@ -18,7 +18,6 @@ const Seasonality = () => {
   const countryList = useCountryStore((state) => state.countries)
   
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-  const [loading, setLoading] = useState(true);
   const [loadingTopDB, setLoadingTopDB] = useState(false); // Géré de façon autonome pour le composant de droite
   const [loadingRecom, setLoadingRecom] = useState(false);
   const [loadingHeatMap, setLoadingHeatMap] = useState(false);
@@ -57,9 +56,9 @@ const Seasonality = () => {
 useEffect(() => {
   const init = async () => {
     await Promise.all([
-      getTopAdvByTags(filters.scheduleStart, filters.scheduleEnd, modeFilters).then(setTopAdvTags).catch(() => setTopAdvTags([])),
-      get_top_DB_tags(filters.scheduleStart, filters.scheduleEnd, filters.tag || null).then(setTopdbTags).catch(() => setTopdbTags([])),
-      getAllRecommendation(sortBy).then(setRecommendTags).catch(() => setRecommendTags(null)),
+      getTopAdvByTags(filters.scheduleStart, filters.scheduleEnd, modeFilters, filters.country).then(setTopAdvTags).catch(() => setTopAdvTags([])),
+      get_top_DB_tags(filters.scheduleStart, filters.scheduleEnd, filters.tag || null, filters.country).then(setTopdbTags).catch(() => setTopdbTags([])),
+      getAllRecommendation(sortBy,filters.country).then(setRecommendTags).catch(() => setRecommendTags(null)),
     ]);
     setIsFirstLoad(false); // débloque l'affichage
   };
@@ -73,12 +72,12 @@ useEffect(() => {
   if (!filters.scheduleStart || !filters.scheduleEnd) return;
 
   setLoadingHeatMap(true);
-  getTopAdvByTags(filters.scheduleStart, filters.scheduleEnd, modeFilters)
+  getTopAdvByTags(filters.scheduleStart, filters.scheduleEnd, modeFilters, filters.country)
     .then(setTopAdvTags)
     .catch(() => setTopAdvTags([]))
     .finally(() => setLoadingHeatMap(false));
 
-}, [filters.scheduleStart, filters.scheduleEnd, filters.tag, modeFilters]);
+}, [filters.scheduleStart, filters.scheduleEnd, modeFilters, filters.country]);
 
 
 // ── Top DBs : skip au premier rendu ──
@@ -87,12 +86,12 @@ useEffect(() => {
   if (!filters.scheduleStart || !filters.scheduleEnd) return;
 
   setLoadingTopDB(true);
-  get_top_DB_tags(filters.scheduleStart, filters.scheduleEnd, filters.tag || null)
+  get_top_DB_tags(filters.scheduleStart, filters.scheduleEnd, filters.tag || null, filters.country)
     .then(setTopdbTags)
     .catch(() => setTopdbTags([]))
     .finally(() => setLoadingTopDB(false));
 
-}, [filters.scheduleStart, filters.scheduleEnd, filters.tag]);
+}, [filters.scheduleStart, filters.scheduleEnd, filters.tag, filters.country]);
 
 
 // ── Recommendations : skip au premier rendu ──
@@ -100,12 +99,12 @@ useEffect(() => {
   if (isFirstLoad) return;
 
   setLoadingRecom(true);
-  getAllRecommendation(sortBy)
+  getAllRecommendation(sortBy,filters.country)
     .then(setRecommendTags)
     .catch(() => setRecommendTags(null))
     .finally(() => setLoadingRecom(false));
 
-}, [sortBy]);
+}, [sortBy,filters.country]);
 
 
 

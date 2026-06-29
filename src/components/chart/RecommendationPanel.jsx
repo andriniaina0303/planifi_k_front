@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Row, Col, Tag, List, Select } from "antd";
+import { Row, Col, Tag, List, Select, Card } from "antd";
 import { TrophyOutlined, RiseOutlined, CaretRightOutlined, ShopOutlined, DatabaseOutlined, TagsOutlined } from "@ant-design/icons";
 
 const { Option } = Select;

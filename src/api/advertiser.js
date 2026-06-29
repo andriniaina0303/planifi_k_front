@@ -201,7 +201,7 @@ export function clearMappingCache(cacheKey = null) {
   }
 }
 
-export async function getTopAdvByTags (startDate, endDate, filtersBy) {
+export async function getTopAdvByTags (startDate, endDate, filtersBy,country) {
   if(!(startDate||endDate)){
         console.log("Mandatory fields missing, please check all fields.")
         return []
@@ -214,12 +214,15 @@ export async function getTopAdvByTags (startDate, endDate, filtersBy) {
   console.log("Date end  : ",date_end)
   const params = new URLSearchParams ({
     date_start,
-    date_end,
+    date_end
   })
   if (!filtersBy || filtersBy==null){
     const filtersBy = "ecpm"
   }
   params.append('sort_by',filtersBy)
+  if(country && country!==null){
+    params.append('country',country)
+  }
   const url = `${config.REACT_APP_ENDPOINT_ADV_BY_TAGS}?${params.toString()}`
   console.log("URL utiliser : ", url)
   try{

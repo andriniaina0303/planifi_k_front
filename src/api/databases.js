@@ -226,7 +226,7 @@ export async function get_dep_tags(tag_id, database_id, date_start, date_end){
   }
 }
 
-export async function get_top_DB_tags(date_start,date_end,tag_id){
+export async function get_top_DB_tags(date_start,date_end,tag_id, country){
   if(!(date_start||date_end||tag_id)){
       console.log("Mandatory fields missing, please check all fields.")
       return []
@@ -238,8 +238,11 @@ export async function get_top_DB_tags(date_start,date_end,tag_id){
       endDate,
     })
 
-    if (tag_id && tag_id!==null){
+    if (tag_id!==null){
       params.append("tag_id",tag_id)
+    }
+    if (country && country!==null){
+      params.append("country",country)
     }
   try{
     const resp = await api.get(`${config.REACT_APP_ENDPOINT_ALL_MAPPING}top_base?${params.toString()}`,{timeout:120000})

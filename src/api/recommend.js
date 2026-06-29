@@ -1,26 +1,25 @@
 import  api from "./interceptor";
 import * as config from "../config/config"
 
-export const getAllRecommendation = async (filterBy) => {
-  
+export const getAllRecommendation = async (filterBy,country) => {
+  if (!(filterBy || country)){
+    console.error("Fields missing on call request.")
+    return []
+  }
   try{
-    if (filterBy){
-      let urlRec = config.REACT_APP_ENDPOINT_SEASONAL_RECOMMEND
-      if(filterBy!==null){
-        const params = new URLSearchParams();
+      const params = new URLSearchParams();
+      if (filterBy !== null){
         params.append("sort_by",filterBy)
-
-        urlRec = `${config.REACT_APP_ENDPOINT_SEASONAL_RECOMMEND}?${params.toString()}`
       }
+      if (country && country!==null){
+      params.append("country",country)
+    }
+      const urlRec = `${config.REACT_APP_ENDPOINT_SEASONAL_RECOMMEND}?${params.toString()}`
       console.log("URL fetcher: ",urlRec)
       const response = await api.get(urlRec,{timeout:120000});
+      console.log("Contenu de Recommandation : ",response.data)
       return response.data
     }
-    else{
-      console.log("Endpoints not provided.")
-      return null;
-    }
-  }
   catch(error){
     console.log("Error raised on fetching of recommendation.")
     console.log(`Error : ${error}`)
