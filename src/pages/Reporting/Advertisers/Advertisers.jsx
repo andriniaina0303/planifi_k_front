@@ -201,8 +201,8 @@ useEffect(() => {
     try {
       console.log("🔄 Init starting...");
       
-      const tags = await getMappingData('tags', 'tags');
-      const countries = await getMappingData('country','country');
+      const tags = await getMappingData('tags', 'tags',filters.scheduleStart,filters.scheduleEnd);
+      const countries = await getMappingData('country','country',filters.scheduleStart,filters.scheduleEnd);
       console.log("Countries fetched:", countries.length, "countries.");
       console.log("✅ Tags loaded:", tags.length, "items");
       setTagMapping(tags);
@@ -254,7 +254,7 @@ useEffect(() => {
           <KpiCardReporting
             key={idx}
             label={s.label}
-            value={s.value}
+            // value={s.value}
             color={s.color}
           />
         ))}

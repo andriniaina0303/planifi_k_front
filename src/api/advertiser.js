@@ -166,14 +166,27 @@ export async function get_advertiser_name(adv_id) {
 // ─── Cache global des mappings ────────────────────────────────────────────────
 const mappingCache = {};
 
-export async function getMappingData(endpoint, cacheKey) {
+export async function getMappingData(endpoint, cacheKey, date_start, date_end, country) {
   if (mappingCache[cacheKey]) {
     console.log(`✅ Using cached ${cacheKey}`);
     return mappingCache[cacheKey];
   }
+  if (!(date_start && date_end)){
+    console.log("No date received yet.")
+    return []
+  }
+  const params = new URLSearchParams ({
+    date_start, 
+    date_end
+  })
+  if (country && country !== null){
+    params.append('country',country)
+  }
+
+  const url = `${config.REACT_APP_ENDPOINT_ALL_MAPPING}${endpoint}?${params.toString()}`
   try {
     console.log(`🔄 Fetching ${cacheKey} from API...`);
-    const response = await api.get(config.REACT_APP_ENDPOINT_ALL_MAPPING + endpoint, { timeout: 120000 });
+    const response = await api.get(url, { timeout: 120000 });
     const data = Array.isArray(response.data) ? response.data : [response.data];
     mappingCache[cacheKey] = data;
     return data;

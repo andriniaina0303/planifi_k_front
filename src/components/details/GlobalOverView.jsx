@@ -532,23 +532,24 @@ useEffect(() =>{
         </button>
       )}
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-        {/* Slider Top Brands */}
+        {/* ── SECTION RECOMMANDATIONS ── */}
         <Col xs={24} lg={24}>
           <SegmentRecommendations 
             styles={styles} 
             recommendations={recommendations}
             selectedSegments={selectedSegments}
             onSegmentsChange={onSegmentsChange}
-          />     
+            />     
         </Col>
       </Row>
-      {/* ── SECTION RECOMMANDATIONS ── */}
+
+      {data.length>0 &&
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         {/* Slider Top Brands */}
         <Col xs={24} lg={24}>
           <TopBrandsSlider segmentNames ={segmentNames} data={data} styles={styles} key_value={key_value} label_value={label_value} tagMapping={tagMapping} />
         </Col>
-      </Row>
+      </Row>}
 
       {/* ── SECTION BASSE : KPIs ET GRAPHIQUES ── */}
       <Row gutter={[16, 16]} style={{ marginTop: 16 }} >

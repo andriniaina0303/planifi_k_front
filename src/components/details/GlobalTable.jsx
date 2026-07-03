@@ -532,7 +532,6 @@ export const GlobalTable = ({
   if (f.cls) d = d.filter((r) => r.classification === f.cls);
   return d;
 }, [bases, f]);
-console.log("Contenu de rows : ", rows)
 
   // ── Données filtrées pour l'export ───────────────────────────────────────
  const filteredBases = useMemo(() => {
@@ -589,7 +588,6 @@ console.log("Contenu de rows : ", rows)
     agencyName.map((ag) => [ag.agence_id, ag.agence_name])
   );  
   const titre =  pluralKey.charAt(0).toUpperCase() + pluralKey.slice(1);
-  console.log("Contenu de base: ", bases)
   const brandCols = createBrandCols(segmentNames,listNames,agenceMap,rows)
   const baseCols  = [
     {
@@ -819,7 +817,6 @@ console.log("Contenu de rows : ", rows)
   // Colonne final à utilisé 
 
   const cols = reorderColumns(Precols,orderCols)
-  console.log("Nom de segment reçu dans GlobalTable : ", segmentNames)
   return (
     <>
     <Card size="large" style={styles.card}>
@@ -846,7 +843,6 @@ console.log("Contenu de rows : ", rows)
           onRow={(record) => ({
           onClick: () => {
             setSelectedBase(record);
-            console.log("Selected base:", record);
           },
             style: { cursor: "pointer" },
           })}

@@ -88,7 +88,6 @@ const { Title, Text, Paragraph } = Typography;
 import { SmartChart } from "../../../components/chart/ReportingDetailsChart.jsx";
 import { tokens } from "../../../utils/Tokens.js";
 import {fmt, pct, usd} from "../../../utils/Helpers.js";
-import { AnalyseBadges } from "../../../components/details/common/AnalyseBadge.jsx";
 import { RateBar } from "../../../components/details/common/RateBar.jsx";
 import { FunnelViz } from "../../../components/details/common/FunnelViz.jsx";
 import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
@@ -365,12 +364,16 @@ useEffect(() => {
   try {
     console.log("🚀 Déclenchement de getMappingData...");
     const [agences, databases] = await Promise.all([
-      getMappingData('agences', 'agences'),
-      getMappingData('all_bases', 'databases'),
+      getMappingData('agences', 'agences', startDateParam, endDateParam),
+      getMappingData('all_bases', 'databases', startDateParam, endDateParam, 'ALL'),
     ]);
 
-    setAgenceMapping(agences);
+    // if (databases && databases!==null){
+    //   console.log("Valeur de database dans advertisersDetails: ", databases)
+    // }
+
     setDatabaseMapping(databases);
+    setAgenceMapping(agences);
 
   } catch (e) {
     console.error(e);
@@ -399,7 +402,7 @@ useEffect(() => {
       hasGender, // correspondra à include_o_gender
       hasIsp     // correspondra à include_o_isp
     );
-    
+
     setData(res);
     if (res && res.bases) {
       fetchSegmentsByDatabases(res.bases);
@@ -438,7 +441,6 @@ useEffect(() => {
   }, [advertiser_id, _mockData, fetchMappings, fetchd, fetchSegmentsByDatabases]);
 
 
-  
   /* Affichage d'attente : spinner pendant le chargement des données */
   if (loading)
     return (

@@ -26,7 +26,7 @@ const COLORS = ["#722ed1", "#9254de", "#b37feb", "#531dab", "#8b5cf6"];
 const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop, styles }) => {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
-
+  console.log("Contenu de Data : ", data)
   /**
    * Extrait et trie le top 10 des DB selon le score reçu
    */
@@ -105,7 +105,7 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop
         maintainAspectRatio: false,
         layout: {
           padding: {
-            top: 30, // Un peu plus de padding en haut de la zone de dessin
+            top: 30,
           },
         },
         plugins: {
@@ -145,11 +145,19 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop
           x: {
             grid: { display: false },
             ticks: {
-              font: { size: 13 },
+              font: { size: 12 },
               color: "#555",
-              maxRotation: 45,
-              minRotation: 45,
-            },
+              maxRotation: 50,
+              minRotation: 50,
+              // 👈 Tronque le texte si plus long que 15 caractères
+              callback: function(value) {
+                const label = this.getLabelForValue(value);
+                if (label.length > 25) {
+                  return label.substring(0, 20) + '...';
+                }
+                return label;
+              }
+            }
           },
           y: {
             // 3. ON REPASSE À TRUE MAIS EN MASQUANT UNIQUEMENT LE VISUEL
@@ -165,7 +173,7 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop
     });
 
     return () => chartRef.current?.destroy();
-  }, [topDbs]);
+  }, [topDbs]);   
 
    if (loadingTop) {
     return (
@@ -179,32 +187,41 @@ const TopDbsTags = ({ data = [], tagNames = {}, tagValue, onTagChange,loadingTop
   }
   else if(data.length>0){
   return (
-    <Card
-      title="📊 Top 10 des Bases par tags"
-      size="medium"
-      style={{ width: "100%", height: "100%" }}
-    >
-      <div style={{ width: "100%", height: 280 }}>
-        <div style={{display:'flex',gap:4}}>
-          <Select
-            showSearch
-            allowClear
-            placeholder="Filtrer par tags"
-            value={tagValue}
-            onChange={onTagChange}
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-            options={Object.entries(tagNames || {}).map(([id, name]) => ({
-              value: id,
-              label: name,
-            }))}
-          />
-        </div>
+  <Card
+    title="📊 Top 10 des Bases par tags"
+    size="medium"
+    style={{ width: "100%", height: "100%"}}
+  >
+    {/* 1. On passe le conteneur principal en Flexbox colonne avec une hauteur fixe */}
+    <div style={{ width: "100%", height: 340, display: "flex", flexDirection: "column", gap: 12 }}>
+      
+      {/* 2. Le sélecteur prend sa hauteur naturelle */}
+      <div style={{ display: 'flex', gap: 4 }}>
+        <Select
+          showSearch
+          allowClear
+          placeholder="Filtrer par tags"
+          value={tagValue}
+          onChange={onTagChange}
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          options={Object.entries(tagNames || {}).map(([id, name]) => ({
+            value: id,
+            label: name,
+          }))}
+          style={{ width: "100%" }} // Optionnel: pour qu'il prenne une bonne largeur
+        />
+      </div>
+      
+      {/* 3. L'enveloppe du canvas prend TOUT l'espace restant (flex: 1) sans déborder */}
+      <div style={{ flex: 1, position: "relative", minHeight: 0 }}>
         <canvas ref={canvasRef} />
       </div>
-    </Card>
-  );
+
+    </div>
+  </Card>
+);
 }
 else{
   return(

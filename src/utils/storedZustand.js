@@ -6,7 +6,7 @@ export const useTagStore = create(
     (set) => ({
       tagMapping: [],
       tagMap: {},
-      Countries: [],
+      countries: [],
 
       setTagMapping: (tags) =>
         set({

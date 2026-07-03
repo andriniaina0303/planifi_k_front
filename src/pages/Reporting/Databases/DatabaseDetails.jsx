@@ -89,7 +89,6 @@ const { Title, Text, Paragraph } = Typography;
 import { SmartChart } from "../../../components/chart/ReportingDetailsChart.jsx";
 import { tokens } from "../../../utils/Tokens.js";
 import {fmt, pct, usd} from "../../../utils/Helpers.js";
-import { AnalyseBadges } from "../../../components/details/common/AnalyseBadge.jsx";
 import { RateBar } from "../../../components/details/common/RateBar.jsx";
 import { FunnelViz } from "../../../components/details/common/FunnelViz.jsx";
 import { GlobalOverview } from "../../../components/details/GlobalOverView.jsx";
@@ -333,7 +332,7 @@ useEffect(() => {
 // Appel API : récupère les données à mapper (agences, databases) pour afficher les noms au lieu des IDs
   const fetchMappings = useCallback(async () => {
   try {
-    const agences = await getMappingData('agences', 'agences')
+    const agences = await getMappingData('agences', 'agences', startDateParam, endDateParam)
     
     setAgenceMapping(agences);
   } catch (e) {

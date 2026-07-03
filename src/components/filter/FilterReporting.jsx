@@ -44,6 +44,13 @@ const FilterReporting = ({ labelFilter, filters, setFilters, listes, countries =
     scheduleStart: filters.scheduleStart,
     scheduleEnd: filters.scheduleEnd,
   });
+  // Synchronise l'état local si le parent change (ex: Reset ou Initialisation)
+React.useEffect(() => {
+  setPendingDates({
+    scheduleStart: filters.scheduleStart,
+    scheduleEnd: filters.scheduleEnd,
+  });
+}, [filters.scheduleStart, filters.scheduleEnd]);
 
   // ── État local pour la sélection multiple en attente ──
   const [pendingSelection, setPendingSelection] = useState(filters.all_fields ?? []);
